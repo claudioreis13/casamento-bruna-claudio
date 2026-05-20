@@ -65,12 +65,6 @@ function Index() {
         <p className="mt-8 text-[11px] font-medium uppercase tracking-editorial-lg text-background/85 sm:text-xs">
           Bem-vindos ao nosso para sempre
         </p>
-        <p
-          aria-hidden="true"
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-pulse text-[10px] uppercase tracking-editorial text-background/60"
-        >
-          Role
-        </p>
       </section>
 
       {/* Versículo */}
