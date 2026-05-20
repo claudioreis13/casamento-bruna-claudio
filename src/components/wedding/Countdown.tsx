@@ -1,65 +1,28 @@
 import { useCountdown } from "@/hooks/use-countdown";
 import { WEDDING } from "@/lib/wedding-config";
 
-const R = 34;
-const C = 2 * Math.PI * R;
+const pad = (n: number) => String(n).padStart(2, "0");
 
-function Arc({
-  valor,
-  maximo,
-  label,
-  numero,
-}: {
-  valor: number;
-  maximo: number;
-  label: string;
-  numero: string;
-}) {
-  const offset = C - Math.min(valor / maximo, 1) * C;
+function Unit({ valor, label }: { valor: string; label: string }) {
   return (
-    <div
-      className="flex flex-col items-center gap-1"
-      aria-label={`${valor} ${label.toLowerCase()}`}
-    >
-      <div className="relative h-20 w-20 sm:h-24 sm:w-24">
-        <svg viewBox="0 0 80 80" className="h-full w-full -rotate-90" aria-hidden="true">
-          <circle
-            cx="40" cy="40" r={R}
-            fill="none"
-            stroke="var(--color-sage-light)"
-            strokeWidth="4"
-          />
-          <circle
-            cx="40" cy="40" r={R}
-            fill="none"
-            stroke="var(--color-primary)"
-            strokeWidth="4"
-            strokeLinecap="round"
-            strokeDasharray={C}
-            strokeDashoffset={offset}
-            style={{ transition: "stroke-dashoffset 0.4s ease" }}
-          />
-        </svg>
-        <div className="absolute inset-0 flex items-center justify-center font-semibold text-primary-dark text-lg sm:text-xl tabular-nums">
-          {numero}
-        </div>
+    <div className="flex flex-col items-center">
+      <div className="font-display text-6xl font-light leading-none tabular-nums text-primary-dark sm:text-7xl md:text-8xl">
+        {valor}
       </div>
-      <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+      <div className="mt-3 text-[9px] font-semibold uppercase tracking-editorial-lg text-primary-dark/60 sm:text-[10px]">
         {label}
-      </span>
+      </div>
     </div>
   );
 }
-
-const pad = (n: number) => String(n).padStart(2, "0");
 
 export function Countdown() {
   const { dias, horas, minutos, segundos, acabou } = useCountdown(WEDDING.data);
 
   if (acabou) {
     return (
-      <p className="text-center text-2xl font-medium text-primary-dark">
-        Já casados! 🎉
+      <p className="text-center font-display text-3xl italic text-primary-dark">
+        Já casados.
       </p>
     );
   }
@@ -69,12 +32,12 @@ export function Countdown() {
       role="timer"
       aria-live="polite"
       aria-label="Contagem regressiva para o casamento"
-      className="flex items-center justify-center gap-3 sm:gap-6"
+      className="grid grid-cols-2 gap-x-10 gap-y-10 sm:grid-cols-4 sm:gap-x-16"
     >
-      <Arc valor={dias % 365} maximo={365} label="Dias" numero={pad(dias)} />
-      <Arc valor={horas} maximo={24} label="Horas" numero={pad(horas)} />
-      <Arc valor={minutos} maximo={60} label="Minutos" numero={pad(minutos)} />
-      <Arc valor={segundos} maximo={60} label="Segundos" numero={pad(segundos)} />
+      <Unit valor={pad(dias)} label="Dias" />
+      <Unit valor={pad(horas)} label="Horas" />
+      <Unit valor={pad(minutos)} label="Minutos" />
+      <Unit valor={pad(segundos)} label="Segundos" />
     </div>
   );
 }

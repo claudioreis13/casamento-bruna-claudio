@@ -56,49 +56,71 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <>
-      <section className="hero-bg relative flex min-h-[70vh] flex-col items-center justify-center px-6 py-20 text-center text-white">
-        <h1 className="font-display text-6xl leading-none drop-shadow-md sm:text-7xl md:text-8xl">
+      {/* Hero fine-art */}
+      <section className="hero-bg relative flex min-h-[88vh] flex-col items-center justify-center px-6 text-center text-primary-dark">
+        <div aria-hidden="true" className="mb-8 h-16 w-px bg-primary-dark/40" />
+        <h1 className="font-display text-6xl font-light italic leading-none tracking-tight sm:text-8xl md:text-9xl">
           Bruna &amp; Cláudio
         </h1>
-        <div
-          aria-hidden="true"
-          className="my-5 h-px w-24 bg-white/70"
-        />
-        <h2 className="text-base font-light tracking-wide sm:text-lg">
+        <p className="mt-8 text-[11px] font-medium uppercase tracking-editorial-lg text-primary-dark/80 sm:text-xs">
           Bem-vindos ao nosso para sempre
-        </h2>
+        </p>
+        <p
+          aria-hidden="true"
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-pulse text-[10px] uppercase tracking-editorial text-primary-dark/40"
+        >
+          role
+        </p>
       </section>
 
-      <section className="mx-auto max-w-3xl px-6 py-14 text-center">
-        <p className="font-display text-2xl text-primary-dark sm:text-3xl">
-          “Assim eles já não são dois, mas sim uma só carne”
-        </p>
-
-        <h2 className="mt-12 text-sm font-medium uppercase tracking-[0.3em] text-muted-foreground">
-          Faltam
-        </h2>
-
-        <div className="mt-6">
-          <Countdown />
+      {/* Versículo */}
+      <section className="flex flex-col items-center px-6 py-28 text-center sm:py-32">
+        <div className="mb-12 opacity-30" aria-hidden="true">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+            <path d="M20 0V40M0 20H40" stroke="currentColor" strokeWidth="0.5" className="text-primary-dark" />
+            <circle cx="20" cy="20" r="5" stroke="currentColor" strokeWidth="0.5" fill="none" className="text-primary-dark" />
+          </svg>
         </div>
+        <blockquote className="max-w-3xl font-display text-3xl font-light italic leading-relaxed text-primary-dark sm:text-4xl md:text-5xl">
+          “Assim eles já não são dois, mas sim uma só carne”
+        </blockquote>
+        <cite className="mt-8 text-[10px] font-semibold uppercase not-italic tracking-editorial text-primary-dark/60">
+          Mateus 19:6
+        </cite>
+      </section>
 
-        <p className="mt-6 text-sm text-muted-foreground">
-          {WEDDING.dataFormatada} • {WEDDING.horarioCerimonia}
-        </p>
+      {/* Countdown + CTAs */}
+      <section className="bg-card/40 px-6 py-24 backdrop-blur-sm">
+        <div className="mx-auto flex max-w-5xl flex-col items-center">
+          <p className="mb-14 text-[10px] font-semibold uppercase tracking-editorial-lg text-primary-dark/60">
+            Contagem Regressiva
+          </p>
 
-        <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Link
-            to="/cerimonia"
-            className="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary-dark"
-          >
-            Ver informações da cerimônia
-          </Link>
-          <Link
-            to="/presentes"
-            className="inline-flex items-center justify-center rounded-full border border-primary px-6 py-3 text-sm font-medium text-primary-dark transition-colors hover:bg-accent"
-          >
-            Escolher um presente
-          </Link>
+          <Countdown />
+
+          <div className="mt-20 flex flex-col items-center">
+            <h2 className="font-display text-2xl font-light tracking-wide text-primary-dark sm:text-3xl">
+              {WEDDING.dataFormatada}
+              <span className="mx-4 text-secondary">|</span>
+              {WEDDING.horarioCerimonia}
+            </h2>
+            <div aria-hidden="true" className="mt-6 h-px w-12 bg-secondary" />
+          </div>
+
+          <div className="mt-16 flex flex-col gap-4 sm:flex-row sm:gap-6">
+            <Link
+              to="/cerimonia"
+              className="min-w-[260px] bg-primary px-10 py-4 text-center text-[10px] font-medium uppercase tracking-editorial text-primary-foreground shadow-soft transition-all duration-500 hover:bg-primary-dark"
+            >
+              Cerimônia &amp; Festa
+            </Link>
+            <Link
+              to="/presentes"
+              className="min-w-[260px] border border-primary/30 px-10 py-4 text-center text-[10px] font-medium uppercase tracking-editorial text-primary-dark transition-all duration-500 hover:bg-accent/40"
+            >
+              Lista de Presentes
+            </Link>
+          </div>
         </div>
       </section>
     </>
