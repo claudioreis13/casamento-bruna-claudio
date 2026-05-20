@@ -60,31 +60,30 @@ function Presentes() {
 
   return (
     <div className="hero-bg min-h-screen">
-      <section className="flex min-h-[35vh] flex-col items-center justify-center px-6 py-14 text-center text-white">
-        <h1 className="font-display text-5xl drop-shadow-md sm:text-6xl">Lista de Presentes</h1>
-        <h2 className="mt-2 max-w-xl text-sm font-light sm:text-base">
-          Escolha algo especial para celebrar conosco 🎁
-        </h2>
+      <section className="flex min-h-[50vh] flex-col items-center justify-center px-6 py-20 text-center">
+        <span className="tracking-editorial-lg text-[10px] uppercase text-primary-dark/70">
+          Com carinho
+        </span>
+        <h1 className="mt-6 font-display text-5xl italic text-primary-dark sm:text-7xl">
+          Lista de Presentes
+        </h1>
+        <div className="mt-6 h-px w-16 bg-primary-dark/40" />
+        <p className="mt-6 max-w-md text-sm text-primary-dark/80">
+          Escolha algo especial para celebrar conosco
+        </p>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-        {/* Controles */}
-        <div className="sticky top-[57px] z-20 mb-6 rounded-2xl bg-card/95 p-4 shadow-soft backdrop-blur">
+      <section className="mx-auto max-w-6xl bg-background/85 px-4 py-12 backdrop-blur-sm sm:px-8">
+        <div className="sticky top-[57px] z-20 mb-10 border-y border-primary/20 bg-background/95 py-4 backdrop-blur">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <div className="relative flex-1">
-              <span
-                aria-hidden="true"
-                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
-              >
-                🔍
-              </span>
               <input
                 type="text"
                 value={termo}
                 onChange={(e) => setTermo(e.target.value)}
-                placeholder="Buscar presente..."
+                placeholder="Buscar presente"
                 aria-label="Buscar entre os presentes"
-                className="w-full rounded-full border border-input bg-background py-2.5 pl-10 pr-4 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30"
+                className="tracking-editorial w-full border-b border-primary/30 bg-transparent py-2.5 text-sm uppercase text-foreground placeholder:text-primary-dark/40 outline-none focus:border-primary-dark"
               />
             </div>
 
@@ -93,7 +92,7 @@ function Presentes() {
                 value={faixa}
                 onChange={(e) => setFaixa(e.target.value as Faixa)}
                 aria-label="Filtrar por faixa de preço"
-                className="rounded-full border border-input bg-background px-4 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30"
+                className="tracking-editorial border border-primary/30 bg-transparent px-4 py-2.5 text-[11px] uppercase text-foreground outline-none focus:border-primary-dark"
               >
                 <option value="todos">Todos os preços</option>
                 <option value="ate200">Até R$ 200</option>
@@ -106,9 +105,9 @@ function Presentes() {
                 value={ordem}
                 onChange={(e) => setOrdem(e.target.value as Ordem)}
                 aria-label="Ordenar presentes"
-                className="rounded-full border border-input bg-background px-4 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/30"
+                className="tracking-editorial border border-primary/30 bg-transparent px-4 py-2.5 text-[11px] uppercase text-foreground outline-none focus:border-primary-dark"
               >
-                <option value="padrao">Ordenar por…</option>
+                <option value="padrao">Ordenar por</option>
                 <option value="menor">Menor preço</option>
                 <option value="maior">Maior preço</option>
                 <option value="az">A → Z</option>
@@ -119,9 +118,9 @@ function Presentes() {
                   type="button"
                   onClick={limpar}
                   aria-label="Limpar filtros"
-                  className="rounded-full bg-muted px-4 py-2.5 text-sm font-medium text-foreground hover:bg-accent"
+                  className="tracking-editorial border border-primary/30 px-4 py-2.5 text-[11px] uppercase text-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
                 >
-                  ✕ Limpar
+                  Limpar
                 </button>
               )}
             </div>
@@ -129,22 +128,21 @@ function Presentes() {
 
           <p
             aria-live="polite"
-            className="mt-3 text-xs text-muted-foreground"
+            className="tracking-editorial mt-3 text-[10px] uppercase text-primary-dark/60"
           >
             {lista.length} presente{lista.length !== 1 ? "s" : ""}
           </p>
         </div>
 
-        {/* Grid */}
         {lista.length === 0 ? (
           <div
             role="status"
-            className="rounded-2xl bg-card p-12 text-center text-muted-foreground shadow-soft"
+            className="border border-primary/20 p-16 text-center font-display text-lg italic text-muted-foreground"
           >
-            Nenhum presente encontrado 😕
+            Nenhum presente encontrado
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
             {lista.map((p) => (
               <GiftCard
                 key={p.id}
