@@ -61,8 +61,8 @@
   /* Verde sage: #6B7A4E -> oklch */
   --primary: oklch(0.52 0.058 120);
   --primary-foreground: oklch(0.98 0.005 95);
-  /* Versão escura para texto de corpo (contraste AA): #556239 */
-  --primary-dark: oklch(0.43 0.06 120);
+  /* Versão escura para corpo de texto — contraste AAA sobre background cream */
+  --primary-dark: oklch(0.32 0.05 120);
 
   --secondary: oklch(0.85 0.04 125);             /* sage claro #B9CCAE */
   --secondary-foreground: oklch(0.3 0.05 120);

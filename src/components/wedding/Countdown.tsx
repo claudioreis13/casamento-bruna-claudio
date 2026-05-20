@@ -28,16 +28,21 @@ export function Countdown() {
   }
 
   return (
-    <div
-      role="timer"
-      aria-live="polite"
-      aria-label="Contagem regressiva para o casamento"
-      className="grid grid-cols-2 gap-x-10 gap-y-10 sm:grid-cols-4 sm:gap-x-16"
-    >
-      <Unit valor={pad(dias)} label="Dias" />
-      <Unit valor={pad(horas)} label="Horas" />
-      <Unit valor={pad(minutos)} label="Minutos" />
-      <Unit valor={pad(segundos)} label="Segundos" />
+    <div className="flex flex-col items-center gap-6">
+      <div
+        role="timer"
+        aria-live="polite"
+        aria-label="Contagem regressiva para o casamento"
+        className="grid grid-cols-2 gap-x-10 gap-y-10 sm:grid-cols-4 sm:gap-x-16"
+      >
+        <Unit valor={pad(dias)} label="Dias" />
+        <Unit valor={pad(horas)} label="Horas" />
+        <Unit valor={pad(minutos)} label="Minutos" />
+        <Unit valor={pad(segundos)} label="Segundos" />
+      </div>
+      <p className="tracking-editorial text-[9px] uppercase text-primary-dark/60">
+        Horário de Brasília (UTC−3)
+      </p>
     </div>
   );
 }
