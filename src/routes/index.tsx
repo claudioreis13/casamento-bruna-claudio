@@ -4,7 +4,9 @@ import { useRef } from "react";
 import { Countdown } from "@/components/wedding/Countdown";
 import { Reveal } from "@/components/wedding/Reveal";
 import { SplitHeadline } from "@/components/wedding/SplitHeadline";
+import { OrganicDivider } from "@/components/wedding/OrganicDivider";
 import { WEDDING } from "@/lib/wedding-config";
+
 
 const eventJsonLd = {
   "@context": "https://schema.org",
