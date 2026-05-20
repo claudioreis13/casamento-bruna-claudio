@@ -10,9 +10,9 @@ export function Nav() {
         <Link
           to="/"
           aria-label="Bruna e Cláudio — Início"
-          className="group flex h-10 w-10 items-center justify-center rounded-full border border-primary/30 font-display text-lg italic text-primary-dark transition-colors hover:border-primary"
+          className="group flex h-10 min-w-10 items-center justify-center rounded-full border border-primary/30 px-3 font-display text-base italic text-primary-dark transition-colors hover:border-primary"
         >
-          B
+          B&amp;C
         </Link>
         <div className="flex items-center gap-6 text-[10px] font-medium uppercase tracking-editorial text-primary-dark sm:gap-10 sm:text-[11px]">
           {[
