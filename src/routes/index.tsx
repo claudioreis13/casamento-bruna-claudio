@@ -69,7 +69,7 @@ function Index() {
           aria-hidden="true"
           className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-pulse text-[10px] uppercase tracking-editorial text-primary-dark/40"
         >
-          role
+          Role
         </p>
       </section>
 
