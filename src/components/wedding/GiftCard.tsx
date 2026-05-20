@@ -92,7 +92,7 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
           disabled={reservado}
           aria-label={reservado ? `${presente.nome}: já reservado` : `Presentear com ${presente.nome}`}
           className={cn(
-            "tracking-editorial group/btn relative mt-2 inline-flex items-center justify-center overflow-hidden border px-4 py-2.5 text-[10px] uppercase transition-colors duration-300",
+            "tracking-editorial group/btn relative mt-2 inline-flex items-center justify-center overflow-hidden rounded-full border px-5 py-2.5 text-[10px] uppercase transition-colors duration-300",
             "border-primary/40 text-primary-dark",
             "hover:border-primary-dark",
             "disabled:cursor-not-allowed disabled:border-muted disabled:text-muted-foreground"
