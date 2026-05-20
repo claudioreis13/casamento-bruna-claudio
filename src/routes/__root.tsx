@@ -11,6 +11,7 @@ import {
 import appCss from "../styles.css?url";
 import { Nav } from "@/components/wedding/Nav";
 import { Footer } from "@/components/wedding/Footer";
+import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
   return (
@@ -109,6 +110,7 @@ function RootComponent() {
           <Outlet />
         </main>
         <Footer />
+        <Toaster position="top-center" />
       </div>
     </QueryClientProvider>
   );
