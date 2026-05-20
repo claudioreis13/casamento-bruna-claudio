@@ -31,7 +31,7 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
       />
 
       {presente.humor && (
-        <span className="tracking-editorial absolute left-3 top-3 z-20 border border-primary/20 bg-background/95 px-2.5 py-1 text-[9px] uppercase text-primary-dark backdrop-blur-sm">
+        <span className="tracking-editorial absolute left-3 top-3 z-20 rounded-full border border-primary/20 bg-background/95 px-2.5 py-1 text-[9px] uppercase text-primary-dark backdrop-blur-sm">
           Surpresa
         </span>
       )}
