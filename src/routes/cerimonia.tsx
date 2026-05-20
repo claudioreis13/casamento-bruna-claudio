@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { HeroPicture } from "@/components/wedding/HeroPicture";
 import { WEDDING } from "@/lib/wedding-config";
+
 
 export const Route = createFileRoute("/cerimonia")({
   head: () => ({
@@ -58,8 +60,13 @@ function Field({ label, value }: { label: string; value: string }) {
 
 function Cerimonia() {
   return (
-    <div className="hero-bg-cerimonia min-h-screen">
-      <section className="flex min-h-[55vh] flex-col items-center justify-center px-6 py-20 text-center text-background">
+    <div className="min-h-screen">
+      <section className="relative flex min-h-[55vh] flex-col items-center justify-center overflow-hidden px-6 py-20 text-center text-background">
+        <HeroPicture
+          basePath="/imagens/igreja"
+          jpgFallback="/imagens/igreja.jpg"
+          priority
+        />
         <span className="tracking-editorial-lg text-[10px] uppercase text-background/85">
           10 · 10 · 2026
         </span>
@@ -71,6 +78,7 @@ function Cerimonia() {
           Tudo o que você precisa saber para celebrar conosco
         </p>
       </section>
+
 
       <section className="mx-auto max-w-2xl space-y-14 bg-background/85 px-6 py-16 backdrop-blur-sm sm:px-12">
         <Panel eyebrow="I" title="Informações gerais">
