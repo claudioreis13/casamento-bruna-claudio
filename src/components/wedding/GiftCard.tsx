@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { formatarPreco, type Gift } from "@/data/gifts";
 import { cn } from "@/lib/utils";
+
 
 interface Props {
   presente: Gift;
@@ -8,6 +10,8 @@ interface Props {
 }
 
 export function GiftCard({ presente, reservado, onPresentear }: Props) {
+  const [carregada, setCarregada] = useState(false);
+
   return (
     <article
       className={cn(
@@ -43,6 +47,14 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
       )}
 
       <div className="relative z-10 aspect-square overflow-hidden bg-muted">
+        {/* Skeleton/placeholder enquanto a imagem carrega */}
+        <div
+          aria-hidden
+          className={cn(
+            "absolute inset-0 bg-gradient-to-br from-muted via-secondary/30 to-muted transition-opacity duration-700",
+            carregada ? "opacity-0" : "opacity-100 animate-pulse"
+          )}
+        />
         <img
           src={presente.img}
           alt={presente.nome}
@@ -50,12 +62,18 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
           decoding="async"
           width={400}
           height={400}
-          className="h-full w-full object-cover transition-transform duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110"
+          onLoad={() => setCarregada(true)}
+          className={cn(
+            "h-full w-full object-cover transition-[transform,filter,opacity] duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110",
+            carregada ? "opacity-100 blur-0" : "scale-105 opacity-0 blur-xl"
+          )}
           onError={(e) => {
+            setCarregada(true);
             (e.currentTarget as HTMLImageElement).src =
               "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><rect fill='%23e8e4dd' width='400' height='400'/></svg>";
           }}
         />
+
         {/* Shimmer diagonal premium */}
         <div
           aria-hidden
