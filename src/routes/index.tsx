@@ -59,7 +59,7 @@ function Index() {
       {/* Hero fine-art */}
       <section className="hero-bg relative flex min-h-[88vh] flex-col items-center justify-center px-6 text-center text-background">
         <div aria-hidden="true" className="mb-8 h-16 w-px bg-background/50" />
-        <h1 className="font-display text-6xl font-light italic leading-none tracking-tight text-background drop-shadow-[0_2px_20px_rgba(0,0,0,0.35)] sm:text-8xl md:text-9xl">
+        <h1 className="font-display text-6xl italic leading-none tracking-tight text-background sm:text-8xl md:text-9xl [text-shadow:0_2px_24px_rgba(0,0,0,0.45)]" style={{ fontWeight: 300 }}>
           Bruna &amp; Cláudio
         </h1>
         <p className="mt-8 text-[11px] font-medium uppercase tracking-editorial-lg text-background/85 sm:text-xs">

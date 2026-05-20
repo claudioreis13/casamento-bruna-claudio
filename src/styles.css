@@ -4,11 +4,12 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@import url("https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Karla:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Italiana&family=Cormorant:ital,wght@0,300;0,400;1,300;1,400;1,500&family=Karla:wght@300;400;500;600&display=swap");
 
 @theme inline {
   --font-sans: "Karla", system-ui, sans-serif;
-  --font-display: "Cormorant", "Cormorant Garamond", "Times New Roman", serif;
+  --font-display: "Italiana", "Cormorant", "Times New Roman", serif;
+  --font-display-italic: "Cormorant", "Times New Roman", serif;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -126,6 +127,13 @@
 @layer utilities {
   .font-display {
     font-family: var(--font-display);
+    font-synthesis: none;
+  }
+  /* Italiana só tem upright — itálico cai para Cormorant 300 (hairline elegante) */
+  .font-display.italic,
+  .italic.font-display {
+    font-family: var(--font-display-italic);
+    font-weight: 300;
   }
   /* Hero fine-art: escurecimento sage para garantir contraste do texto cream */
   .hero-bg {
