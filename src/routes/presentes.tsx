@@ -5,7 +5,7 @@ import { PRESENTES, CATEGORIAS, type Categoria, type Gift } from "@/data/gifts";
 import { GiftCard } from "@/components/wedding/GiftCard";
 import { GiftModal } from "@/components/wedding/GiftModal";
 import { useReservados } from "@/hooks/use-reservados";
-import { WEDDING } from "@/lib/wedding-config";
+import { WEDDING, whatsappLink } from "@/lib/wedding-config";
 import { cn } from "@/lib/utils";
 
 type Faixa = "todos" | "ate200" | "200a500" | "500a1000" | "acima1000";
