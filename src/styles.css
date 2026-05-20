@@ -127,6 +127,13 @@
 @layer utilities {
   .font-display {
     font-family: var(--font-display);
+    font-synthesis: none;
+  }
+  /* Italiana só tem upright — itálico cai para Cormorant 300 (hairline elegante) */
+  .font-display.italic,
+  .italic.font-display {
+    font-family: var(--font-display-italic);
+    font-weight: 300;
   }
   /* Hero fine-art: escurecimento sage para garantir contraste do texto cream */
   .hero-bg {
