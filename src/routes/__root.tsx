@@ -12,6 +12,8 @@ import appCss from "../styles.css?url";
 import { Nav } from "@/components/wedding/Nav";
 import { Footer } from "@/components/wedding/Footer";
 import { Toaster } from "@/components/ui/sonner";
+import { RouteTransition } from "@/components/wedding/RouteTransition";
+
 
 function NotFoundComponent() {
   return (
@@ -107,11 +109,14 @@ function RootComponent() {
       <div className="flex min-h-screen flex-col">
         <Nav />
         <main className="flex-1">
-          <Outlet />
+          <RouteTransition>
+            <Outlet />
+          </RouteTransition>
         </main>
         <Footer />
         <Toaster position="top-center" />
       </div>
+
     </QueryClientProvider>
   );
 }
