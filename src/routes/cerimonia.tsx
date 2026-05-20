@@ -59,15 +59,15 @@ function Field({ label, value }: { label: string; value: string }) {
 function Cerimonia() {
   return (
     <div className="hero-bg-cerimonia min-h-screen">
-      <section className="flex min-h-[55vh] flex-col items-center justify-center px-6 py-20 text-center">
-        <span className="tracking-editorial-lg text-[10px] uppercase text-primary-dark/70">
+      <section className="flex min-h-[55vh] flex-col items-center justify-center px-6 py-20 text-center text-background">
+        <span className="tracking-editorial-lg text-[10px] uppercase text-background/85">
           10 · 10 · 2026
         </span>
-        <h1 className="mt-6 font-display text-5xl italic text-primary-dark sm:text-7xl">
+        <h1 className="mt-6 font-display text-5xl italic text-background drop-shadow-[0_2px_20px_rgba(0,0,0,0.35)] sm:text-7xl">
           Cerimônia
         </h1>
-        <div className="mt-6 h-px w-16 bg-primary-dark/40" />
-        <p className="mt-6 max-w-md text-sm text-primary-dark/80">
+        <div className="mt-6 h-px w-16 bg-background/50" />
+        <p className="mt-6 max-w-md text-sm text-background/85">
           Tudo o que você precisa saber para celebrar conosco
         </p>
       </section>
