@@ -4,28 +4,32 @@ export function Nav() {
   return (
     <nav
       aria-label="Menu principal"
-      className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur-md"
+      className="sticky top-0 z-40 border-b border-border/40 bg-background/85 backdrop-blur-md"
     >
-      <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3">
+      <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-5">
         <Link
           to="/"
-          className="font-display text-2xl text-primary-dark"
           aria-label="Bruna e Cláudio — Início"
+          className="group flex h-10 w-10 items-center justify-center rounded-full border border-primary/30 font-display text-lg italic text-primary-dark transition-colors hover:border-primary"
         >
-          B &amp; C
+          B
         </Link>
-        <div className="flex items-center gap-1 text-sm sm:gap-2 sm:text-base">
+        <div className="flex items-center gap-6 text-[10px] font-medium uppercase tracking-editorial text-primary-dark sm:gap-10 sm:text-[11px]">
           {[
             { to: "/", label: "Início" },
-            { to: "/presentes", label: "Presentes" },
             { to: "/cerimonia", label: "Cerimônia" },
+            { to: "/presentes", label: "Presentes" },
           ].map((l) => (
             <Link
               key={l.to}
               to={l.to}
-              className="rounded-full px-3 py-1.5 font-medium text-primary-dark transition-colors hover:bg-accent"
+              className="relative py-1 transition-opacity hover:opacity-60"
               activeOptions={{ exact: l.to === "/" }}
-              activeProps={{ className: "bg-primary text-primary-foreground hover:bg-primary" }}
+              activeProps={{
+                "aria-current": "page",
+                className:
+                  "relative py-1 after:absolute after:-bottom-0.5 after:left-0 after:h-px after:w-full after:bg-primary-dark",
+              }}
             >
               {l.label}
             </Link>
