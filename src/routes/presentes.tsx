@@ -89,8 +89,14 @@ function Presentes() {
   }
 
   return (
-    <div className="hero-bg min-h-screen">
-      <section className="flex min-h-[50vh] flex-col items-center justify-center px-6 py-20 text-center text-background">
+    <div className="min-h-screen">
+      <section className="relative flex min-h-[50vh] flex-col items-center justify-center overflow-hidden px-6 py-20 text-center text-background">
+        <HeroPicture
+          basePath="/imagens/casamento"
+          jpgFallback="/imagens/casamento.jpg"
+          priority
+        />
+
         <span className="tracking-editorial-lg text-[10px] uppercase text-background/85">
           Com carinho
         </span>
