@@ -1,13 +1,16 @@
 import { useCountdown } from "@/hooks/use-countdown";
 import { WEDDING } from "@/lib/wedding-config";
+import { AnimatedDigit } from "./AnimatedDigit";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
 function Unit({ valor, label }: { valor: string; label: string }) {
   return (
     <div className="flex flex-col items-center">
-      <div className="font-display text-6xl font-light leading-none tabular-nums text-primary-dark sm:text-7xl md:text-8xl">
-        {valor}
+      <div className="flex font-display text-6xl font-light leading-none text-primary-dark sm:text-7xl md:text-8xl">
+        {Array.from(valor).map((d, i) => (
+          <AnimatedDigit key={i} value={d} />
+        ))}
       </div>
       <div className="mt-3 text-[9px] font-semibold uppercase tracking-editorial-lg text-primary-dark/60 sm:text-[10px]">
         {label}
