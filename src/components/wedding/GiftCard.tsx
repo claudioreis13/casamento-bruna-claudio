@@ -37,7 +37,7 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
       )}
 
       {reservado && (
-        <span className="tracking-editorial absolute right-3 top-3 z-20 border border-primary-dark/30 bg-background/95 px-2.5 py-1 text-[9px] uppercase text-primary-dark backdrop-blur-sm">
+        <span className="tracking-editorial absolute right-3 top-3 z-20 rounded-full border border-primary-dark/30 bg-background/95 px-2.5 py-1 text-[9px] uppercase text-primary-dark backdrop-blur-sm">
           ✓ Reservado
         </span>
       )}
