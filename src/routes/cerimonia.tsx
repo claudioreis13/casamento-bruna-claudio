@@ -32,11 +32,11 @@ function Panel({
 }) {
   return (
     <section className="border-t border-primary/20 pt-8">
-      <div className="mb-6 flex items-baseline justify-between gap-4">
-        <span className="tracking-editorial-lg text-[10px] uppercase text-primary-dark/70">
+      <div className="mb-8">
+        <span className="block tracking-editorial-lg text-[10px] uppercase text-primary-dark/60">
           {eyebrow}
         </span>
-        <h2 className="font-display text-2xl italic text-primary-dark sm:text-3xl">
+        <h2 className="mt-3 font-display text-3xl italic text-primary-dark sm:text-4xl">
           {title}
         </h2>
       </div>
