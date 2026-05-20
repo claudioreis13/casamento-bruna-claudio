@@ -11,7 +11,7 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
   return (
     <article
       className={cn(
-        "group relative flex flex-col overflow-hidden bg-card",
+        "group relative flex flex-col overflow-hidden rounded-2xl bg-card",
         "border border-primary/10",
         "shadow-[0_1px_2px_rgba(0,0,0,0.04)]",
         "transition-[transform,box-shadow,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
@@ -31,13 +31,13 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
       />
 
       {presente.humor && (
-        <span className="tracking-editorial absolute left-3 top-3 z-20 border border-primary/20 bg-background/95 px-2.5 py-1 text-[9px] uppercase text-primary-dark backdrop-blur-sm">
+        <span className="tracking-editorial absolute left-3 top-3 z-20 rounded-full border border-primary/20 bg-background/95 px-2.5 py-1 text-[9px] uppercase text-primary-dark backdrop-blur-sm">
           Surpresa
         </span>
       )}
 
       {reservado && (
-        <span className="tracking-editorial absolute right-3 top-3 z-20 border border-primary-dark/30 bg-background/95 px-2.5 py-1 text-[9px] uppercase text-primary-dark backdrop-blur-sm">
+        <span className="tracking-editorial absolute right-3 top-3 z-20 rounded-full border border-primary-dark/30 bg-background/95 px-2.5 py-1 text-[9px] uppercase text-primary-dark backdrop-blur-sm">
           ✓ Reservado
         </span>
       )}
@@ -92,7 +92,7 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
           disabled={reservado}
           aria-label={reservado ? `${presente.nome}: já reservado` : `Presentear com ${presente.nome}`}
           className={cn(
-            "tracking-editorial group/btn relative mt-2 inline-flex items-center justify-center overflow-hidden border px-4 py-2.5 text-[10px] uppercase transition-colors duration-300",
+            "tracking-editorial group/btn relative mt-2 inline-flex items-center justify-center overflow-hidden rounded-full border px-5 py-2.5 text-[10px] uppercase transition-colors duration-300",
             "border-primary/40 text-primary-dark",
             "hover:border-primary-dark",
             "disabled:cursor-not-allowed disabled:border-muted disabled:text-muted-foreground"
