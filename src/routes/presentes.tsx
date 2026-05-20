@@ -59,8 +59,8 @@ function Presentes() {
   }
 
   return (
-    <>
-      <section className="hero-bg flex min-h-[35vh] flex-col items-center justify-center px-6 py-14 text-center text-white">
+    <div className="hero-bg min-h-screen">
+      <section className="flex min-h-[35vh] flex-col items-center justify-center px-6 py-14 text-center text-white">
         <h1 className="font-display text-5xl drop-shadow-md sm:text-6xl">Lista de Presentes</h1>
         <h2 className="mt-2 max-w-xl text-sm font-light sm:text-base">
           Escolha algo especial para celebrar conosco 🎁
@@ -162,6 +162,6 @@ function Presentes() {
         onClose={() => setSelecionado(null)}
         onConfirm={marcar}
       />
-    </>
+    </div>
   );
 }

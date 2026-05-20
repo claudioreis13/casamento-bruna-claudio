@@ -51,8 +51,8 @@ function Field({ label, value }: { label: string; value: string }) {
 
 function Cerimonia() {
   return (
-    <>
-      <section className="hero-bg-cerimonia flex min-h-[40vh] flex-col items-center justify-center px-6 py-16 text-center text-white">
+    <div className="hero-bg-cerimonia min-h-screen">
+      <section className="flex min-h-[40vh] flex-col items-center justify-center px-6 py-16 text-center text-white">
         <h1 className="font-display text-5xl drop-shadow-md sm:text-6xl">
           Bruna &amp; Cláudio
         </h1>
@@ -124,6 +124,6 @@ function Cerimonia() {
           </div>
         </InfoCard>
       </section>
-    </>
+    </div>
   );
 }
