@@ -68,23 +68,21 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
         />
       </div>
 
-      <div className="relative z-10 flex flex-1 flex-col gap-3 p-5">
+      <div className="relative z-10 flex flex-1 flex-col items-center gap-3 p-5 text-center">
         {/* Linha decorativa que cresce */}
         <span
           aria-hidden
           className="h-px w-8 bg-primary/40 transition-[width,background-color] duration-500 group-hover:w-16 group-hover:bg-primary-dark"
         />
 
-        <h3
-          className="line-clamp-2 min-h-[2.75rem] font-display text-lg italic leading-snug text-foreground"
-          title={presente.nome}
-        >
+        <h3 className="font-display text-lg italic leading-snug text-foreground">
           {presente.nome}
         </h3>
 
         <p className="tracking-editorial text-xs uppercase text-primary-dark tabular-nums">
           {formatarPreco(presente.preco)}
         </p>
+
 
         <button
           type="button"
