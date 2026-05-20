@@ -57,17 +57,17 @@ function Index() {
   return (
     <>
       {/* Hero fine-art */}
-      <section className="hero-bg relative flex min-h-[88vh] flex-col items-center justify-center px-6 text-center text-primary-dark">
-        <div aria-hidden="true" className="mb-8 h-16 w-px bg-primary-dark/40" />
-        <h1 className="font-display text-6xl font-light italic leading-none tracking-tight sm:text-8xl md:text-9xl">
+      <section className="hero-bg relative flex min-h-[88vh] flex-col items-center justify-center px-6 text-center text-background">
+        <div aria-hidden="true" className="mb-8 h-16 w-px bg-background/50" />
+        <h1 className="font-display text-6xl font-light italic leading-none tracking-tight text-background drop-shadow-[0_2px_20px_rgba(0,0,0,0.35)] sm:text-8xl md:text-9xl">
           Bruna &amp; Cláudio
         </h1>
-        <p className="mt-8 text-[11px] font-medium uppercase tracking-editorial-lg text-primary-dark/80 sm:text-xs">
+        <p className="mt-8 text-[11px] font-medium uppercase tracking-editorial-lg text-background/85 sm:text-xs">
           Bem-vindos ao nosso para sempre
         </p>
         <p
           aria-hidden="true"
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-pulse text-[10px] uppercase tracking-editorial text-primary-dark/40"
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-pulse text-[10px] uppercase tracking-editorial text-background/60"
         >
           Role
         </p>
