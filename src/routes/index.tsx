@@ -101,20 +101,6 @@ function Index() {
             <div aria-hidden="true" className="mt-6 h-px w-12 bg-secondary" />
           </div>
 
-          <div className="mt-16 flex flex-col gap-4 sm:flex-row sm:gap-6">
-            <Link
-              to="/cerimonia"
-              className="min-w-[260px] bg-primary px-10 py-4 text-center text-[10px] font-medium uppercase tracking-editorial text-primary-foreground shadow-soft transition-all duration-500 hover:bg-primary-dark"
-            >
-              Cerimônia &amp; Festa
-            </Link>
-            <Link
-              to="/presentes"
-              className="min-w-[260px] border border-primary/30 px-10 py-4 text-center text-[10px] font-medium uppercase tracking-editorial text-primary-dark transition-all duration-500 hover:bg-accent/40"
-            >
-              Lista de Presentes
-            </Link>
-          </div>
         </div>
       </section>
     </>
