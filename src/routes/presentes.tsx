@@ -5,9 +5,11 @@ import { toast } from "sonner";
 import { PRESENTES, CATEGORIAS, type Categoria, type Gift } from "@/data/gifts";
 import { GiftCard } from "@/components/wedding/GiftCard";
 import { GiftModal } from "@/components/wedding/GiftModal";
+import { HeroPicture } from "@/components/wedding/HeroPicture";
 import { useReservados } from "@/hooks/use-reservados";
 import { WEDDING, whatsappLink } from "@/lib/wedding-config";
 import { cn } from "@/lib/utils";
+
 
 
 type Faixa = "todos" | "ate200" | "200a500" | "500a1000" | "acima1000";
@@ -87,8 +89,14 @@ function Presentes() {
   }
 
   return (
-    <div className="hero-bg min-h-screen">
-      <section className="flex min-h-[50vh] flex-col items-center justify-center px-6 py-20 text-center text-background">
+    <div className="min-h-screen">
+      <section className="hero-section relative flex min-h-[50vh] flex-col items-center justify-center overflow-hidden px-6 py-20 text-center text-background">
+        <HeroPicture
+          basePath="/imagens/casamento"
+          jpgFallback="/imagens/casamento.jpg"
+          priority
+        />
+
         <span className="tracking-editorial-lg text-[10px] uppercase text-background/85">
           Com carinho
         </span>
@@ -269,27 +277,34 @@ function Presentes() {
             // re-anima quando filtros mudam
             key={`${categoria}-${faixa}-${ordem}-${termoDeferred}`}
           >
-            {lista.map((p) => (
-              <motion.div
-                key={p.id}
-                variants={{
-                  hidden: { opacity: 0, y: 24, filter: "blur(6px)" },
-                  show: {
-                    opacity: 1,
-                    y: 0,
-                    filter: "blur(0px)",
-                    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
-                  },
-                }}
-              >
-                <GiftCard
-                  presente={p}
-                  reservado={reservados.includes(p.id)}
-                  onPresentear={() => setSelecionado(p)}
-                />
-              </motion.div>
-            ))}
+            {lista.map((p, i) => {
+              // Bento leve: 2 cards "destaque" ocupam 2 colunas em telas grandes,
+              // quebrando a monotonia do grid uniforme.
+              const destaque = i === 0 || i === 7;
+              return (
+                <motion.div
+                  key={p.id}
+                  className={cn(destaque && "lg:col-span-2")}
+                  variants={{
+                    hidden: { opacity: 0, y: 24, filter: "blur(6px)" },
+                    show: {
+                      opacity: 1,
+                      y: 0,
+                      filter: "blur(0px)",
+                      transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+                    },
+                  }}
+                >
+                  <GiftCard
+                    presente={p}
+                    reservado={reservados.includes(p.id)}
+                    onPresentear={() => setSelecionado(p)}
+                  />
+                </motion.div>
+              );
+            })}
           </motion.div>
+
 
         )}
       </section>

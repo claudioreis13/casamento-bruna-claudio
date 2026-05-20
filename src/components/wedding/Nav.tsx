@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { ThemeToggle } from "./ThemeToggle";
 
 export function Nav() {
   return (
@@ -34,6 +35,7 @@ export function Nav() {
               {l.label}
             </Link>
           ))}
+          <ThemeToggle />
         </div>
       </div>
     </nav>

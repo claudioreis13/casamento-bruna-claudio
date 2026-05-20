@@ -5,7 +5,10 @@ import { Countdown } from "@/components/wedding/Countdown";
 import { Reveal } from "@/components/wedding/Reveal";
 import { SplitHeadline } from "@/components/wedding/SplitHeadline";
 import { OrganicDivider } from "@/components/wedding/OrganicDivider";
+import { HeroPicture } from "@/components/wedding/HeroPicture";
+import { useAdaptiveCopy } from "@/hooks/use-adaptive-copy";
 import { WEDDING } from "@/lib/wedding-config";
+
 
 
 const eventJsonLd = {
@@ -62,6 +65,7 @@ export const Route = createFileRoute("/")({
 function Index() {
   const reduce = useReducedMotion();
   const heroRef = useRef<HTMLElement>(null);
+  const { saudacao, hero: heroCopy } = useAdaptiveCopy();
 
   // Parallax do conteúdo do hero conforme o usuário rola.
   const { scrollYProgress } = useScroll({
@@ -76,29 +80,14 @@ function Index() {
       {/* Hero fine-art com Ken Burns + parallax + scroll cue */}
       <section
         ref={heroRef}
-        className="relative flex min-h-[88vh] flex-col items-center justify-center overflow-hidden px-6 text-center text-background"
+        className="hero-section relative flex min-h-[88vh] flex-col items-center justify-center overflow-hidden px-6 text-center text-background"
       >
-        {/* Camada de imagem com Ken Burns lento */}
-        <motion.div
-          aria-hidden
-          className="hero-bg absolute inset-0 -z-10"
-          initial={reduce ? false : { scale: 1 }}
-          animate={reduce ? undefined : { scale: 1.08 }}
-          transition={{
-            duration: 24,
-            ease: "easeOut",
-            repeat: Infinity,
-            repeatType: "reverse",
-          }}
-        />
-        {/* Grain sutil para textura analógica */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 opacity-[0.06] mix-blend-overlay"
-          style={{
-            backgroundImage:
-              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/></svg>\")",
-          }}
+
+        <HeroPicture
+          basePath="/imagens/casamento"
+          jpgFallback="/imagens/casamento.jpg"
+          kenBurns
+          priority
         />
 
         <motion.div
@@ -119,14 +108,23 @@ function Index() {
             <SplitHeadline text="Bruna & Cláudio" delay={0.6} />
           </h1>
           <motion.p
-            className="mt-8 text-[11px] font-medium uppercase tracking-editorial-lg text-background/85 sm:text-xs"
+            className="mt-6 text-[10px] font-medium uppercase tracking-editorial-lg text-background/70 sm:text-[11px]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 1.4 }}
+          >
+            {saudacao}
+          </motion.p>
+          <motion.p
+            className="mt-3 text-[11px] font-medium uppercase tracking-editorial-lg text-background/85 sm:text-xs"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 1.6 }}
+            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 1.7 }}
           >
-            Bem-vindos ao nosso para sempre
+            {heroCopy}
           </motion.p>
         </motion.div>
+
 
         {/* Scroll cue */}
         <motion.div
