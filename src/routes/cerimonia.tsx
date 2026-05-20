@@ -61,7 +61,7 @@ function Field({ label, value }: { label: string; value: string }) {
 function Cerimonia() {
   return (
     <div className="min-h-screen">
-      <section className="relative flex min-h-[55vh] flex-col items-center justify-center overflow-hidden px-6 py-20 text-center text-background">
+      <section className="hero-section relative flex min-h-[55vh] flex-col items-center justify-center overflow-hidden px-6 py-20 text-center text-background">
         <HeroPicture
           basePath="/imagens/igreja"
           jpgFallback="/imagens/igreja.jpg"

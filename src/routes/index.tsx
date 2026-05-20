@@ -80,8 +80,9 @@ function Index() {
       {/* Hero fine-art com Ken Burns + parallax + scroll cue */}
       <section
         ref={heroRef}
-        className="relative flex min-h-[88vh] flex-col items-center justify-center overflow-hidden px-6 text-center text-background"
+        className="hero-section relative flex min-h-[88vh] flex-col items-center justify-center overflow-hidden px-6 text-center text-background"
       >
+
         <HeroPicture
           basePath="/imagens/casamento"
           jpgFallback="/imagens/casamento.jpg"

@@ -90,7 +90,7 @@ function Presentes() {
 
   return (
     <div className="min-h-screen">
-      <section className="relative flex min-h-[50vh] flex-col items-center justify-center overflow-hidden px-6 py-20 text-center text-background">
+      <section className="hero-section relative flex min-h-[50vh] flex-col items-center justify-center overflow-hidden px-6 py-20 text-center text-background">
         <HeroPicture
           basePath="/imagens/casamento"
           jpgFallback="/imagens/casamento.jpg"
