@@ -77,13 +77,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      // Performance: preconnect e preload do LCP
+      // Performance: preconnect e preload responsivo do LCP
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "preload",
         as: "image",
-        href: "/imagens/casamento.jpg",
+        href: "/imagens/casamento-1280.webp",
+        imagesrcset:
+          "/imagens/casamento-640.webp 640w, /imagens/casamento-1280.webp 1280w, /imagens/casamento-1920.webp 1920w",
+        imagesizes: "100vw",
+        type: "image/webp",
         fetchpriority: "high",
       },
       {
@@ -92,6 +96,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💍</text></svg>",
       },
     ],
+
 
   }),
   shellComponent: RootShell,
