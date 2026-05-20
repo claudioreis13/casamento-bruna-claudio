@@ -190,8 +190,66 @@ function Index() {
         </Reveal>
       </section>
 
+      <OrganicDivider />
+
+      {/* Seção assimétrica: imagem à esquerda, texto à direita */}
+      <section className="px-6 py-24 sm:py-32">
+        <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-12 md:items-center md:gap-16">
+          <Reveal className="md:col-span-7" y={32}>
+            <div className="group relative aspect-[4/5] overflow-hidden">
+              <motion.img
+                src="/imagens/casamento.jpg"
+                alt="Bruna e Cláudio"
+                loading="lazy"
+                decoding="async"
+                className="h-full w-full object-cover"
+                initial={{ scale: 1.15 }}
+                whileInView={{ scale: 1 }}
+                viewport={{ once: true, margin: "-15%" }}
+                transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1] }}
+              />
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-primary-dark/20 via-transparent to-transparent"
+              />
+            </div>
+          </Reveal>
+
+          <div className="md:col-span-5">
+            <Reveal delay={0.15}>
+              <span className="tracking-editorial-lg text-[10px] uppercase text-primary-dark/60">
+                Nossa história
+              </span>
+            </Reveal>
+            <Reveal delay={0.25}>
+              <h2 className="mt-6 font-display text-4xl font-light italic leading-tight text-primary-dark sm:text-5xl md:text-6xl">
+                De dois caminhos, um só destino.
+              </h2>
+            </Reveal>
+            <Reveal delay={0.35}>
+              <p className="mt-8 max-w-md text-base leading-relaxed text-primary-dark/85">
+                Cada encontro, cada risada, cada silêncio compartilhado nos
+                trouxe até aqui. Em outubro, diante de Deus e de quem amamos,
+                celebramos a escolha de seguir juntos — para sempre.
+              </p>
+            </Reveal>
+            <Reveal delay={0.45}>
+              <div className="mt-10 flex items-center gap-4">
+                <span className="h-px w-12 bg-primary/60" />
+                <span className="tracking-editorial text-[10px] uppercase text-primary-dark/60">
+                  Bruna &amp; Cláudio
+                </span>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      <OrganicDivider />
+
       {/* Countdown + CTAs */}
       <section className="bg-card/40 px-6 py-24 backdrop-blur-sm">
+
         <div className="mx-auto flex max-w-5xl flex-col items-center">
           <Reveal>
             <p className="mb-14 text-[10px] font-semibold uppercase tracking-editorial-lg text-primary-dark/60">
