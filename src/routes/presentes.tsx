@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useDeferredValue, useMemo, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
 import { toast } from "sonner";
 import { PRESENTES, CATEGORIAS, type Categoria, type Gift } from "@/data/gifts";
 import { GiftCard } from "@/components/wedding/GiftCard";
@@ -7,6 +8,7 @@ import { GiftModal } from "@/components/wedding/GiftModal";
 import { useReservados } from "@/hooks/use-reservados";
 import { WEDDING, whatsappLink } from "@/lib/wedding-config";
 import { cn } from "@/lib/utils";
+
 
 type Faixa = "todos" | "ate200" | "200a500" | "500a1000" | "acima1000";
 type Ordem = "padrao" | "menor" | "maior" | "az";
@@ -39,11 +41,13 @@ export const Route = createFileRoute("/presentes")({
 });
 
 function Presentes() {
+  const reduce = useReducedMotion();
   const [termo, setTermo] = useState("");
   const [categoria, setCategoria] = useState<Categoria | "todos">("todos");
   const [faixa, setFaixa] = useState<Faixa>("todos");
   const [ordem, setOrdem] = useState<Ordem>("padrao");
   const [selecionado, setSelecionado] = useState<Gift | null>(null);
+
 
   const termoDeferred = useDeferredValue(termo);
   const { reservados, marcar } = useReservados();
@@ -254,16 +258,39 @@ function Presentes() {
             Nenhum presente encontrado
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
+          <motion.div
+            className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4"
+            initial="hidden"
+            animate="show"
+            variants={{
+              hidden: {},
+              show: { transition: { staggerChildren: reduce ? 0 : 0.06 } },
+            }}
+            // re-anima quando filtros mudam
+            key={`${categoria}-${faixa}-${ordem}-${termoDeferred}`}
+          >
             {lista.map((p) => (
-              <GiftCard
+              <motion.div
                 key={p.id}
-                presente={p}
-                reservado={reservados.includes(p.id)}
-                onPresentear={() => setSelecionado(p)}
-              />
+                variants={{
+                  hidden: { opacity: 0, y: 24, filter: "blur(6px)" },
+                  show: {
+                    opacity: 1,
+                    y: 0,
+                    filter: "blur(0px)",
+                    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+                  },
+                }}
+              >
+                <GiftCard
+                  presente={p}
+                  reservado={reservados.includes(p.id)}
+                  onPresentear={() => setSelecionado(p)}
+                />
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
+
         )}
       </section>
 
