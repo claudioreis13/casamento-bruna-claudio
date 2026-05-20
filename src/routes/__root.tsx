@@ -110,6 +110,7 @@ function RootComponent() {
           <Outlet />
         </main>
         <Footer />
+        <Toaster position="top-center" />
       </div>
     </QueryClientProvider>
   );
