@@ -11,7 +11,7 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
   return (
     <article
       className={cn(
-        "group relative flex flex-col overflow-hidden bg-card",
+        "group relative flex flex-col overflow-hidden rounded-2xl bg-card",
         "border border-primary/10",
         "shadow-[0_1px_2px_rgba(0,0,0,0.04)]",
         "transition-[transform,box-shadow,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
