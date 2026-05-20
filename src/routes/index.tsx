@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { Countdown } from "@/components/wedding/Countdown";
 import { WEDDING } from "@/lib/wedding-config";
 
