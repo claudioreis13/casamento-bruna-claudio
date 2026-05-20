@@ -120,6 +120,25 @@ function Presentes() {
               Copiar PIX
             </button>
           </div>
+
+          {/* Observação: outras formas de pagamento */}
+          <div className="mt-6 border-t border-primary/15 pt-5">
+            <p className="text-sm leading-relaxed text-foreground/80">
+              <span className="tracking-editorial mr-2 text-[10px] uppercase text-primary-dark/70">
+                Observação
+              </span>
+              Se você deseja comprar ou pagar de outra forma,{" "}
+              <a
+                href={whatsappLink("Oii Bruna! Gostaria de combinar outra forma de presentear vocês.")}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-primary-dark underline decoration-primary/40 underline-offset-4 transition-colors hover:decoration-primary-dark"
+              >
+                entre em contato com a Bruna
+              </a>{" "}
+              pra combinar a melhor forma.
+            </p>
+          </div>
         </div>
 
         {/* Cabeçalho da lista */}
