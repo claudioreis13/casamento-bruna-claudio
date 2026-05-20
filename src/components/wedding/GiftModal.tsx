@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import confetti from "canvas-confetti";
 import { formatarPreco, type Gift } from "@/data/gifts";
 import { WEDDING, whatsappLink } from "@/lib/wedding-config";
+import { petalBurst } from "@/lib/petals";
 import { cn } from "@/lib/utils";
+
 
 interface Props {
   presente: Gift | null;
@@ -63,18 +64,14 @@ export function GiftModal({ presente, onClose, onConfirm }: Props) {
     try {
       await navigator.clipboard.writeText(WEDDING.pix);
       setCopied(true);
-      confetti({
-        particleCount: 80,
-        spread: 70,
-        origin: { y: 0.6 },
-        colors: ["#6B7A4E", "#B9CCAE", "#D4DECE", "#A1A1A0", "#fff"],
-      });
+      petalBurst();
       onConfirm(presente.id);
       setTimeout(() => onClose(), 2500);
     } catch {
       alert(`Copie manualmente: ${WEDDING.pix}`);
     }
   }
+
 
   return (
     <div

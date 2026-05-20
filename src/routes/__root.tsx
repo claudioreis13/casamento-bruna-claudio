@@ -13,6 +13,8 @@ import { Nav } from "@/components/wedding/Nav";
 import { Footer } from "@/components/wedding/Footer";
 import { Toaster } from "@/components/ui/sonner";
 import { RouteTransition } from "@/components/wedding/RouteTransition";
+import { CustomCursor } from "@/components/wedding/CustomCursor";
+
 
 
 function NotFoundComponent() {
@@ -75,12 +77,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      // Performance: preconnect e preload do LCP
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "preload",
+        as: "image",
+        href: "/imagens/casamento.jpg",
+        fetchpriority: "high",
+      },
       {
         rel: "icon",
         href:
           "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💍</text></svg>",
       },
     ],
+
   }),
   shellComponent: RootShell,
   component: RootComponent,
@@ -106,6 +118,7 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   return (
     <QueryClientProvider client={queryClient}>
+      <CustomCursor />
       <div className="flex min-h-screen flex-col">
         <Nav />
         <main className="flex-1">
@@ -116,7 +129,7 @@ function RootComponent() {
         <Footer />
         <Toaster position="top-center" />
       </div>
-
     </QueryClientProvider>
   );
 }
+
