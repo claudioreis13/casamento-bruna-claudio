@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 
 const KEY = "reservados";
+const RESET_KEY = "reservados:reset:v2";
 
 function read(): string[] {
   if (typeof window === "undefined") return [];
@@ -10,6 +11,7 @@ function read(): string[] {
     return [];
   }
 }
+
 
 export function useReservados() {
   const [reservados, setReservados] = useState<string[]>([]);
