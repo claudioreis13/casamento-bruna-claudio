@@ -1,16 +1,23 @@
+import { useEffect, useState } from "react";
 import { useCountdown } from "@/hooks/use-countdown";
 import { WEDDING } from "@/lib/wedding-config";
 
 /**
  * Texto adaptativo baseado em horário do dia + dias restantes.
- *  - Manhã/tarde/noite muda saudação
- *  - Copy do hero muda quando faltam < 30, < 180 ou < 365 dias
+ * Para evitar mismatch de hidratação SSR/CSR, sempre renderiza
+ * o texto estático no primeiro render e só ativa o dinâmico após
+ * a montagem no cliente.
  */
 export function useAdaptiveCopy() {
   const { dias, acabou } = useCountdown(WEDDING.data);
+  const [mounted, setMounted] = useState(false);
 
-  if (typeof window === "undefined") {
-    return { saudacao: "Bem-vindos", hero: "ao nosso para sempre" };
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return { saudacao: "Bem-vindos", hero: "Bem-vindos ao nosso para sempre", dias, acabou };
   }
 
   const h = new Date().getHours();
@@ -30,8 +37,6 @@ export function useAdaptiveCopy() {
     hero = `Faltam ${dias} dias para o nosso sim`;
   } else if (dias <= 180) {
     hero = `Faltam ${dias} dias — e contando`;
-  } else {
-    hero = "Bem-vindos ao nosso para sempre";
   }
 
   return { saudacao, hero, dias, acabou };
