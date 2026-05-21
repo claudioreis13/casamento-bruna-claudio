@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { PRESENTES, CATEGORIAS, type Categoria, type Gift } from "@/data/gifts";
 import { GiftCard } from "@/components/wedding/GiftCard";
 import { GiftModal } from "@/components/wedding/GiftModal";
-import { HeroPicture } from "@/components/wedding/HeroPicture";
+
 import { useReservados } from "@/hooks/use-reservados";
 import { WEDDING, whatsappLink } from "@/lib/wedding-config";
 import { cn } from "@/lib/utils";
@@ -93,192 +93,186 @@ function Presentes() {
   }
 
   return (
-    <div className="min-h-screen">
-      <section className="hero-section relative flex min-h-[50vh] flex-col items-center justify-center overflow-hidden px-6 py-20 text-center text-background">
-        <HeroPicture
-          basePath="/imagens/casamento"
-          jpgFallback="/imagens/casamento.jpg"
-          priority
-        />
-
-        <span className="tracking-editorial-lg text-[10px] uppercase text-background/85">
+    <div className="min-h-screen bg-background">
+      {/* Hero editorial */}
+      <header className="mx-auto max-w-6xl px-4 pb-16 pt-20 text-center sm:px-8 sm:pt-28">
+        <span className="tracking-editorial-lg block text-[11px] font-semibold uppercase text-primary">
           Com carinho
         </span>
-        <h1 className="mt-6 font-display text-5xl italic text-background drop-shadow-[0_2px_20px_rgba(0,0,0,0.35)] sm:text-7xl">
+        <h1 className="mt-5 font-display text-5xl italic leading-[1.05] text-foreground sm:text-7xl">
           Lista de Presentes
         </h1>
-        <div className="mt-6 h-px w-16 bg-background/50" />
-        <p className="mt-6 max-w-md text-sm text-background/85">
-          Escolha algo especial para celebrar conosco
+        <p className="mx-auto mt-6 max-w-md text-sm font-light leading-relaxed text-muted-foreground">
+          Escolha algo especial para celebrar conosco e tornar nossa nova casa
+          um reflexo do nosso amor.
         </p>
-      </section>
+      </header>
 
-      <section className="mx-auto max-w-6xl bg-background/95 px-4 py-12 backdrop-blur-sm sm:px-8">
-        {/* Banner PIX em destaque */}
-        <div className="mb-10 border border-primary/30 bg-card p-6 sm:p-8">
-          <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <p className="tracking-editorial text-[10px] uppercase text-primary-dark/60">
-                Prefere contribuir em dinheiro?
-              </p>
-              <h2 className="mt-2 font-display text-2xl italic text-primary-dark sm:text-3xl">
-                Envie um PIX direto para os noivos
+      {/* PIX em destaque — boutique */}
+      <section className="mx-auto mb-24 max-w-4xl px-4 sm:px-8">
+        <div className="relative overflow-hidden border border-primary/20 bg-secondary/20 p-8 sm:p-12">
+          {/* Ornamento sutil */}
+          <div
+            aria-hidden
+            className="absolute -right-16 -top-16 h-32 w-32 rounded-full bg-primary/5"
+          />
+          <div className="relative z-10 flex flex-col items-center justify-between gap-8 sm:flex-row">
+            <div className="text-center sm:text-left">
+              <h2 className="font-display text-2xl italic text-primary-dark sm:text-3xl">
+                Contribuição Espontânea
               </h2>
-              <p className="mt-2 font-mono text-sm text-foreground break-all">
-                {WEDDING.pix}
+              <p className="mt-2 text-sm text-muted-foreground">
+                Prefere contribuir em dinheiro? Envie um PIX direto aos noivos.
               </p>
+              <div className="mt-4 inline-flex items-center gap-3 border border-primary/15 bg-card px-4 py-2">
+                <span className="font-mono text-sm text-foreground break-all">
+                  {WEDDING.pix}
+                </span>
+              </div>
             </div>
             <button
               type="button"
               onClick={copiarPix}
-              className="tracking-editorial w-full shrink-0 bg-primary px-6 py-3 text-[10px] uppercase text-primary-foreground transition-colors hover:bg-primary-dark sm:w-auto"
+              className="tracking-editorial w-full shrink-0 bg-primary px-10 py-4 text-[11px] font-semibold uppercase text-primary-foreground shadow-sm transition-colors hover:bg-primary-dark sm:w-auto"
             >
-              Copiar PIX
+              Copiar Chave PIX
             </button>
           </div>
+          <p className="tracking-editorial mt-8 text-center text-[10px] uppercase text-muted-foreground">
+            Se preferir outra forma de presentear,{" "}
+            <a
+              href={whatsappLink(
+                "Oii Bruna! Gostaria de combinar outra forma de presentear vocês."
+              )}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-primary-dark underline decoration-primary/40 underline-offset-4 hover:decoration-primary-dark"
+            >
+              fale com a Bruna
+            </a>{" "}
+            para combinar.
+          </p>
+        </div>
+      </section>
 
-          {/* Observação: outras formas de pagamento */}
-          <div className="mt-6 border-t border-primary/15 pt-5">
-            <p className="text-sm leading-relaxed text-foreground/80">
-              <span className="tracking-editorial mr-2 text-[10px] uppercase text-primary-dark/70">
-                Observação
+      {/* Controls */}
+      <div className="mx-auto mb-12 max-w-6xl border-b border-primary/15 px-4 pb-8 sm:px-8">
+        <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
+          <div className="space-y-6">
+            {/* Categoria — tabs editoriais */}
+            <div>
+              <span className="tracking-editorial mb-3 block text-[10px] font-semibold uppercase text-muted-foreground">
+                Filtrar por Categoria
               </span>
-              Se você deseja comprar ou pagar de outra forma,{" "}
-              <a
-                href={whatsappLink("Oii Bruna! Gostaria de combinar outra forma de presentear vocês.")}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-medium text-primary-dark underline decoration-primary/40 underline-offset-4 transition-colors hover:decoration-primary-dark"
-              >
-                entre em contato com a Bruna
-              </a>{" "}
-              pra combinar a melhor forma.
-            </p>
+              <div className="flex flex-wrap gap-x-6 gap-y-2">
+                {CATEGORIAS.map((c) => {
+                  const ativo = categoria === c.id;
+                  return (
+                    <button
+                      key={c.id}
+                      type="button"
+                      onClick={() => setCategoria(c.id)}
+                      aria-pressed={ativo}
+                      className={cn(
+                        "pb-1 text-sm transition-colors",
+                        ativo
+                          ? "border-b border-primary-dark font-medium text-primary-dark"
+                          : "text-muted-foreground hover:text-foreground"
+                      )}
+                    >
+                      {c.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Faixa — chips outlined */}
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="tracking-editorial text-[10px] font-semibold uppercase text-muted-foreground">
+                Faixa de Preço:
+              </span>
+              {FAIXAS.map((f) => {
+                const ativo = faixa === f.id;
+                return (
+                  <button
+                    key={f.id}
+                    type="button"
+                    onClick={() => setFaixa(f.id)}
+                    aria-pressed={ativo}
+                    className={cn(
+                      "border px-3 py-1 text-xs transition-colors",
+                      ativo
+                        ? "border-primary-dark bg-primary text-primary-foreground"
+                        : "border-primary/20 text-foreground hover:border-primary"
+                    )}
+                  >
+                    {f.label}
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        </div>
 
-        {/* Cabeçalho da lista */}
-        <div className="mb-6 border-t border-primary/20 pt-8">
-          <span className="tracking-editorial-lg text-[10px] uppercase text-primary-dark/60">
-            Ou escolha um presente
-          </span>
-          <h2 className="mt-3 font-display text-3xl italic text-primary-dark sm:text-4xl">
-            Lista completa
-          </h2>
-        </div>
-
-        {/* Categorias em chips */}
-        <div className="mb-6">
-          <p className="tracking-editorial mb-3 text-[10px] uppercase text-primary-dark/50">
-            Categoria
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {CATEGORIAS.map((c) => {
-              const ativo = categoria === c.id;
-              return (
-                <button
-                  key={c.id}
-                  type="button"
-                  onClick={() => setCategoria(c.id)}
-                  aria-pressed={ativo}
-                  className={cn(
-                    "tracking-editorial border px-4 py-2 text-[10px] uppercase transition-colors",
-                    ativo
-                      ? "border-primary-dark bg-primary text-primary-foreground"
-                      : "border-primary/30 text-primary-dark hover:border-primary"
-                  )}
-                >
-                  {c.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Faixa de preço em chips */}
-        <div className="mb-6">
-          <p className="tracking-editorial mb-3 text-[10px] uppercase text-primary-dark/50">
-            Faixa de preço
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {FAIXAS.map((f) => {
-              const ativo = faixa === f.id;
-              return (
-                <button
-                  key={f.id}
-                  type="button"
-                  onClick={() => setFaixa(f.id)}
-                  aria-pressed={ativo}
-                  className={cn(
-                    "tracking-editorial border px-4 py-2 text-[10px] uppercase transition-colors",
-                    ativo
-                      ? "border-primary-dark bg-primary text-primary-foreground"
-                      : "border-primary/30 text-primary-dark hover:border-primary"
-                  )}
-                >
-                  {f.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Busca + ordenação + status */}
-        <div className="sticky top-[57px] z-20 mb-10 flex flex-col gap-3 border-y border-primary/20 bg-background/95 py-4 backdrop-blur sm:flex-row sm:items-center">
-          <input
-            type="text"
-            value={termo}
-            onChange={(e) => setTermo(e.target.value)}
-            placeholder="Buscar presente"
-            aria-label="Buscar entre os presentes"
-            className="tracking-editorial flex-1 border-b border-primary/30 bg-transparent py-2.5 text-sm uppercase text-foreground placeholder:text-primary-dark/40 outline-none focus:border-primary-dark"
-          />
-          <select
-            value={ordem}
-            onChange={(e) => setOrdem(e.target.value as Ordem)}
-            aria-label="Ordenar presentes"
-            className="tracking-editorial border border-primary/30 bg-transparent px-4 py-2.5 text-[11px] uppercase text-foreground outline-none focus:border-primary-dark"
-          >
-            <option value="padrao">Ordenar por</option>
-            <option value="menor">Menor preço</option>
-            <option value="maior">Maior preço</option>
-            <option value="az">A → Z</option>
-          </select>
-          {(ativos > 0 || ordem !== "padrao") && (
-            <button
-              type="button"
-              onClick={limpar}
-              className="tracking-editorial border border-primary/30 px-4 py-2.5 text-[11px] uppercase text-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
+          <div className="flex w-full gap-4 lg:w-auto">
+            <div className="relative flex-1 lg:w-64">
+              <input
+                type="text"
+                value={termo}
+                onChange={(e) => setTermo(e.target.value)}
+                placeholder="BUSCAR PRESENTE"
+                aria-label="Buscar entre os presentes"
+                className="tracking-editorial w-full border-b border-primary/20 bg-transparent py-2 text-xs text-foreground placeholder:text-muted-foreground/60 outline-none focus:border-primary-dark"
+              />
+            </div>
+            <select
+              value={ordem}
+              onChange={(e) => setOrdem(e.target.value as Ordem)}
+              aria-label="Ordenar presentes"
+              className="tracking-editorial cursor-pointer border-b border-primary/20 bg-transparent py-2 text-xs uppercase text-foreground outline-none focus:border-primary-dark"
             >
-              Limpar
-            </button>
-          )}
+              <option value="padrao">ORDENAR POR</option>
+              <option value="menor">Menor Preço</option>
+              <option value="maior">Maior Preço</option>
+              <option value="az">A → Z</option>
+            </select>
+            {(ativos > 0 || ordem !== "padrao") && (
+              <button
+                type="button"
+                onClick={limpar}
+                className="tracking-editorial border-b border-primary/20 px-2 py-2 text-xs uppercase text-foreground transition-colors hover:text-primary-dark"
+              >
+                Limpar
+              </button>
+            )}
+          </div>
         </div>
+      </div>
 
-        <p
-          aria-live="polite"
-          className="tracking-editorial mb-6 text-[10px] uppercase text-primary-dark/60"
-        >
-          {lista.length} presente{lista.length !== 1 ? "s" : ""}
-        </p>
+      <p
+        aria-live="polite"
+        className="tracking-editorial mx-auto mb-10 max-w-6xl px-4 text-[10px] uppercase text-muted-foreground sm:px-8"
+      >
+        {lista.length} presente{lista.length !== 1 ? "s" : ""}
+      </p>
 
+      <section className="mx-auto mb-20 max-w-6xl px-4 sm:px-8">
         {lista.length === 0 ? (
           <div
             role="status"
-            className="border border-primary/20 p-16 text-center font-display text-lg italic text-muted-foreground"
+            className="border border-primary/15 p-16 text-center font-display text-lg italic text-muted-foreground"
           >
             Nenhum presente encontrado
           </div>
         ) : (
           <motion.div
-            className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4"
+            className="grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-4"
             initial="hidden"
             animate="show"
             variants={{
               hidden: {},
               show: { transition: { staggerChildren: reduce ? 0 : 0.06 } },
             }}
-            // re-anima quando filtros mudam
             key={`${categoria}-${faixa}-${ordem}-${termoDeferred}`}
           >
             {lista.map((p) => (
@@ -302,8 +296,6 @@ function Presentes() {
               </motion.div>
             ))}
           </motion.div>
-
-
         )}
       </section>
 
