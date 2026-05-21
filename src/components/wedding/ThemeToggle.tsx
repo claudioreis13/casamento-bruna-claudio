@@ -65,8 +65,7 @@ export function ThemeToggle() {
       typeof window !== "undefined" &&
       window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 
-    const doc = document as DocumentWithViewTransition;
-    const supported = typeof doc.startViewTransition === "function";
+    const supported = typeof document.startViewTransition === "function";
 
     // Fallback: no View Transitions API or reduced motion → instant
     if (!supported || prefersReducedMotion) {
@@ -85,7 +84,7 @@ export function ThemeToggle() {
     );
 
     animatingRef.current = true;
-    const transition = doc.startViewTransition!(() => {
+    const transition = document.startViewTransition(() => {
       applyTheme(next);
       setTheme(next);
     });
