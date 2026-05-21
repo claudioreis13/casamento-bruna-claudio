@@ -67,9 +67,8 @@ function Cerimonia() {
           jpgFallback="/imagens/igreja.jpg"
           priority
         />
-        <span className="tracking-editorial-lg text-[10px] uppercase text-background/85">
-          10 · 10 · 2026
-        </span>
+
+
         <h1 className="mt-6 font-display text-5xl italic text-background drop-shadow-[0_2px_20px_rgba(0,0,0,0.35)] sm:text-7xl">
           Cerimônia
         </h1>
