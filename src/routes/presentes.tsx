@@ -188,63 +188,67 @@ function Presentes() {
             </div>
 
             {/* Faixa — chips outlined */}
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="tracking-editorial text-[10px] font-semibold uppercase text-muted-foreground">
-                Faixa de Preço:
+            <div>
+              <span className="tracking-editorial mb-3 block text-[10px] font-semibold uppercase text-muted-foreground">
+                Faixa de Preço
               </span>
-              {FAIXAS.map((f) => {
-                const ativo = faixa === f.id;
-                return (
-                  <button
-                    key={f.id}
-                    type="button"
-                    onClick={() => setFaixa(f.id)}
-                    aria-pressed={ativo}
-                    className={cn(
-                      "border px-3 py-1 text-xs transition-colors",
-                      ativo
-                        ? "border-primary-dark bg-primary text-primary-foreground"
-                        : "border-primary/20 text-foreground hover:border-primary"
-                    )}
-                  >
-                    {f.label}
-                  </button>
-                );
-              })}
+              <div className="flex flex-wrap gap-2">
+                {FAIXAS.map((f) => {
+                  const ativo = faixa === f.id;
+                  return (
+                    <button
+                      key={f.id}
+                      type="button"
+                      onClick={() => setFaixa(f.id)}
+                      aria-pressed={ativo}
+                      className={cn(
+                        "min-h-11 border px-3 py-1.5 text-xs transition-colors",
+                        ativo
+                          ? "border-primary-dark bg-primary text-primary-foreground"
+                          : "border-primary/20 text-foreground hover:border-primary"
+                      )}
+                    >
+                      {f.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
-          <div className="flex w-full gap-4 lg:w-auto">
-            <div className="relative flex-1 lg:w-64">
+          <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-end sm:gap-4 lg:w-auto">
+            <div className="relative w-full lg:w-64">
               <input
                 type="text"
                 value={termo}
                 onChange={(e) => setTermo(e.target.value)}
                 placeholder="BUSCAR PRESENTE"
                 aria-label="Buscar entre os presentes"
-                className="tracking-editorial w-full border-b border-primary/20 bg-transparent py-2 text-xs text-foreground placeholder:text-muted-foreground/60 outline-none focus:border-primary-dark"
+                className="tracking-editorial min-h-11 w-full border-b border-primary/20 bg-transparent py-2 text-xs text-foreground placeholder:text-muted-foreground/60 outline-none focus:border-primary-dark"
               />
             </div>
-            <select
-              value={ordem}
-              onChange={(e) => setOrdem(e.target.value as Ordem)}
-              aria-label="Ordenar presentes"
-              className="tracking-editorial cursor-pointer border-b border-primary/20 bg-transparent py-2 text-xs uppercase text-foreground outline-none focus:border-primary-dark"
-            >
-              <option value="padrao">ORDENAR POR</option>
-              <option value="menor">Menor Preço</option>
-              <option value="maior">Maior Preço</option>
-              <option value="az">A → Z</option>
-            </select>
-            {(ativos > 0 || ordem !== "padrao") && (
-              <button
-                type="button"
-                onClick={limpar}
-                className="tracking-editorial border-b border-primary/20 px-2 py-2 text-xs uppercase text-foreground transition-colors hover:text-primary-dark"
+            <div className="flex gap-3">
+              <select
+                value={ordem}
+                onChange={(e) => setOrdem(e.target.value as Ordem)}
+                aria-label="Ordenar presentes"
+                className="tracking-editorial min-h-11 flex-1 cursor-pointer border-b border-primary/20 bg-transparent py-2 text-xs uppercase text-foreground outline-none focus:border-primary-dark sm:flex-none"
               >
-                Limpar
-              </button>
-            )}
+                <option value="padrao">ORDENAR POR</option>
+                <option value="menor">Menor Preço</option>
+                <option value="maior">Maior Preço</option>
+                <option value="az">A → Z</option>
+              </select>
+              {(ativos > 0 || ordem !== "padrao") && (
+                <button
+                  type="button"
+                  onClick={limpar}
+                  className="tracking-editorial min-h-11 border-b border-primary/20 px-2 py-2 text-xs uppercase text-foreground transition-colors hover:text-primary-dark"
+                >
+                  Limpar
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
