@@ -17,9 +17,9 @@ export function Nav() {
           <img
             src={logoBC}
             alt="Monograma Bruna e Cláudio"
-            className="h-14 w-auto sm:h-16"
-            width={52}
-            height={80}
+            className="h-14 w-auto object-contain sm:h-16"
+            width={405}
+            height={611}
           />
         </Link>
         <div className="flex items-center gap-6 text-[10px] font-medium uppercase tracking-editorial text-primary-dark sm:gap-10 sm:text-[11px]">
