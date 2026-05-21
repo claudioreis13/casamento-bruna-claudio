@@ -37,7 +37,7 @@ export const PRESENTES: Gift[] = [
   { id: "esmeril", nome: "Acessório para cortar a unha do dedão do noivo", preco: 200, img: "/imagens/esmerilhadeira.jpg", categoria: "diversao", humor: true },
   { id: "cabeceira", nome: "Cabeceira King Size", preco: 800, img: "/imagens/cabeceira.jpg", categoria: "quarto" },
   { id: "rochele", nome: "É claro que eu posso pagar, meu marido tem 2 empregos", preco: 700, img: "/imagens/rochele.jpg", categoria: "diversao", humor: true },
-  { id: "cobreleito", nome: "Cobreleito king", preco: 477.67, img: "/imagens/cobreleito.jpg", categoria: "quarto" },
+  { id: "cobreleito", nome: "Cobreleito king", preco: 477.67, img: "/imagens/cobreleito.jpg", categoria: "quarto", presenteado: true },
   { id: "louca", nome: "Lava louças 10 serviços", preco: 2950, img: "/imagens/louca.jpg", categoria: "eletrodomesticos" },
   { id: "microondas", nome: "Microondas 30 litros", preco: 650, img: "/imagens/microondas.jpg", categoria: "eletrodomesticos" },
   { id: "patolino", nome: "Seja meu convidado preferido", preco: 700, img: "/imagens/patolino.jpg", categoria: "diversao", humor: true },
