@@ -240,3 +240,31 @@ html {
 *::-webkit-scrollbar-corner {
   background: transparent;
 }
+
+/* ===== Theme toggle: circular reveal via View Transitions API ===== */
+@keyframes themeIconIn {
+  0% {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.4);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+/* Disable default cross-fade so only our clip-path animation runs */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* New theme (incoming) sits on top during the reveal */
+::view-transition-new(root) {
+  z-index: 1;
+}
+::view-transition-old(root) {
+  z-index: 0;
+}
+
