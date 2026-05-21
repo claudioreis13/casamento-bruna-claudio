@@ -287,10 +287,10 @@ function Index() {
 
           <Reveal delay={0.2}>
             <div className="mt-20 flex flex-col items-center">
-              <h2 className="font-display text-2xl font-light tracking-wide text-primary-dark sm:text-3xl">
-                {WEDDING.dataFormatada}
-                <span className="mx-4 text-secondary">|</span>
-                {WEDDING.horarioCerimonia}
+              <h2 className="flex flex-col items-center gap-2 text-center font-display text-2xl font-light tracking-wide text-primary-dark sm:flex-row sm:gap-0 sm:text-3xl">
+                <span>{WEDDING.dataFormatada}</span>
+                <span className="mx-4 hidden text-secondary sm:inline">|</span>
+                <span>{WEDDING.horarioCerimonia}</span>
               </h2>
               <motion.div
                 aria-hidden="true"
