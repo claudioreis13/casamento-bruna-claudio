@@ -11,6 +11,9 @@ interface Props {
 
 export function GiftCard({ presente, reservado, onPresentear }: Props) {
   const [carregada, setCarregada] = useState(false);
+  const presenteado = !!presente.presenteado;
+  const indisponivel = presenteado || reservado;
+
 
   return (
     <article
@@ -20,9 +23,10 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
         "shadow-[0_1px_2px_rgba(0,0,0,0.04)]",
         "transition-[transform,box-shadow,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
         "hover:-translate-y-1 hover:border-primary/30 hover:shadow-[0_20px_40px_-20px_rgba(40,50,30,0.35)]",
-        reservado && "opacity-60"
+        indisponivel && "opacity-60"
       )}
       data-id={presente.id}
+
     >
       {/* Halo sutil ao hover */}
       <div
@@ -40,11 +44,16 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
         </span>
       )}
 
-      {reservado && (
+      {presenteado ? (
+        <span className="tracking-editorial absolute right-3 top-3 z-20 rounded-full border border-primary-dark/40 bg-primary-dark px-2.5 py-1 text-[9px] uppercase text-primary-foreground backdrop-blur-sm">
+          ✓ Já presenteado
+        </span>
+      ) : reservado ? (
         <span className="tracking-editorial absolute right-3 top-3 z-20 rounded-full border border-primary-dark/30 bg-background/95 px-2.5 py-1 text-[9px] uppercase text-primary-dark backdrop-blur-sm">
           ✓ Reservado
         </span>
-      )}
+      ) : null}
+
 
       <div className="relative z-10 aspect-square overflow-hidden bg-muted">
         {/* Skeleton/placeholder enquanto a imagem carrega */}
@@ -105,8 +114,14 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
         <button
           type="button"
           onClick={onPresentear}
-          disabled={reservado}
-          aria-label={reservado ? `${presente.nome}: já reservado` : `Presentear com ${presente.nome}`}
+          disabled={indisponivel}
+          aria-label={
+            presenteado
+              ? `${presente.nome}: já presenteado`
+              : reservado
+                ? `${presente.nome}: já reservado`
+                : `Presentear com ${presente.nome}`
+          }
           className={cn(
             "tracking-editorial group/btn relative mt-2 inline-flex items-center justify-center overflow-hidden rounded-full border px-5 py-2.5 text-[10px] uppercase transition-colors duration-300",
             "border-primary/40 text-primary-dark",
@@ -119,18 +134,19 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
             aria-hidden
             className={cn(
               "absolute inset-0 -z-0 origin-left scale-x-0 bg-primary transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
-              !reservado && "group-hover/btn:scale-x-100"
+              !indisponivel && "group-hover/btn:scale-x-100"
             )}
           />
           <span
             className={cn(
               "relative z-10 transition-colors duration-300",
-              !reservado && "group-hover/btn:text-primary-foreground"
+              !indisponivel && "group-hover/btn:text-primary-foreground"
             )}
           >
-            {reservado ? "Reservado" : "Presentear"}
+            {presenteado ? "Já presenteado" : reservado ? "Reservado" : "Presentear"}
           </span>
         </button>
+
       </div>
     </article>
   );

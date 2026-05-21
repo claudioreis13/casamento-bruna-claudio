@@ -14,7 +14,9 @@ export interface Gift {
   img: string;
   categoria: Categoria;
   humor?: boolean;
+  presenteado?: boolean;
 }
+
 
 export const CATEGORIAS: { id: Categoria | "todos"; label: string }[] = [
   { id: "todos", label: "Todos" },
@@ -35,13 +37,13 @@ export const PRESENTES: Gift[] = [
   { id: "esmeril", nome: "Acessório para cortar a unha do dedão do noivo", preco: 200, img: "/imagens/esmerilhadeira.jpg", categoria: "diversao", humor: true },
   { id: "cabeceira", nome: "Cabeceira King Size", preco: 800, img: "/imagens/cabeceira.jpg", categoria: "quarto" },
   { id: "rochele", nome: "É claro que eu posso pagar, meu marido tem 2 empregos", preco: 700, img: "/imagens/rochele.jpg", categoria: "diversao", humor: true },
-  { id: "cobreleito", nome: "Cobreleito king", preco: 477.67, img: "/imagens/cobreleito.jpg", categoria: "quarto" },
+  { id: "cobreleito", nome: "Cobreleito king", preco: 477.67, img: "/imagens/cobreleito.jpg", categoria: "quarto", presenteado: true },
   { id: "louca", nome: "Lava louças 10 serviços", preco: 2950, img: "/imagens/louca.jpg", categoria: "eletrodomesticos" },
   { id: "microondas", nome: "Microondas 30 litros", preco: 650, img: "/imagens/microondas.jpg", categoria: "eletrodomesticos" },
   { id: "patolino", nome: "Seja meu convidado preferido", preco: 700, img: "/imagens/patolino.jpg", categoria: "diversao", humor: true },
   { id: "razao", nome: "Cobertor para a noiva que está coberta de razão", preco: 200, img: "/imagens/razao.jpg", categoria: "diversao", humor: true },
   { id: "toalha", nome: "Jogo de toalha banhão", preco: 182.27, img: "/imagens/toalha.jpg", categoria: "quarto" },
-  { id: "edredon", nome: "Edredon Queen 300 fios", preco: 500, img: "/imagens/edredon.jpg", categoria: "quarto" },
+  { id: "edredon", nome: "Edredon Queen 300 fios", preco: 500, img: "/imagens/edredon.jpg", categoria: "quarto", presenteado: true },
   { id: "purificador", nome: "Purificador de água", preco: 500, img: "/imagens/purificador.jpg", categoria: "eletrodomesticos" },
   { id: "buque", nome: "Aumente em 30% sua chance de pegar o buquê", preco: 150, img: "/imagens/buque.jpg", categoria: "diversao", humor: true },
   { id: "convidado", nome: "Levar alguém que não foi convidado", preco: 7965.49, img: "/imagens/convidado.jpg", categoria: "diversao", humor: true },
