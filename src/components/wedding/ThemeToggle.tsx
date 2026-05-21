@@ -127,17 +127,25 @@ export function ThemeToggle({
   const [hovered, setHovered] = useState(false);
   const [pressed, setPressed] = useState(false);
   const curtainColorRef = useRef<string>("");
-  const t = TOKENS[theme];
+  const t = TOKENS[theme] ?? TOKENS.light;
 
   // Sync with persisted theme / DOM on mount
   useEffect(() => {
     if (typeof document === "undefined") return;
-    const stored = localStorage.getItem(STORAGE_KEY) as Theme | null;
+    const raw = localStorage.getItem(STORAGE_KEY);
+    // Migrate legacy values ("claro"/"escuro") and validate
+    const normalized: Theme | null =
+      raw === "dark" || raw === "escuro"
+        ? "dark"
+        : raw === "light" || raw === "claro"
+        ? "light"
+        : null;
     const prefersDark =
       typeof window !== "undefined" &&
       window.matchMedia?.("(prefers-color-scheme: dark)").matches;
-    const initial: Theme = stored ?? (prefersDark ? "dark" : "light");
+    const initial: Theme = normalized ?? (prefersDark ? "dark" : "light");
     document.documentElement.classList.toggle("dark", initial === "dark");
+    try { localStorage.setItem(STORAGE_KEY, initial); } catch {}
     setTheme(initial);
   }, []);
 
