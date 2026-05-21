@@ -51,7 +51,10 @@ export const Route = createFileRoute("/")({
           "Estamos muito felizes em compartilhar esse momento com você! Confira a lista de presentes e informações da cerimônia.",
       },
       { property: "og:image", content: "/imagens/casamento.jpg" },
+      { property: "og:url", content: "/" },
+      { name: "twitter:image", content: "/imagens/casamento.jpg" },
     ],
+    links: [{ rel: "canonical", href: "/" }],
     scripts: [
       {
         type: "application/ld+json",
