@@ -14,7 +14,9 @@ export interface Gift {
   img: string;
   categoria: Categoria;
   humor?: boolean;
+  presenteado?: boolean;
 }
+
 
 export const CATEGORIAS: { id: Categoria | "todos"; label: string }[] = [
   { id: "todos", label: "Todos" },
