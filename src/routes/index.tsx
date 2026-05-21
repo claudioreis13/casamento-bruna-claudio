@@ -225,7 +225,8 @@ function Index() {
                 loading="lazy"
                 decoding="async"
                 className="h-full w-full object-cover"
-                initial={{ scale: 1.15 }}
+                style={{ objectPosition: "center 25%" }}
+                initial={{ scale: 1.04 }}
                 whileInView={{ scale: 1 }}
                 viewport={{ once: true, margin: "-15%" }}
                 transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1] }}
