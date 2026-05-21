@@ -44,11 +44,16 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
         </span>
       )}
 
-      {reservado && (
+      {presenteado ? (
+        <span className="tracking-editorial absolute right-3 top-3 z-20 rounded-full border border-primary-dark/40 bg-primary-dark px-2.5 py-1 text-[9px] uppercase text-primary-foreground backdrop-blur-sm">
+          ✓ Já presenteado
+        </span>
+      ) : reservado ? (
         <span className="tracking-editorial absolute right-3 top-3 z-20 rounded-full border border-primary-dark/30 bg-background/95 px-2.5 py-1 text-[9px] uppercase text-primary-dark backdrop-blur-sm">
           ✓ Reservado
         </span>
-      )}
+      ) : null}
+
 
       <div className="relative z-10 aspect-square overflow-hidden bg-muted">
         {/* Skeleton/placeholder enquanto a imagem carrega */}
