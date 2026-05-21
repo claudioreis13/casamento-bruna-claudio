@@ -109,23 +109,23 @@ function Presentes() {
       </header>
 
       {/* PIX em destaque — boutique */}
-      <section className="mx-auto mb-24 max-w-4xl px-4 sm:px-8">
-        <div className="relative overflow-hidden border border-primary/20 bg-secondary/20 p-8 sm:p-12">
+      <section className="mx-auto mb-16 max-w-4xl px-4 sm:mb-24 sm:px-8">
+        <div className="relative overflow-hidden border border-primary/20 bg-secondary/20 p-6 sm:p-12">
           {/* Ornamento sutil */}
           <div
             aria-hidden
             className="absolute -right-16 -top-16 h-32 w-32 rounded-full bg-primary/5"
           />
-          <div className="relative z-10 flex flex-col items-center justify-between gap-8 sm:flex-row">
-            <div className="text-center sm:text-left">
+          <div className="relative z-10 flex flex-col items-center justify-between gap-6 sm:flex-row sm:gap-8">
+            <div className="w-full text-center sm:w-auto sm:text-left">
               <h2 className="font-display text-2xl italic text-primary-dark sm:text-3xl">
                 Contribuição Espontânea
               </h2>
               <p className="mt-2 text-sm text-muted-foreground">
                 Prefere contribuir em dinheiro? Envie um PIX direto aos noivos.
               </p>
-              <div className="mt-4 inline-flex items-center gap-3 border border-primary/15 bg-card px-4 py-2">
-                <span className="font-mono text-sm text-foreground break-all">
+              <div className="mt-4 inline-flex max-w-full items-center gap-3 border border-primary/15 bg-card px-3 py-2">
+                <span className="font-mono text-xs text-foreground break-all sm:text-sm">
                   {WEDDING.pix}
                 </span>
               </div>
@@ -133,7 +133,7 @@ function Presentes() {
             <button
               type="button"
               onClick={copiarPix}
-              className="tracking-editorial w-full shrink-0 bg-primary px-10 py-4 text-[11px] font-semibold uppercase text-primary-foreground shadow-sm transition-colors hover:bg-primary-dark sm:w-auto"
+              className="tracking-editorial w-full shrink-0 bg-primary px-6 py-4 text-[11px] font-semibold uppercase text-primary-foreground shadow-sm transition-colors hover:bg-primary-dark sm:w-auto sm:px-10"
             >
               Copiar Chave PIX
             </button>
