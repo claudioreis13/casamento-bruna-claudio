@@ -56,7 +56,7 @@ export function SplitHeadline({
               {c}
             </motion.span>
           ))}
-          {wi < words.length - 1 && "\u00A0"}
+          {wi < words.length - 1 && " "}
         </span>
       ))}
     </motion.span>
