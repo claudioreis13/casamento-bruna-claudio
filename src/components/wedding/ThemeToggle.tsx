@@ -2,8 +2,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 type Theme = "light" | "dark";
 const STORAGE_KEY = "tema";
-const DURATION = 550;
-const EASING = "cubic-bezier(0.76, 0, 0.24, 1)";
+const DURATION = 700;
+const EASING = "cubic-bezier(0.65, 0, 0.35, 1)";
 
 function readStoredTheme(): Theme | null {
   if (typeof window === "undefined") return null;
@@ -40,13 +40,12 @@ function SunIcon() {
   );
 }
 
-type Phase = "idle" | "falling" | "rising";
 
 export function ThemeToggle() {
   const [theme, setTheme] = useState<Theme>("light");
   const [mounted, setMounted] = useState(false);
-  const [phase, setPhase] = useState<Phase>("idle");
-  const curtainColorRef = useRef<string>("");
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const animatingRef = useRef(false);
 
   // Reconcile with DOM (set pre-hydration by inline script in __root)
   useEffect(() => {
@@ -58,31 +57,61 @@ export function ThemeToggle() {
     setMounted(true);
   }, []);
 
-  // Respect reduced motion: skip curtain entirely
-  const prefersReducedMotion =
-    typeof window !== "undefined" &&
-    window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-
   const toggle = useCallback(() => {
-    if (phase !== "idle") return;
+    if (animatingRef.current) return;
     const next: Theme = theme === "light" ? "dark" : "light";
 
-    if (prefersReducedMotion) {
+    const prefersReducedMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+
+    const supported = typeof document.startViewTransition === "function";
+
+    // Fallback: no View Transitions API or reduced motion → instant
+    if (!supported || prefersReducedMotion) {
       applyTheme(next);
       setTheme(next);
       return;
     }
 
-    curtainColorRef.current = next === "dark" ? "var(--bg-dark)" : "var(--bg-light)";
-    setPhase("falling");
+    // Capture click origin for the circular reveal
+    const rect = btnRef.current?.getBoundingClientRect();
+    const cx = rect ? rect.left + rect.width / 2 : window.innerWidth / 2;
+    const cy = rect ? rect.top + rect.height / 2 : window.innerHeight / 2;
+    const endRadius = Math.hypot(
+      Math.max(cx, window.innerWidth - cx),
+      Math.max(cy, window.innerHeight - cy)
+    );
 
-    window.setTimeout(() => {
+    animatingRef.current = true;
+    const transition = document.startViewTransition(() => {
       applyTheme(next);
       setTheme(next);
-      setPhase("rising");
-      window.setTimeout(() => setPhase("idle"), DURATION + 60);
-    }, DURATION);
-  }, [phase, theme, prefersReducedMotion]);
+    });
+
+    transition.ready
+      .then(() => {
+        const clipPath = [
+          `circle(0px at ${cx}px ${cy}px)`,
+          `circle(${endRadius}px at ${cx}px ${cy}px)`,
+        ];
+        document.documentElement.animate(
+          { clipPath },
+          {
+            duration: DURATION,
+            easing: EASING,
+            pseudoElement: "::view-transition-new(root)",
+          }
+        );
+      })
+      .catch(() => {
+        /* ignore */
+      });
+
+    transition.finished.finally(() => {
+      animatingRef.current = false;
+    });
+  }, [theme]);
 
   // Avoid hydration mismatch: render placeholder with same dimensions
   if (!mounted) {
@@ -92,32 +121,20 @@ export function ThemeToggle() {
   const isDark = theme === "dark";
 
   return (
-    <>
-      {/* Curtain overlay — driven by design tokens */}
-      <div
-        aria-hidden
-        className="pointer-events-none fixed inset-0 origin-top"
-        style={{
-          zIndex: 9997,
-          background: curtainColorRef.current,
-          transform: phase === "falling" ? "scaleY(1)" : "scaleY(0)",
-          transition: phase !== "idle" ? `transform ${DURATION}ms ${EASING}` : "none",
-        }}
-      />
-      <button
-        type="button"
-        onClick={toggle}
-        aria-label={isDark ? "Ativar tema claro" : "Ativar tema escuro"}
-        aria-pressed={isDark}
-        className="relative z-[9999] inline-flex h-9 w-9 items-center justify-center rounded-full border border-primary/30 bg-background text-primary-dark transition-all duration-200 hover:scale-110 hover:border-primary hover:bg-primary/10 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+    <button
+      ref={btnRef}
+      type="button"
+      onClick={toggle}
+      aria-label={isDark ? "Ativar tema claro" : "Ativar tema escuro"}
+      aria-pressed={isDark}
+      className="relative inline-flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border border-primary/30 bg-background text-primary-dark transition-all duration-300 hover:scale-110 hover:border-primary hover:bg-primary/10 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+    >
+      <span
+        key={isDark ? "sun" : "moon"}
+        className="inline-flex animate-[themeIconIn_400ms_cubic-bezier(0.34,1.56,0.64,1)_both]"
       >
-        <span
-          className="transition-transform duration-500"
-          style={{ transform: isDark ? "rotate(0deg)" : "rotate(40deg)" }}
-        >
-          {isDark ? <SunIcon /> : <MoonIcon />}
-        </span>
-      </button>
-    </>
+        {isDark ? <SunIcon /> : <MoonIcon />}
+      </span>
+    </button>
   );
 }
