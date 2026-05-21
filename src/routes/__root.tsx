@@ -74,6 +74,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Estamos muito felizes em compartilhar esse momento com você! Confira a lista de presentes e informações da cerimônia.",
       },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Bruna & Cláudio 💍 — 10/10/2026" },
+      { name: "description", content: "A wedding website for Bruna and Cláudio, featuring event details, gift registry, and interactive elements." },
+      { property: "og:description", content: "A wedding website for Bruna and Cláudio, featuring event details, gift registry, and interactive elements." },
+      { name: "twitter:description", content: "A wedding website for Bruna and Cláudio, featuring event details, gift registry, and interactive elements." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/bdf392d4-6472-4e5e-a56e-b607f95a45f5/id-preview-55fd13af--62b47273-69a3-41f7-aeea-ae327657b610.lovable.app-1779404452429.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/bdf392d4-6472-4e5e-a56e-b607f95a45f5/id-preview-55fd13af--62b47273-69a3-41f7-aeea-ae327657b610.lovable.app-1779404452429.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
