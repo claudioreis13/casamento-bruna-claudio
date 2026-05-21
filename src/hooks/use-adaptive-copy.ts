@@ -35,9 +35,8 @@ export function useAdaptiveCopy() {
     hero = "Amanhã. Não vemos a hora.";
   } else if (dias <= 30) {
     hero = `Faltam ${dias} dias para o nosso sim`;
-  } else if (dias <= 180) {
-    hero = `Faltam ${dias} dias — e contando`;
   }
+
 
   return { saudacao, hero, dias, acabou };
 }

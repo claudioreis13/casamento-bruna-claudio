@@ -135,10 +135,7 @@ function Index() {
           transition={{ duration: 1, delay: 2.2 }}
         >
           <div className="flex flex-col items-center gap-3">
-            <span className="tracking-editorial-lg text-[9px] uppercase text-background/70">
-              Role
-            </span>
-            <div className="relative h-10 w-px overflow-hidden bg-background/30">
+            <div className="relative h-12 w-px overflow-hidden bg-background/30">
               <motion.div
                 className="absolute inset-x-0 top-0 h-1/2 bg-background"
                 animate={reduce ? undefined : { y: ["-100%", "200%"] }}
@@ -149,8 +146,20 @@ function Index() {
                 }}
               />
             </div>
+            <motion.svg
+              width="10"
+              height="6"
+              viewBox="0 0 10 6"
+              fill="none"
+              className="text-background/70"
+              animate={reduce ? undefined : { y: [0, 3, 0] }}
+              transition={{ duration: 2, ease: "easeInOut", repeat: Infinity }}
+            >
+              <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
+            </motion.svg>
           </div>
         </motion.div>
+
       </section>
 
       {/* Versículo */}
@@ -228,7 +237,8 @@ function Index() {
               <p className="mt-8 max-w-md text-base leading-relaxed text-primary-dark/85">
                 Cada encontro, cada risada, cada silêncio compartilhado nos
                 trouxe até aqui. Em outubro, diante de Deus e de quem amamos,
-                celebramos a escolha de seguir juntos — para sempre.
+                celebramos a escolha de seguir juntos para sempre.
+
               </p>
             </Reveal>
             <Reveal delay={0.45}>
