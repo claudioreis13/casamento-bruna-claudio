@@ -14,7 +14,7 @@ export function SplitHeadline({
   delay?: number;
 }) {
   const reduce = useReducedMotion();
-  const chars = Array.from(text);
+  
 
   if (reduce) {
     return <span className={className}>{text}</span>;
