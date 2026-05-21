@@ -11,6 +11,9 @@ interface Props {
 
 export function GiftCard({ presente, reservado, onPresentear }: Props) {
   const [carregada, setCarregada] = useState(false);
+  const presenteado = !!presente.presenteado;
+  const indisponivel = presenteado || reservado;
+
 
   return (
     <article
