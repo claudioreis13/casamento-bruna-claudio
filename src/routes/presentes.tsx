@@ -30,14 +30,18 @@ export const Route = createFileRoute("/presentes")({
       {
         name: "description",
         content:
-          "Lista de presentes do casamento de Bruna e Cláudio. Escolha o seu presente e surpreenda os noivos!",
+          "Lista de presentes do casamento de Bruna e Cláudio (10/10/2026). Escolha um presente especial ou contribua via PIX.",
       },
-      { property: "og:title", content: "Lista de Presentes 🎁 — Bruna & Cláudio" },
+      { property: "og:title", content: "Lista de Presentes — Bruna & Cláudio" },
       {
         property: "og:description",
         content: "Escolha um presente especial para o casamento em 10/10/2026!",
       },
+      { property: "og:image", content: "/imagens/casamento.jpg" },
+      { property: "og:url", content: "/presentes" },
+      { name: "twitter:image", content: "/imagens/casamento.jpg" },
     ],
+    links: [{ rel: "canonical", href: "/presentes" }],
   }),
   component: Presentes,
 });
