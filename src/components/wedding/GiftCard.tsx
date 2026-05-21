@@ -71,7 +71,7 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
             sizes="(min-width: 768px) 300px, 50vw"
             onLoad={() => setCarregada(true)}
             className={cn(
-              "h-full w-full object-cover transition-[transform,filter,opacity] duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
+              "h-full w-full object-contain p-4 transition-[transform,filter,opacity] duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
               !indisponivel && "group-hover:scale-105",
               presenteado && "grayscale",
               carregada ? "opacity-100 blur-0" : "scale-105 opacity-0 blur-xl"
