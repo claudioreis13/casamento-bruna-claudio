@@ -237,7 +237,8 @@ function Index() {
               <p className="mt-8 max-w-md text-base leading-relaxed text-primary-dark/85">
                 Cada encontro, cada risada, cada silêncio compartilhado nos
                 trouxe até aqui. Em outubro, diante de Deus e de quem amamos,
-                celebramos a escolha de seguir juntos — para sempre.
+                celebramos a escolha de seguir juntos para sempre.
+
               </p>
             </Reveal>
             <Reveal delay={0.45}>
