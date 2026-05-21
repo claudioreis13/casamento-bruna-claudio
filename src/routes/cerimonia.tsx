@@ -19,7 +19,10 @@ export const Route = createFileRoute("/cerimonia")({
         content: "10/10/2026 • 20h • Igreja Matriz, Nepomuceno - MG.",
       },
       { property: "og:image", content: "/imagens/igreja.jpg" },
+      { property: "og:url", content: "/cerimonia" },
+      { name: "twitter:image", content: "/imagens/igreja.jpg" },
     ],
+    links: [{ rel: "canonical", href: "/cerimonia" }],
   }),
   component: Cerimonia,
 });
