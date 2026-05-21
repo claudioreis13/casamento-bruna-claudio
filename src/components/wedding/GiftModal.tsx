@@ -111,7 +111,7 @@ export function GiftModal({ presente, onClose, onConfirm }: Props) {
             alt={presente.nome}
             width={128}
             height={128}
-            className="mx-auto h-32 w-32 rounded-xl object-cover shadow-soft"
+            className="mx-auto h-32 w-32 rounded-xl bg-secondary/20 object-contain p-2 shadow-soft"
             loading="lazy"
             decoding="async"
           />
