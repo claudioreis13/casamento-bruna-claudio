@@ -126,6 +126,7 @@ export function ThemeToggle({
   const [phase, setPhase] = useState<CurtainPhase>("idle");
   const [hovered, setHovered] = useState(false);
   const [pressed, setPressed] = useState(false);
+  const curtainColorRef = useRef<string>("");
   const t = TOKENS[theme] ?? TOKENS.light;
 
   // Sync with persisted theme / DOM on mount
