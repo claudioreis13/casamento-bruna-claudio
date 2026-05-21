@@ -1,78 +1,356 @@
-import { useEffect, useState } from "react";
+"use client";
 
-const KEY = "tema";
-type Tema = "claro" | "escuro";
+import {
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+  type ReactNode,
+  type CSSProperties,
+} from "react";
 
-function lerTema(): Tema {
-  if (typeof window === "undefined") return "claro";
-  const salvo = localStorage.getItem(KEY) as Tema | null;
-  if (salvo) return salvo;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "escuro" : "claro";
+// ─── Types ────────────────────────────────────────────────────────────────────
+export type Theme = "light" | "dark";
+
+export interface AppBarProps {
+  logo?: ReactNode;
+  appName?: string;
+  onSearch?: (query: string) => void;
+  userAvatar?: ReactNode;
+  userName?: string;
 }
 
-function aplicar(tema: Tema) {
-  if (typeof document === "undefined") return;
-  document.documentElement.classList.toggle("dark", tema === "escuro");
+export interface ThemeToggleProps {
+  variant?: "default" | "appbar" | "icon";
+  appBarProps?: AppBarProps;
+  defaultTheme?: Theme;
+  barHeight?: number;
+  buttonSize?: number;
+  duration?: number;
+  onThemeChange?: (theme: Theme) => void;
+  children?: ReactNode;
 }
 
-export function ThemeToggle() {
-  // SSR-safe: começa "claro", reconcilia no client
-  const [tema, setTema] = useState<Tema>("claro");
-  const [montado, setMontado] = useState(false);
+// ─── Design tokens ────────────────────────────────────────────────────────────
+const TOKENS: Record<Theme, Record<string, string>> = {
+  light: {
+    pageBg:    "#f3ede1",
+    pageText:  "#1a1a1a",
+    barBg:     "#1a1a1a",
+    barText:   "#ffffff",
+    barBorder: "rgba(255,255,255,0.07)",
+    btnBg:     "#f3ede1",
+    btnText:   "#1a1a1a",
+    btnRing:   "rgba(255,255,255,0.15)",
+    inputBg:   "rgba(255,255,255,0.1)",
+    inputText: "#ffffff",
+  },
+  dark: {
+    pageBg:    "#0e0e0e",
+    pageText:  "#dfd8c6",
+    barBg:     "#dfd8c6",
+    barText:   "#1a1a1a",
+    barBorder: "rgba(0,0,0,0.10)",
+    btnBg:     "#0e0e0e",
+    btnText:   "#dfd8c6",
+    btnRing:   "rgba(0,0,0,0.25)",
+    inputBg:   "rgba(0,0,0,0.08)",
+    inputText: "#1a1a1a",
+  },
+};
 
+const STORAGE_KEY = "tema";
+
+// ─── Icons ────────────────────────────────────────────────────────────────────
+function MoonIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+    </svg>
+  );
+}
+
+function SunIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="4" />
+      <line x1="12" y1="1" x2="12" y2="3" />
+      <line x1="12" y1="21" x2="12" y2="23" />
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+      <line x1="1" y1="12" x2="3" y2="12" />
+      <line x1="21" y1="12" x2="23" y2="12" />
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+    </svg>
+  );
+}
+
+function SearchIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="11" cy="11" r="8"></circle>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+  );
+}
+
+function UserIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+      <circle cx="12" cy="7" r="4"></circle>
+    </svg>
+  );
+}
+
+// ─── Component ────────────────────────────────────────────────────────────────
+type CurtainPhase = "idle" | "falling" | "rising";
+const EASING = "cubic-bezier(0.76, 0, 0.24, 1)";
+
+export function ThemeToggle({
+  variant = "icon",
+  appBarProps,
+  defaultTheme = "light",
+  barHeight: explicitBarHeight,
+  buttonSize = 36,
+  duration = 550,
+  onThemeChange,
+  children,
+}: ThemeToggleProps) {
+  const isAppBar = variant === "appbar";
+  const isIcon = variant === "icon";
+  const barHeight = explicitBarHeight ?? (isAppBar ? 60 : 44);
+
+  const [theme, setTheme] = useState<Theme>(defaultTheme);
+  const [phase, setPhase] = useState<CurtainPhase>("idle");
+  const [hovered, setHovered] = useState(false);
+  const [pressed, setPressed] = useState(false);
+  const curtainColorRef = useRef<string>("");
+  const t = TOKENS[theme];
+
+  // Sync with persisted theme / DOM on mount
   useEffect(() => {
-    const t = lerTema();
-    setTema(t);
-    aplicar(t);
-    setMontado(true);
+    if (typeof document === "undefined") return;
+    const stored = localStorage.getItem(STORAGE_KEY) as Theme | null;
+    const prefersDark =
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-color-scheme: dark)").matches;
+    const initial: Theme = stored ?? (prefersDark ? "dark" : "light");
+    document.documentElement.classList.toggle("dark", initial === "dark");
+    setTheme(initial);
   }, []);
 
-  function alternar() {
-    const novo: Tema = tema === "claro" ? "escuro" : "claro";
-    setTema(novo);
-    aplicar(novo);
-    localStorage.setItem(KEY, novo);
-  }
+  const toggle = useCallback(() => {
+    if (phase !== "idle") return;
+    const next: Theme = theme === "light" ? "dark" : "light";
+    curtainColorRef.current = TOKENS[next].pageBg;
+    setPhase("falling");
 
-  if (!montado) {
-    // placeholder com mesmo tamanho para evitar layout shift
-    return <div aria-hidden className="h-9 w-9" />;
-  }
+    setTimeout(() => {
+      setTheme(next);
+      onThemeChange?.(next);
+      if (typeof document !== "undefined") {
+        document.documentElement.classList.toggle("dark", next === "dark");
+        try {
+          localStorage.setItem(STORAGE_KEY, next);
+        } catch {}
+      }
+      setPhase("rising");
+      setTimeout(() => setPhase("idle"), duration + 60);
+    }, duration);
+  }, [phase, theme, duration, onThemeChange]);
 
-  const escuro = tema === "escuro";
+  // ── Derived styles ──────────────────────────────────────────────────────────
+  const pageStyle: CSSProperties = {
+    minHeight: "100vh",
+    paddingTop: barHeight,
+    background: t.pageBg,
+    color: t.pageText,
+    transition: "background 0.3s ease, color 0.3s ease",
+  };
+
+  const barStyle: CSSProperties = {
+    position: "fixed",
+    top: 0, left: 0, right: 0,
+    height: barHeight,
+    background: t.barBg,
+    color: t.barText,
+    borderBottom: `1px solid ${t.barBorder}`,
+    overflow: "visible",
+    zIndex: 9998,
+    transition: "background 0.3s ease, border-color 0.3s ease, color 0.3s ease",
+    display: isAppBar ? "flex" : "block",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: isAppBar ? "0 24px" : "0",
+    fontFamily: "system-ui, -apple-system, sans-serif",
+  };
+
+  const btnScale = pressed ? 0.96 : hovered ? 1.1 : 1;
+  const btnStyle: CSSProperties = {
+    position: isAppBar || isIcon ? "relative" : "absolute",
+    bottom: isAppBar || isIcon ? "auto" : -(buttonSize / 2),
+    left: isAppBar || isIcon ? "auto" : "50%",
+    transform: isAppBar || isIcon ? `scale(${btnScale})` : `translateX(-50%) scale(${btnScale})`,
+    width: buttonSize,
+    height: buttonSize,
+    borderRadius: "50%",
+    border: "none",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    background: t.btnBg,
+    color: t.btnText,
+    boxShadow: `0 0 0 1.5px ${t.btnRing}`,
+    zIndex: 9999,
+    outline: "none",
+    transition:
+      "background 0.3s ease, color 0.3s ease, transform 0.15s ease, box-shadow 0.3s ease",
+    marginLeft: isAppBar ? "16px" : "0",
+    flexShrink: 0,
+  };
+
+  const curtainStyle: CSSProperties = {
+    position: "fixed",
+    inset: 0,
+    background: curtainColorRef.current,
+    transformOrigin: "top",
+    transform: phase === "falling" ? "scaleY(1)" : "scaleY(0)",
+    transition: phase !== "idle" ? `transform ${duration}ms ${EASING}` : "none",
+    zIndex: 9997,
+    pointerEvents: "none",
+  };
+
+  const appBarSectionStyle: CSSProperties = {
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+  };
+
+  if (isIcon) {
+    return (
+      <>
+        <div aria-hidden="true" style={curtainStyle} />
+        <button
+          style={btnStyle}
+          onClick={toggle}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => { setHovered(false); setPressed(false); }}
+          onMouseDown={() => setPressed(true)}
+          onMouseUp={() => setPressed(false)}
+          aria-label={theme === "light" ? "Ativar tema escuro" : "Ativar tema claro"}
+          aria-pressed={theme === "dark"}
+        >
+          {theme === "light" ? <MoonIcon /> : <SunIcon />}
+        </button>
+      </>
+    );
+  }
 
   return (
-    <button
-      type="button"
-      onClick={alternar}
-      aria-label={escuro ? "Ativar tema claro" : "Ativar tema escuro"}
-      aria-pressed={escuro}
-      className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-primary/30 text-primary-dark transition-colors hover:border-primary hover:bg-primary/10"
-    >
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="transition-transform duration-500"
-        style={{ transform: escuro ? "rotate(0deg)" : "rotate(40deg)" }}
-        aria-hidden
-      >
-        {escuro ? (
-          // Sol (no escuro mostra opção de mudar para claro)
-          <>
-            <circle cx="12" cy="12" r="4" />
-            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
-          </>
-        ) : (
-          // Lua (no claro mostra opção de mudar para escuro)
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+    <div style={pageStyle}>
+      <div aria-hidden="true" style={curtainStyle} />
+      <div style={barStyle}>
+        {isAppBar && (
+          <div style={{ ...appBarSectionStyle, flex: 1 }}>
+            {appBarProps?.logo && (
+              <div style={{ display: "flex", alignItems: "center" }}>
+                {appBarProps.logo}
+              </div>
+            )}
+            {appBarProps?.appName && (
+              <span style={{ fontWeight: 600, fontSize: "1.1rem", letterSpacing: "-0.01em" }}>
+                {appBarProps.appName}
+              </span>
+            )}
+          </div>
         )}
-      </svg>
-    </button>
+
+        {isAppBar && appBarProps?.onSearch && (
+          <div style={{ ...appBarSectionStyle, flex: 1, justifyContent: "center" }}>
+            <div style={{ position: "relative", width: "100%", maxWidth: "320px", display: "flex", alignItems: "center" }}>
+              <div style={{ position: "absolute", left: "12px", display: "flex", opacity: 0.6 }}>
+                <SearchIcon />
+              </div>
+              <input
+                type="text"
+                placeholder="Search..."
+                onChange={(e) => appBarProps.onSearch?.(e.target.value)}
+                style={{
+                  width: "100%",
+                  height: "36px",
+                  padding: "0 16px 0 36px",
+                  borderRadius: "18px",
+                  border: "none",
+                  outline: "none",
+                  background: t.inputBg,
+                  color: t.inputText,
+                  fontSize: "0.9rem",
+                  transition: "background 0.3s ease, color 0.3s ease",
+                }}
+              />
+            </div>
+          </div>
+        )}
+
+        {isAppBar && (
+          <div style={{ ...appBarSectionStyle, flex: 1, justifyContent: "flex-end" }}>
+            {appBarProps?.userName && (
+              <span style={{ fontSize: "0.9rem", opacity: 0.9 }}>
+                {appBarProps.userName}
+              </span>
+            )}
+            {appBarProps?.userAvatar !== undefined ? (
+              appBarProps.userAvatar
+            ) : (
+              <div style={{
+                width: "32px",
+                height: "32px",
+                borderRadius: "50%",
+                background: t.inputBg,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: t.inputText,
+              }}>
+                <UserIcon />
+              </div>
+            )}
+
+            <button
+              style={btnStyle}
+              onClick={toggle}
+              onMouseEnter={() => setHovered(true)}
+              onMouseLeave={() => { setHovered(false); setPressed(false); }}
+              onMouseDown={() => setPressed(true)}
+              onMouseUp={() => setPressed(false)}
+              aria-label={theme === "light" ? "Ativar tema escuro" : "Ativar tema claro"}
+              aria-pressed={theme === "dark"}
+            >
+              {theme === "light" ? <MoonIcon /> : <SunIcon />}
+            </button>
+          </div>
+        )}
+
+        {!isAppBar && (
+          <button
+            style={btnStyle}
+            onClick={toggle}
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => { setHovered(false); setPressed(false); }}
+            onMouseDown={() => setPressed(true)}
+            onMouseUp={() => setPressed(false)}
+            aria-label={theme === "light" ? "Ativar tema escuro" : "Ativar tema claro"}
+            aria-pressed={theme === "dark"}
+          >
+            {theme === "light" ? <MoonIcon /> : <SunIcon />}
+          </button>
+        )}
+      </div>
+
+      {children}
+    </div>
   );
 }
