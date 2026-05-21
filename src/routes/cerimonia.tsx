@@ -22,7 +22,19 @@ export const Route = createFileRoute("/cerimonia")({
       { property: "og:url", content: "/cerimonia" },
       { name: "twitter:image", content: "/imagens/igreja.jpg" },
     ],
-    links: [{ rel: "canonical", href: "/cerimonia" }],
+    links: [
+      { rel: "canonical", href: "/cerimonia" },
+      {
+        rel: "preload",
+        as: "image",
+        href: "/imagens/igreja-1280.webp",
+        imagesrcset:
+          "/imagens/igreja-640.webp 640w, /imagens/igreja-1280.webp 1280w, /imagens/igreja-1920.webp 1920w",
+        imagesizes: "100vw",
+        type: "image/webp",
+        fetchpriority: "high",
+      },
+    ],
   }),
   component: Cerimonia,
 });
