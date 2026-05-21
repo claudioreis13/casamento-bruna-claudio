@@ -104,13 +104,18 @@ export function GiftModal({ presente, onClose, onConfirm }: Props) {
           💖 Obrigado pelo presente!
         </h2>
 
-        <img
-          src={presente.img}
-          alt={presente.nome}
-          className="mx-auto h-32 w-32 rounded-xl object-cover shadow-soft"
-          loading="lazy"
-          decoding="async"
-        />
+        <picture>
+          <source type="image/webp" srcSet={presente.img.replace(/\.jpe?g$/i, ".webp")} />
+          <img
+            src={presente.img}
+            alt={presente.nome}
+            width={128}
+            height={128}
+            className="mx-auto h-32 w-32 rounded-xl object-cover shadow-soft"
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
 
         <div className="text-center">
           <p className="text-sm font-medium text-foreground">{presente.nome}</p>
