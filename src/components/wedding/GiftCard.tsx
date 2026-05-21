@@ -16,7 +16,7 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
   return (
     <article
       className={cn(
-        "group flex flex-col",
+        "group flex flex-col [content-visibility:auto] [contain-intrinsic-size:1px_520px]",
         indisponivel && "opacity-60"
       )}
       data-id={presente.id}
