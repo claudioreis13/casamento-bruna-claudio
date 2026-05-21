@@ -54,7 +54,19 @@ export const Route = createFileRoute("/")({
       { property: "og:url", content: "/" },
       { name: "twitter:image", content: "/imagens/casamento.jpg" },
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: [
+      { rel: "canonical", href: "/" },
+      {
+        rel: "preload",
+        as: "image",
+        href: "/imagens/casamento-1280.webp",
+        imagesrcset:
+          "/imagens/casamento-640.webp 640w, /imagens/casamento-1280.webp 1280w, /imagens/casamento-1920.webp 1920w",
+        imagesizes: "100vw",
+        type: "image/webp",
+        fetchpriority: "high",
+      },
+    ],
     scripts: [
       {
         type: "application/ld+json",
