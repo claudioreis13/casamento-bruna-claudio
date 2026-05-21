@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { motion } from "motion/react";
 import { HeroPicture } from "@/components/wedding/HeroPicture";
+import { Reveal } from "@/components/wedding/Reveal";
 import { WEDDING } from "@/lib/wedding-config";
-
 
 export const Route = createFileRoute("/cerimonia")({
   head: () => ({
@@ -23,40 +24,11 @@ export const Route = createFileRoute("/cerimonia")({
   component: Cerimonia,
 });
 
-function Panel({
-  eyebrow,
-  title,
-  children,
-}: {
-  eyebrow: string;
-  title: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className="border-t border-primary/20 pt-8">
-      <div className="mb-8">
-        <span className="block tracking-editorial-lg text-[10px] uppercase text-primary-dark/60">
-          {eyebrow}
-        </span>
-        <h2 className="mt-3 font-display text-3xl italic text-primary-dark sm:text-4xl">
-          {title}
-        </h2>
-      </div>
-      {children}
-    </section>
-  );
-}
-
-function Field({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <div className="tracking-editorial text-[10px] uppercase text-primary-dark/60">
-        {label}
-      </div>
-      <div className="mt-1 font-display text-lg text-foreground">{value}</div>
-    </div>
-  );
-}
+const ROTEIRO = [
+  { hora: WEDDING.horarioRecepcao, desc: "Recepção dos convidados", destaque: false },
+  { hora: WEDDING.horarioCerimonia, desc: "Início da cerimônia", destaque: true },
+  { hora: WEDDING.horarioFesta, desc: "Início da festa", destaque: false },
+];
 
 function Cerimonia() {
   return (
@@ -68,7 +40,6 @@ function Cerimonia() {
           priority
         />
 
-
         <h1 className="mt-6 font-display text-5xl italic text-background drop-shadow-[0_2px_20px_rgba(0,0,0,0.35)] sm:text-7xl">
           Cerimônia
         </h1>
@@ -78,63 +49,137 @@ function Cerimonia() {
         </p>
       </section>
 
+      {/* Conteúdo — horas XL como âncora */}
+      <section className="bg-background/95 px-6 py-20 backdrop-blur-sm sm:py-28">
+        <div className="mx-auto grid max-w-6xl grid-cols-1 items-start gap-16 lg:grid-cols-12 lg:gap-12">
+          {/* Coluna esquerda — Informações gerais */}
+          <Reveal className="lg:col-span-3 lg:pt-24" y={24}>
+            <div className="border-l border-primary/20 pl-6">
+              <span className="block text-[10px] font-light uppercase tracking-editorial-lg text-primary-dark/70">
+                Essencial
+              </span>
+              <h2 className="mb-8 mt-4 font-display text-3xl italic leading-tight text-primary-dark">
+                Informações
+                <br />
+                gerais
+              </h2>
 
-      <section className="mx-auto max-w-2xl space-y-14 bg-background/85 px-6 py-16 backdrop-blur-sm sm:px-12">
-        <Panel eyebrow="I" title="Informações gerais">
-          <div className="grid gap-6 sm:grid-cols-2">
-            <Field label="Data" value={WEDDING.dataFormatada} />
-            <Field label="Horário" value={WEDDING.horarioCerimonia} />
-            <div className="sm:col-span-2">
-              <Field label="Local" value={WEDDING.local} />
+              <dl className="space-y-6">
+                <div>
+                  <dt className="mb-1 text-[9px] uppercase tracking-editorial text-primary-dark/60">
+                    Data
+                  </dt>
+                  <dd className="text-sm text-foreground">{WEDDING.dataFormatada}</dd>
+                </div>
+                <div>
+                  <dt className="mb-1 text-[9px] uppercase tracking-editorial text-primary-dark/60">
+                    Horário
+                  </dt>
+                  <dd className="text-sm text-foreground">{WEDDING.horarioCerimonia}</dd>
+                </div>
+                <div>
+                  <dt className="mb-1 text-[9px] uppercase tracking-editorial text-primary-dark/60">
+                    Local
+                  </dt>
+                  <dd className="font-display text-sm italic leading-relaxed text-foreground">
+                    Igreja Matriz
+                    <br />
+                    Nepomuceno, MG
+                  </dd>
+                </div>
+              </dl>
             </div>
-          </div>
-        </Panel>
+          </Reveal>
 
-        <Panel eyebrow="II" title="Roteiro da noite">
-          <ol className="space-y-6">
-            {[
-              { hora: WEDDING.horarioRecepcao, desc: "Recepção dos convidados" },
-              { hora: WEDDING.horarioCerimonia, desc: "Início da cerimônia" },
-              { hora: WEDDING.horarioFesta, desc: "Festa" },
-            ].map((item) => (
-              <li
-                key={item.hora}
-                className="flex items-baseline gap-6 border-b border-primary/10 pb-5 last:border-0"
-              >
-                <span className="font-display text-3xl italic text-primary-dark tabular-nums">
-                  {item.hora}
-                </span>
-                <span className="tracking-editorial text-xs uppercase text-foreground/80">
-                  {item.desc}
-                </span>
-              </li>
-            ))}
-          </ol>
-        </Panel>
+          {/* Coluna central — Roteiro com horas XL */}
+          <div className="flex flex-col items-center lg:col-span-6">
+            <Reveal>
+              <span className="mb-12 block text-[10px] font-light uppercase tracking-editorial-lg text-primary-dark/70">
+                O tempo da noite
+              </span>
+            </Reveal>
 
-        <Panel eyebrow="III" title="Como chegar">
-          <p className="font-display text-lg italic text-foreground">
-            {WEDDING.endereco}
-          </p>
-          <div className="mt-8 grid gap-3 sm:grid-cols-2">
-            <a
-              href={WEDDING.wazeUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="tracking-editorial inline-flex items-center justify-center border border-primary/40 px-6 py-3 text-[11px] uppercase text-primary-dark transition-colors hover:bg-primary hover:text-primary-foreground"
-            >
-              Abrir no Waze
-            </a>
-            <a
-              href={WEDDING.gmapsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="tracking-editorial inline-flex items-center justify-center bg-primary px-6 py-3 text-[11px] uppercase text-primary-foreground transition-colors hover:bg-primary-dark"
-            >
-              Google Maps
-            </a>
+            <ol className="flex w-full flex-col gap-14 sm:gap-16">
+              {ROTEIRO.map((item, i) => (
+                <li key={item.hora} className="flex flex-col items-center">
+                  <Reveal delay={0.1 + i * 0.12}>
+                    <motion.span
+                      className={
+                        "block text-center font-display text-7xl italic leading-none tabular-nums sm:text-8xl md:text-9xl " +
+                        (item.destaque ? "text-primary-dark" : "text-primary")
+                      }
+                      initial={{ opacity: 0, y: 24, letterSpacing: "0.05em" }}
+                      whileInView={{ opacity: 1, y: 0, letterSpacing: "0em" }}
+                      viewport={{ once: true, margin: "-10%" }}
+                      transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                      {item.hora}
+                    </motion.span>
+                  </Reveal>
+                  <Reveal delay={0.2 + i * 0.12}>
+                    <p
+                      className={
+                        "mt-4 text-center text-[11px] uppercase tracking-editorial-lg text-primary-dark " +
+                        (item.destaque ? "font-semibold" : "font-light")
+                      }
+                    >
+                      {item.desc}
+                    </p>
+                  </Reveal>
+                  {item.destaque && (
+                    <motion.div
+                      aria-hidden
+                      className="mt-6 h-px bg-primary/40"
+                      initial={{ width: 0 }}
+                      whileInView={{ width: 48 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
+                    />
+                  )}
+                </li>
+              ))}
+            </ol>
           </div>
-        </Panel>
+
+          {/* Coluna direita — Como chegar */}
+          <Reveal className="lg:col-span-3 lg:pt-24" y={24}>
+            <div className="border-l border-primary/20 pl-6">
+              <span className="block text-[10px] font-light uppercase tracking-editorial-lg text-primary-dark/70">
+                Localização
+              </span>
+              <h2 className="mb-8 mt-4 font-display text-3xl italic leading-tight text-primary-dark">
+                Como
+                <br />
+                chegar
+              </h2>
+
+              <p className="mb-10 text-sm leading-relaxed text-foreground">
+                Praça da Matriz
+                <br />
+                Nepomuceno — MG
+              </p>
+
+              <div className="flex flex-col gap-3">
+                <a
+                  href={WEDDING.wazeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="tracking-editorial inline-flex items-center justify-center border border-primary px-6 py-3 text-[10px] uppercase text-primary-dark transition-colors hover:bg-primary hover:text-primary-foreground"
+                >
+                  Abrir no Waze
+                </a>
+                <a
+                  href={WEDDING.gmapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="tracking-editorial inline-flex items-center justify-center bg-primary px-6 py-3 text-[10px] uppercase text-primary-foreground transition-opacity hover:opacity-90"
+                >
+                  Google Maps
+                </a>
+              </div>
+            </div>
+          </Reveal>
+        </div>
       </section>
     </div>
   );
