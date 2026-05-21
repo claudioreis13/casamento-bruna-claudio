@@ -41,7 +41,19 @@ export const Route = createFileRoute("/presentes")({
       { property: "og:url", content: "/presentes" },
       { name: "twitter:image", content: "/imagens/casamento.jpg" },
     ],
-    links: [{ rel: "canonical", href: "/presentes" }],
+    links: [
+      { rel: "canonical", href: "/presentes" },
+      {
+        rel: "preload",
+        as: "image",
+        href: "/imagens/igreja-1280.webp",
+        imagesrcset:
+          "/imagens/igreja-640.webp 640w, /imagens/igreja-1280.webp 1280w, /imagens/igreja-1920.webp 1920w",
+        imagesizes: "100vw",
+        type: "image/webp",
+        fetchpriority: "high",
+      },
+    ],
   }),
   component: Presentes,
 });
