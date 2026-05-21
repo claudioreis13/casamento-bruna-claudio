@@ -48,6 +48,12 @@
 :root {
   --radius: 0.75rem;
 
+  /* Cores de fundo absolutas (usadas pela cortina do theme toggle) */
+  --bg-light: oklch(0.97 0.005 95);
+  --bg-dark: oklch(0.18 0.015 95);
+
+
+
   /* Paleta sage — convertida para oklch (mesmas cores do site original) */
   --background: oklch(0.97 0.005 95);            /* #F5F5F0 quente */
   --foreground: oklch(0.2 0 0);                  /* texto principal */

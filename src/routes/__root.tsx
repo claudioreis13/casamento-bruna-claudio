@@ -105,11 +105,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
+const THEME_INIT_SCRIPT = `(function(){try{var k='tema',v=localStorage.getItem(k);if(v==='escuro')v='dark';if(v==='claro')v='light';if(v!=='dark'&&v!=='light'){v=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}if(v==='dark')document.documentElement.classList.add('dark');}catch(e){}})();`;
+
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR">
       <head>
         <HeadContent />
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
       </head>
       <body>
         {children}
