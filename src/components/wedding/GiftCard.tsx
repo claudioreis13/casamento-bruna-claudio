@@ -114,8 +114,14 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
         <button
           type="button"
           onClick={onPresentear}
-          disabled={reservado}
-          aria-label={reservado ? `${presente.nome}: já reservado` : `Presentear com ${presente.nome}`}
+          disabled={indisponivel}
+          aria-label={
+            presenteado
+              ? `${presente.nome}: já presenteado`
+              : reservado
+                ? `${presente.nome}: já reservado`
+                : `Presentear com ${presente.nome}`
+          }
           className={cn(
             "tracking-editorial group/btn relative mt-2 inline-flex items-center justify-center overflow-hidden rounded-full border px-5 py-2.5 text-[10px] uppercase transition-colors duration-300",
             "border-primary/40 text-primary-dark",
@@ -128,18 +134,19 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
             aria-hidden
             className={cn(
               "absolute inset-0 -z-0 origin-left scale-x-0 bg-primary transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
-              !reservado && "group-hover/btn:scale-x-100"
+              !indisponivel && "group-hover/btn:scale-x-100"
             )}
           />
           <span
             className={cn(
               "relative z-10 transition-colors duration-300",
-              !reservado && "group-hover/btn:text-primary-foreground"
+              !indisponivel && "group-hover/btn:text-primary-foreground"
             )}
           >
-            {reservado ? "Reservado" : "Presentear"}
+            {presenteado ? "Já presenteado" : reservado ? "Reservado" : "Presentear"}
           </span>
         </button>
+
       </div>
     </article>
   );
