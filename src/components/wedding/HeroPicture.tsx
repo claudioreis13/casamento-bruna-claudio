@@ -29,6 +29,7 @@ export function HeroPicture({
   alt = "",
   className = "",
   overlayClassName = "",
+  objectPosition = "center 30%",
 }: Props) {
   const reduce = useReducedMotion();
   const animate = kenBurns && !reduce;
