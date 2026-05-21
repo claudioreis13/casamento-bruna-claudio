@@ -2,7 +2,6 @@ import { useState } from "react";
 import { formatarPreco, type Gift } from "@/data/gifts";
 import { cn } from "@/lib/utils";
 
-
 interface Props {
   presente: Gift;
   reservado: boolean;
@@ -14,53 +13,46 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
   const presenteado = !!presente.presenteado;
   const indisponivel = presenteado || reservado;
 
-
   return (
     <article
       className={cn(
-        "group relative flex flex-col overflow-hidden rounded-2xl bg-card",
-        "border border-primary/10",
-        "shadow-[0_1px_2px_rgba(0,0,0,0.04)]",
-        "transition-[transform,box-shadow,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
-        "hover:-translate-y-1 hover:border-primary/30 hover:shadow-[0_20px_40px_-20px_rgba(40,50,30,0.35)]",
+        "group flex flex-col",
         indisponivel && "opacity-60"
       )}
       data-id={presente.id}
-
     >
-      {/* Halo sutil ao hover */}
+      {/* Moldura — image with white matte border */}
       <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 z-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100"
-        style={{
-          background:
-            "radial-gradient(120% 80% at 50% 0%, rgba(107,122,78,0.10), transparent 60%)",
-        }}
-      />
+        className={cn(
+          "relative aspect-square overflow-hidden bg-secondary/20",
+          "transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
+          !indisponivel && "group-hover:-translate-y-1"
+        )}
+      >
+        {/* Badges */}
+        {presente.humor && (
+          <span className="tracking-editorial absolute left-4 top-4 z-20 bg-primary px-2.5 py-1 text-[9px] uppercase text-primary-foreground">
+            Surpresa
+          </span>
+        )}
+        {presenteado ? (
+          <span className="tracking-editorial absolute left-4 top-4 z-20 bg-muted-foreground px-2.5 py-1 text-[9px] uppercase text-background">
+            ✓ Já presenteado
+          </span>
+        ) : reservado ? (
+          <span className="tracking-editorial absolute left-4 top-4 z-20 bg-background/95 border border-primary/30 px-2.5 py-1 text-[9px] uppercase text-primary-dark backdrop-blur-sm">
+            ✓ Reservado
+          </span>
+        ) : null}
 
-      {presente.humor && (
-        <span className="tracking-editorial absolute left-3 top-3 z-20 rounded-full border border-primary/20 bg-background/95 px-2.5 py-1 text-[9px] uppercase text-primary-dark backdrop-blur-sm">
-          Surpresa
-        </span>
-      )}
+        {/* White matte frame */}
+        <div className="absolute inset-0 z-10 border-[12px] border-background pointer-events-none" />
 
-      {presenteado ? (
-        <span className="tracking-editorial absolute right-3 top-3 z-20 rounded-full border border-primary-dark/40 bg-primary-dark px-2.5 py-1 text-[9px] uppercase text-primary-foreground backdrop-blur-sm">
-          ✓ Já presenteado
-        </span>
-      ) : reservado ? (
-        <span className="tracking-editorial absolute right-3 top-3 z-20 rounded-full border border-primary-dark/30 bg-background/95 px-2.5 py-1 text-[9px] uppercase text-primary-dark backdrop-blur-sm">
-          ✓ Reservado
-        </span>
-      ) : null}
-
-
-      <div className="relative z-10 aspect-square overflow-hidden bg-muted">
-        {/* Skeleton/placeholder enquanto a imagem carrega */}
+        {/* Skeleton */}
         <div
           aria-hidden
           className={cn(
-            "absolute inset-0 bg-gradient-to-br from-muted via-secondary/30 to-muted transition-opacity duration-700",
+            "absolute inset-0 bg-gradient-to-br from-secondary/30 via-secondary/10 to-secondary/30 transition-opacity duration-700",
             carregada ? "opacity-0" : "opacity-100 animate-pulse"
           )}
         />
@@ -73,7 +65,9 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
           height={400}
           onLoad={() => setCarregada(true)}
           className={cn(
-            "h-full w-full object-cover transition-[transform,filter,opacity] duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110",
+            "h-full w-full object-cover transition-[transform,filter,opacity] duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
+            !indisponivel && "group-hover:scale-105",
+            presenteado && "grayscale",
             carregada ? "opacity-100 blur-0" : "scale-105 opacity-0 blur-xl"
           )}
           onError={(e) => {
@@ -82,34 +76,21 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
               "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><rect fill='%23e8e4dd' width='400' height='400'/></svg>";
           }}
         />
-
-        {/* Shimmer diagonal premium */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-[1200ms] ease-out group-hover:translate-x-full"
-        />
-        {/* Vinheta inferior para legibilidade */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/15 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-        />
       </div>
 
-      <div className="relative z-10 flex flex-1 flex-col items-center gap-3 p-5 text-center">
-        {/* Linha decorativa que cresce */}
-        <span
-          aria-hidden
-          className="h-px w-8 bg-primary/40 transition-[width,background-color] duration-500 group-hover:w-16 group-hover:bg-primary-dark"
-        />
-
-        <h3 className="font-display text-lg italic leading-snug text-foreground">
+      {/* Info */}
+      <div className="mt-6 flex flex-col items-center gap-2 text-center">
+        <h3 className="font-display text-lg italic leading-tight text-foreground">
           {presente.nome}
         </h3>
-
-        <p className="tracking-editorial text-xs uppercase text-primary-dark tabular-nums">
+        <p
+          className={cn(
+            "tracking-editorial text-sm font-semibold text-primary-dark tabular-nums",
+            presenteado && "line-through text-muted-foreground"
+          )}
+        >
           {formatarPreco(presente.preco)}
         </p>
-
 
         <button
           type="button"
@@ -123,30 +104,14 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
                 : `Presentear com ${presente.nome}`
           }
           className={cn(
-            "tracking-editorial group/btn relative mt-2 inline-flex items-center justify-center overflow-hidden rounded-full border px-5 py-2.5 text-[10px] uppercase transition-colors duration-300",
-            "border-primary/40 text-primary-dark",
-            "hover:border-primary-dark",
-            "disabled:cursor-not-allowed disabled:border-muted disabled:text-muted-foreground"
+            "tracking-editorial mt-3 w-full border py-3 text-[10px] font-bold uppercase transition-all duration-300",
+            indisponivel
+              ? "border-muted text-muted-foreground cursor-not-allowed"
+              : "border-primary text-primary-dark hover:bg-primary hover:text-primary-foreground"
           )}
         >
-          {/* Fundo que desliza no hover */}
-          <span
-            aria-hidden
-            className={cn(
-              "absolute inset-0 -z-0 origin-left scale-x-0 bg-primary transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
-              !indisponivel && "group-hover/btn:scale-x-100"
-            )}
-          />
-          <span
-            className={cn(
-              "relative z-10 transition-colors duration-300",
-              !indisponivel && "group-hover/btn:text-primary-foreground"
-            )}
-          >
-            {presenteado ? "Já presenteado" : reservado ? "Reservado" : "Presentear"}
-          </span>
+          {presenteado ? "Já presenteado" : reservado ? "Reservado" : "Presentear"}
         </button>
-
       </div>
     </article>
   );
