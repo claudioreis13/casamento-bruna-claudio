@@ -64,6 +64,7 @@ export function HeroPicture({
           fetchPriority={priority ? "high" : "auto"}
           loading={priority ? "eager" : "lazy"}
           className="h-full w-full object-cover"
+          style={{ objectPosition }}
         />
       </motion.picture>
 
