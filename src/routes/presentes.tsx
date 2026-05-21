@@ -109,23 +109,23 @@ function Presentes() {
       </header>
 
       {/* PIX em destaque — boutique */}
-      <section className="mx-auto mb-24 max-w-4xl px-4 sm:px-8">
-        <div className="relative overflow-hidden border border-primary/20 bg-secondary/20 p-8 sm:p-12">
+      <section className="mx-auto mb-16 max-w-4xl px-4 sm:mb-24 sm:px-8">
+        <div className="relative overflow-hidden border border-primary/20 bg-secondary/20 p-6 sm:p-12">
           {/* Ornamento sutil */}
           <div
             aria-hidden
             className="absolute -right-16 -top-16 h-32 w-32 rounded-full bg-primary/5"
           />
-          <div className="relative z-10 flex flex-col items-center justify-between gap-8 sm:flex-row">
-            <div className="text-center sm:text-left">
+          <div className="relative z-10 flex flex-col items-center justify-between gap-6 sm:flex-row sm:gap-8">
+            <div className="w-full text-center sm:w-auto sm:text-left">
               <h2 className="font-display text-2xl italic text-primary-dark sm:text-3xl">
                 Contribuição Espontânea
               </h2>
               <p className="mt-2 text-sm text-muted-foreground">
                 Prefere contribuir em dinheiro? Envie um PIX direto aos noivos.
               </p>
-              <div className="mt-4 inline-flex items-center gap-3 border border-primary/15 bg-card px-4 py-2">
-                <span className="font-mono text-sm text-foreground break-all">
+              <div className="mt-4 inline-flex max-w-full items-center gap-3 border border-primary/15 bg-card px-3 py-2">
+                <span className="font-mono text-xs text-foreground break-all sm:text-sm">
                   {WEDDING.pix}
                 </span>
               </div>
@@ -133,7 +133,7 @@ function Presentes() {
             <button
               type="button"
               onClick={copiarPix}
-              className="tracking-editorial w-full shrink-0 bg-primary px-10 py-4 text-[11px] font-semibold uppercase text-primary-foreground shadow-sm transition-colors hover:bg-primary-dark sm:w-auto"
+              className="tracking-editorial w-full shrink-0 bg-primary px-6 py-4 text-[11px] font-semibold uppercase text-primary-foreground shadow-sm transition-colors hover:bg-primary-dark sm:w-auto sm:px-10"
             >
               Copiar Chave PIX
             </button>
@@ -188,63 +188,67 @@ function Presentes() {
             </div>
 
             {/* Faixa — chips outlined */}
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="tracking-editorial text-[10px] font-semibold uppercase text-muted-foreground">
-                Faixa de Preço:
+            <div>
+              <span className="tracking-editorial mb-3 block text-[10px] font-semibold uppercase text-muted-foreground">
+                Faixa de Preço
               </span>
-              {FAIXAS.map((f) => {
-                const ativo = faixa === f.id;
-                return (
-                  <button
-                    key={f.id}
-                    type="button"
-                    onClick={() => setFaixa(f.id)}
-                    aria-pressed={ativo}
-                    className={cn(
-                      "border px-3 py-1 text-xs transition-colors",
-                      ativo
-                        ? "border-primary-dark bg-primary text-primary-foreground"
-                        : "border-primary/20 text-foreground hover:border-primary"
-                    )}
-                  >
-                    {f.label}
-                  </button>
-                );
-              })}
+              <div className="flex flex-wrap gap-2">
+                {FAIXAS.map((f) => {
+                  const ativo = faixa === f.id;
+                  return (
+                    <button
+                      key={f.id}
+                      type="button"
+                      onClick={() => setFaixa(f.id)}
+                      aria-pressed={ativo}
+                      className={cn(
+                        "min-h-11 border px-3 py-1.5 text-xs transition-colors",
+                        ativo
+                          ? "border-primary-dark bg-primary text-primary-foreground"
+                          : "border-primary/20 text-foreground hover:border-primary"
+                      )}
+                    >
+                      {f.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
-          <div className="flex w-full gap-4 lg:w-auto">
-            <div className="relative flex-1 lg:w-64">
+          <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-end sm:gap-4 lg:w-auto">
+            <div className="relative w-full lg:w-64">
               <input
                 type="text"
                 value={termo}
                 onChange={(e) => setTermo(e.target.value)}
                 placeholder="BUSCAR PRESENTE"
                 aria-label="Buscar entre os presentes"
-                className="tracking-editorial w-full border-b border-primary/20 bg-transparent py-2 text-xs text-foreground placeholder:text-muted-foreground/60 outline-none focus:border-primary-dark"
+                className="tracking-editorial min-h-11 w-full border-b border-primary/20 bg-transparent py-2 text-xs text-foreground placeholder:text-muted-foreground/60 outline-none focus:border-primary-dark"
               />
             </div>
-            <select
-              value={ordem}
-              onChange={(e) => setOrdem(e.target.value as Ordem)}
-              aria-label="Ordenar presentes"
-              className="tracking-editorial cursor-pointer border-b border-primary/20 bg-transparent py-2 text-xs uppercase text-foreground outline-none focus:border-primary-dark"
-            >
-              <option value="padrao">ORDENAR POR</option>
-              <option value="menor">Menor Preço</option>
-              <option value="maior">Maior Preço</option>
-              <option value="az">A → Z</option>
-            </select>
-            {(ativos > 0 || ordem !== "padrao") && (
-              <button
-                type="button"
-                onClick={limpar}
-                className="tracking-editorial border-b border-primary/20 px-2 py-2 text-xs uppercase text-foreground transition-colors hover:text-primary-dark"
+            <div className="flex gap-3">
+              <select
+                value={ordem}
+                onChange={(e) => setOrdem(e.target.value as Ordem)}
+                aria-label="Ordenar presentes"
+                className="tracking-editorial min-h-11 flex-1 cursor-pointer border-b border-primary/20 bg-transparent py-2 text-xs uppercase text-foreground outline-none focus:border-primary-dark sm:flex-none"
               >
-                Limpar
-              </button>
-            )}
+                <option value="padrao">ORDENAR POR</option>
+                <option value="menor">Menor Preço</option>
+                <option value="maior">Maior Preço</option>
+                <option value="az">A → Z</option>
+              </select>
+              {(ativos > 0 || ordem !== "padrao") && (
+                <button
+                  type="button"
+                  onClick={limpar}
+                  className="tracking-editorial min-h-11 border-b border-primary/20 px-2 py-2 text-xs uppercase text-foreground transition-colors hover:text-primary-dark"
+                >
+                  Limpar
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -266,7 +270,7 @@ function Presentes() {
           </div>
         ) : (
           <motion.div
-            className="grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-4"
+            className="grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 sm:gap-y-12 lg:grid-cols-4"
             initial="hidden"
             animate="show"
             variants={{

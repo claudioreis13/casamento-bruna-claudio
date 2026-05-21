@@ -46,7 +46,7 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
         ) : null}
 
         {/* White matte frame */}
-        <div className="absolute inset-0 z-10 border-[12px] border-background pointer-events-none" />
+        <div className="absolute inset-0 z-10 border-[8px] border-background pointer-events-none sm:border-[12px]" />
 
         {/* Skeleton */}
         <div
