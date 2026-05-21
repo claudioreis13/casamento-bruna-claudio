@@ -13,6 +13,8 @@ interface Props {
   className?: string;
   /** Camadas de overlay aplicadas em cima da imagem */
   overlayClassName?: string;
+  /** object-position CSS — default "center" */
+  objectPosition?: string;
 }
 
 /**
@@ -27,6 +29,7 @@ export function HeroPicture({
   alt = "",
   className = "",
   overlayClassName = "",
+  objectPosition = "center 30%",
 }: Props) {
   const reduce = useReducedMotion();
   const animate = kenBurns && !reduce;
@@ -61,6 +64,7 @@ export function HeroPicture({
           fetchPriority={priority ? "high" : "auto"}
           loading={priority ? "eager" : "lazy"}
           className="h-full w-full object-cover"
+          style={{ objectPosition }}
         />
       </motion.picture>
 
