@@ -40,10 +40,6 @@ function SunIcon() {
   );
 }
 
-// Browsers that support View Transitions API
-interface DocumentWithViewTransition extends Document {
-  startViewTransition?: (cb: () => void) => { ready: Promise<void>; finished: Promise<void> };
-}
 
 export function ThemeToggle() {
   const [theme, setTheme] = useState<Theme>("light");
