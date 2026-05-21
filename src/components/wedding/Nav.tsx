@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ThemeToggle } from "./ThemeToggle";
+import logoBC from "@/assets/logo-bc.png";
 
 export function Nav() {
   return (
@@ -11,9 +12,15 @@ export function Nav() {
         <Link
           to="/"
           aria-label="Bruna e Cláudio — Início"
-          className="group flex h-10 min-w-10 items-center justify-center rounded-full border border-primary/30 px-3 font-display text-base italic text-primary-dark transition-colors hover:border-primary"
+          className="group flex items-center justify-center transition-opacity hover:opacity-70"
         >
-          B&amp;C
+          <img
+            src={logoBC}
+            alt="Monograma Bruna e Cláudio"
+            className="h-12 w-auto dark:invert dark:brightness-110"
+            width={48}
+            height={64}
+          />
         </Link>
         <div className="flex items-center gap-6 text-[10px] font-medium uppercase tracking-editorial text-primary-dark sm:gap-10 sm:text-[11px]">
           {[
