@@ -13,6 +13,8 @@ interface Props {
   className?: string;
   /** Camadas de overlay aplicadas em cima da imagem */
   overlayClassName?: string;
+  /** object-position CSS — default "center" */
+  objectPosition?: string;
 }
 
 /**
