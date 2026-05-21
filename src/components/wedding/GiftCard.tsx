@@ -23,9 +23,10 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
         "shadow-[0_1px_2px_rgba(0,0,0,0.04)]",
         "transition-[transform,box-shadow,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
         "hover:-translate-y-1 hover:border-primary/30 hover:shadow-[0_20px_40px_-20px_rgba(40,50,30,0.35)]",
-        reservado && "opacity-60"
+        indisponivel && "opacity-60"
       )}
       data-id={presente.id}
+
     >
       {/* Halo sutil ao hover */}
       <div
