@@ -20,13 +20,16 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
         indisponivel && "opacity-60"
       )}
       data-id={presente.id}
+      style={{ perspective: "1200px" }}
     >
       {/* Moldura — image with white matte border */}
       <div
         className={cn(
           "relative aspect-square overflow-hidden bg-secondary/20",
-          "transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
-          !indisponivel && "group-hover:-translate-y-1"
+          "transition-[transform,box-shadow] duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
+          "[transform-style:preserve-3d] will-change-transform",
+          !indisponivel &&
+            "group-hover:[transform:translateY(-10px)_rotateX(4deg)_rotateY(-3deg)] group-hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.35)]"
         )}
       >
         {/* Badges */}
@@ -47,6 +50,28 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
 
         {/* White matte frame */}
         <div className="absolute inset-0 z-10 border-[8px] border-background pointer-events-none sm:border-[12px]" />
+
+        {/* Shine sweep on hover */}
+        {!indisponivel && (
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 z-[15] overflow-hidden"
+          >
+            <div className="absolute -inset-y-8 -left-1/2 w-1/2 rotate-12 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 transition-all duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:left-[125%] group-hover:opacity-100" />
+          </div>
+        )}
+
+        {/* Vignette glow */}
+        {!indisponivel && (
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 z-[12] opacity-0 transition-opacity duration-700 group-hover:opacity-100"
+            style={{
+              background:
+                "radial-gradient(circle at 50% 40%, rgba(255,255,255,0.18), transparent 60%)",
+            }}
+          />
+        )}
 
         {/* Skeleton */}
         <div
@@ -72,7 +97,8 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
             onLoad={() => setCarregada(true)}
             className={cn(
               "h-full w-full object-contain p-4 transition-[transform,filter,opacity] duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
-              !indisponivel && "group-hover:scale-105",
+              !indisponivel &&
+                "group-hover:[transform:translateZ(40px)_scale(1.08)]",
               presenteado && "grayscale",
               carregada ? "opacity-100 blur-0" : "scale-105 opacity-0 blur-xl"
             )}
