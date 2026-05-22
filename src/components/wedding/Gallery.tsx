@@ -35,7 +35,7 @@ const PHOTOS: Photo[] = [
       caption: "onde tudo começou",
     },
   },
-  { src: "/imagens/galeria/momento-02.jpg", alt: "Momento 2", span: "short",  parallax:  25 },
+  
   { src: "/imagens/galeria/momento-03.jpg", alt: "Momento 3", span: "medium", parallax: -20 },
   { src: "/imagens/galeria/momento-04.jpg", alt: "Momento 4", span: "tall",   parallax:  35 },
   { src: "/imagens/galeria/momento-05.jpg", alt: "Momento 5", span: "medium", parallax: -30 },
