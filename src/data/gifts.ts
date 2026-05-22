@@ -80,6 +80,10 @@ export const PRESENTES: Gift[] = [
   { id: "saladeira", nome: "Conjunto saladeira Ryo Maresia Areia Oxford", preco: 100, img: "/imagens/saladeira.jpg", categoria: "cozinha" },
   { id: "puff", nome: "Puff Dior Decorativo P/ Closet Dior Banqueta", preco: 200, img: "/imagens/puff.jpg", categoria: "quarto" },
   { id: "luminaria", nome: "Luminária de Piso Abajur Chão Com Cúpula Tecido Off White", preco: 190, img: "/imagens/luminaria.jpg", categoria: "sala" },
+  { id: "tapete", nome: "Tapete de sala", preco: 450, img: "/imagens/tapete.jpg", categoria: "sala" },
+  { id: "quadros", nome: "Quadros decorativos", preco: 250, img: "/imagens/quadros.jpg", categoria: "sala" },
+  { id: "difusor", nome: "Difusor de ambiente", preco: 120, img: "/imagens/difusor.jpg", categoria: "sala" },
+  { id: "ferro", nome: "Ferro a vapor vertical", preco: 350, img: "/imagens/ferro.jpg", categoria: "ferramentas" },
 ];
 
 export function formatarPreco(preco: number) {
