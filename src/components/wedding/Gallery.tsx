@@ -14,7 +14,7 @@ import { Reveal } from "./Reveal";
 type Photo = {
   src: string;
   alt: string;
-  span: "tall" | "short" | "medium";
+  span: "tall" | "short" | "medium" | "portrait";
   /** Velocidade de parallax (1 = neutro). */
   parallax: number;
   featured?: { label: string; caption: string };
@@ -28,7 +28,7 @@ const PHOTOS: Photo[] = [
   {
     src: "/imagens/galeria/momento-01.jpg",
     alt: "A primeira foto que tiramos juntos",
-    span: "tall",
+    span: "portrait",
     parallax: -40,
     featured: {
       label: "O primeiro clique",
@@ -47,6 +47,7 @@ const spanClasses: Record<Photo["span"], string> = {
   tall: "aspect-[3/4]",
   medium: "aspect-[4/5]",
   short: "aspect-[4/3]",
+  portrait: "aspect-[9/16]",
 };
 
 function PlaceholderArt({ index }: { index: number }) {
