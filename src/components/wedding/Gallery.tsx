@@ -8,6 +8,7 @@ import {
   useMotionValue,
   useSpring,
   LayoutGroup,
+  type PanInfo,
 } from "motion/react";
 import { Reveal } from "./Reveal";
 
@@ -35,7 +36,7 @@ const PHOTOS: Photo[] = [
       caption: "onde tudo começou",
     },
   },
-  
+
   { src: "/imagens/galeria/momento-03.jpg", alt: "Momento 3", span: "medium", parallax: -20 },
   { src: "/imagens/galeria/momento-04.jpg", alt: "Momento 4", span: "tall",   parallax:  35 },
   { src: "/imagens/galeria/momento-05.jpg", alt: "Momento 5", span: "medium", parallax: -30 },
@@ -75,7 +76,7 @@ function PlaceholderArt({ index }: { index: number }) {
 }
 
 /* ============================================================ */
-/*  Tile com magnetic hover + tilt + parallax de scroll          */
+/*  Tile com magnetic hover + tilt + parallax interno            */
 /* ============================================================ */
 function GalleryTile({
   photo,
@@ -95,17 +96,21 @@ function GalleryTile({
   const tileRef = useRef<HTMLButtonElement>(null);
   const [loaded, setLoaded] = useState(false);
   const [hovered, setHovered] = useState(false);
+  const [pressed, setPressed] = useState(false);
+  // Foco editorial no mobile: a foto mais próxima do centro do viewport
+  // ganha cor + escala 1.0; as outras ficam dessaturadas e levemente menores.
+  const [focusAmount, setFocusAmount] = useState(isTouch ? 0 : 1);
 
-  // Parallax: cada tile flutua em ritmo diferente conforme a seção é rolada.
-  // Desabilitado em touch/mobile para evitar oscilação durante o scroll.
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
+  // Parallax interno: a moldura fica parada, só a imagem desliza dentro dela.
+  // Isso elimina o "pulo" do tile durante o scroll no mobile.
+  const { scrollYProgress: tileProgress } = useScroll({
+    target: tileRef,
     offset: ["start end", "end start"],
   });
-  const parallaxY = useTransform(
-    scrollYProgress,
+  const imageY = useTransform(
+    tileProgress,
     [0, 1],
-    reduce || isTouch ? [0, 0] : [photo.parallax, -photo.parallax],
+    reduce ? ["0%", "0%"] : ["-6%", "6%"],
   );
 
   // Tilt magnético com mouse (apenas desktop).
@@ -119,8 +124,8 @@ function GalleryTile({
     const rect = e.currentTarget.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
-    ry.set(x * 8);   // rotateY em graus
-    rx.set(-y * 8);  // rotateX em graus
+    ry.set(x * 8);
+    rx.set(-y * 8);
   };
   const handleMouseLeave = () => {
     rx.set(0);
@@ -128,14 +133,64 @@ function GalleryTile({
     setHovered(false);
   };
 
-  // No mobile a foto fica sempre revelada (em cor, sem grayscale).
-  const isRevealed = hovered || isTouch;
+  // Foco no centro do viewport (mobile): mede a distância do centro do tile
+  // ao centro da tela e converte em um valor 0..1.
+  useEffect(() => {
+    if (!isTouch || reduce) {
+      setFocusAmount(1);
+      return;
+    }
+    const el = tileRef.current;
+    if (!el) return;
+    let raf = 0;
+    const update = () => {
+      const rect = el.getBoundingClientRect();
+      const tileCenter = rect.top + rect.height / 2;
+      const viewportCenter = window.innerHeight / 2;
+      const dist = Math.abs(tileCenter - viewportCenter);
+      // Quanto mais perto do centro, mais próximo de 1.
+      const focus = Math.max(0, 1 - dist / (window.innerHeight * 0.55));
+      setFocusAmount(focus);
+    };
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        update();
+      });
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [isTouch, reduce]);
+
+  // No desktop: hover controla a revelação.
+  // No mobile: a "revelação" depende do foco (proximidade ao centro) ou do press.
+  const desktopRevealed = hovered && !isTouch;
+  const mobileFocus = isTouch ? focusAmount : 1;
+  const grayscale = isTouch
+    ? Math.round((1 - mobileFocus) * 80) // 0% (foco) → 80% (longe)
+    : desktopRevealed
+      ? 0
+      : 100;
+  const brightness = isTouch
+    ? 0.92 + mobileFocus * 0.1 // 0.92 → 1.02
+    : desktopRevealed
+      ? 1.02
+      : 0.95;
+  const scale = isTouch
+    ? 0.97 + mobileFocus * 0.03 + (pressed ? 0.02 : 0)
+    : desktopRevealed
+      ? 1.06
+      : 1;
 
   return (
-    <motion.div
-      style={{ y: parallaxY }}
-      className={`mb-4 break-inside-avoid md:mb-6`}
-    >
+    <motion.div className="mb-4 break-inside-avoid md:mb-6">
       <motion.button
         ref={tileRef}
         type="button"
@@ -144,6 +199,9 @@ function GalleryTile({
         onMouseMove={handleMouseMove}
         onMouseEnter={() => !isTouch && setHovered(true)}
         onMouseLeave={handleMouseLeave}
+        onTouchStart={() => isTouch && setPressed(true)}
+        onTouchEnd={() => isTouch && setPressed(false)}
+        onTouchCancel={() => isTouch && setPressed(false)}
         initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
         whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         viewport={{ once: true, margin: "-10%" }}
@@ -161,32 +219,50 @@ function GalleryTile({
         className={`group relative block w-full overflow-hidden bg-secondary/20 ${spanClasses[photo.span]} cursor-pointer will-change-transform`}
         aria-label={`Abrir ${photo.alt}`}
       >
-
         {/* Placeholder por trás */}
         <PlaceholderArt index={index} />
 
-        {/* Imagem real (some se quebrar) */}
-        <motion.img
-          src={photo.src}
-          alt={photo.alt}
-          loading="lazy"
-          decoding="async"
-          onLoad={() => setLoaded(true)}
-          onError={(e) => {
-            (e.currentTarget as HTMLImageElement).style.display = "none";
-          }}
-          animate={{
-            scale: isRevealed ? (isTouch ? 1.02 : 1.06) : 1,
-            filter: isRevealed
-              ? "grayscale(0%) brightness(1.02)"
-              : "grayscale(100%) brightness(0.95)",
-            opacity: loaded ? 1 : 0,
-          }}
-          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className={`relative h-full w-full will-change-transform ${
-            photo.featured ? "object-contain object-center" : "object-cover object-top"
-          }`}
-        />
+        {/* Imagem real — agora com parallax INTERNO (o tile não se move) */}
+        <motion.div
+          className="absolute inset-0"
+          style={{ y: isTouch && !reduce ? imageY : 0 }}
+        >
+          <motion.img
+            src={photo.src}
+            alt={photo.alt}
+            loading="lazy"
+            decoding="async"
+            onLoad={() => setLoaded(true)}
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).style.display = "none";
+            }}
+            animate={{
+              scale,
+              filter: `grayscale(${grayscale}%) brightness(${brightness})`,
+              opacity: loaded ? 1 : 0,
+            }}
+            transition={{
+              duration: isTouch ? 0.6 : 0.9,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            className={`relative h-full w-full will-change-transform ${
+              photo.featured ? "object-contain object-center" : "object-cover object-top"
+            }`}
+            // Aumenta a área renderizada para esconder as bordas durante o parallax interno
+            style={isTouch ? { height: "112%", top: "-6%" } : undefined}
+          />
+        </motion.div>
+
+        {/* Shimmer enquanto carrega */}
+        {!loaded && (
+          <motion.div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-background/20 to-transparent"
+            initial={{ x: "-100%" }}
+            animate={{ x: "100%" }}
+            transition={{ duration: 1.6, ease: "linear", repeat: Infinity }}
+          />
+        )}
 
         {/* Sheen — brilho diagonal que cruza no hover (desktop) */}
         <motion.div
@@ -196,17 +272,22 @@ function GalleryTile({
           transition={{ duration: 1.1, ease: [0.4, 0, 0.2, 1] }}
         />
 
-        {/* Vinheta inferior + caption */}
+        {/* Vinheta inferior */}
         <motion.div
           aria-hidden
           className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-primary-dark/70 via-primary-dark/20 to-transparent"
-          animate={{ opacity: isRevealed ? (isTouch ? 0.75 : 1) : 0 }}
+          animate={{
+            opacity: isTouch ? mobileFocus * 0.75 : desktopRevealed ? 1 : 0,
+          }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         />
 
         <motion.div
           className="absolute inset-x-0 bottom-0 flex items-end justify-between p-4 sm:p-5"
-          animate={{ opacity: isRevealed ? 1 : 0, y: isRevealed ? 0 : 12 }}
+          animate={{
+            opacity: isTouch ? mobileFocus : desktopRevealed ? 1 : 0,
+            y: isTouch ? (1 - mobileFocus) * 12 : desktopRevealed ? 0 : 12,
+          }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         >
           <span className="font-display text-xs italic text-background/90 sm:text-sm">
@@ -214,7 +295,7 @@ function GalleryTile({
           </span>
         </motion.div>
 
-        {/* Borda interna sutil para sensação de "moldura" */}
+        {/* Borda interna sutil */}
         <div
           aria-hidden
           className={`pointer-events-none absolute inset-0 ring-inset transition-all duration-500 ${
@@ -225,7 +306,6 @@ function GalleryTile({
                 : "ring-1 ring-background/0 group-hover:ring-background/20"
           }`}
         />
-
 
         {/* Selo de foto em destaque */}
         {photo.featured && (
@@ -255,7 +335,7 @@ function GalleryTile({
 }
 
 /* ============================================================ */
-/*  Lightbox premium                                              */
+/*  Lightbox premium com gestos (swipe horizontal + swipe-down)  */
 /* ============================================================ */
 function Lightbox({
   index,
@@ -263,13 +343,42 @@ function Lightbox({
   onPrev,
   onNext,
   reduce,
+  isTouch,
 }: {
   index: number;
   onClose: () => void;
   onPrev: () => void;
   onNext: () => void;
   reduce: boolean | null;
+  isTouch: boolean;
 }) {
+  const dragX = useMotionValue(0);
+  const dragY = useMotionValue(0);
+  // Backdrop fica mais transparente conforme arrasta para baixo
+  const backdropOpacity = useTransform(dragY, [0, 300], [1, 0.2]);
+
+  const handleDragEnd = (
+    _: MouseEvent | TouchEvent | PointerEvent,
+    info: PanInfo,
+  ) => {
+    const { offset, velocity } = info;
+    const swipeDown = offset.y > 120 || velocity.y > 600;
+    const swipeLeft = offset.x < -80 || velocity.x < -500;
+    const swipeRight = offset.x > 80 || velocity.x > 500;
+
+    if (swipeDown) {
+      onClose();
+      return;
+    }
+    if (swipeLeft) {
+      onNext();
+    } else if (swipeRight) {
+      onPrev();
+    }
+    dragX.set(0);
+    dragY.set(0);
+  };
+
   return (
     <motion.div
       key="lightbox"
@@ -283,15 +392,19 @@ function Lightbox({
       aria-modal="true"
       aria-label="Visualização ampliada"
     >
-      {/* Backdrop com blur animado */}
+      {/* Backdrop com blur animado — opacidade reage ao swipe vertical */}
       <motion.div
         aria-hidden
         className="absolute inset-0 bg-primary-dark/95"
-        initial={{ backdropFilter: "blur(0px)", opacity: 0 }}
-        animate={{ backdropFilter: "blur(20px)", opacity: 1 }}
-        exit={{ backdropFilter: "blur(0px)", opacity: 0 }}
-        transition={{ duration: reduce ? 0 : 0.6 }}
-        style={{ WebkitBackdropFilter: "blur(20px)" }}
+        style={{
+          opacity: isTouch ? backdropOpacity : 1,
+          WebkitBackdropFilter: "blur(20px)",
+          backdropFilter: "blur(20px)",
+        }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: reduce ? 0 : 0.4 }}
       />
 
       {/* Header: contador editorial */}
@@ -345,32 +458,33 @@ function Lightbox({
         </svg>
       </motion.button>
 
-      {/* Setas */}
-      {[
-        { dir: "prev" as const, label: "Anterior", side: "left-4 sm:left-8", path: "M15 6l-6 6 6 6", handler: onPrev },
-        { dir: "next" as const, label: "Próxima", side: "right-4 sm:right-8", path: "M9 6l6 6-6 6", handler: onNext },
-      ].map((b) => (
-        <motion.button
-          key={b.dir}
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            b.handler();
-          }}
-          className={`group absolute ${b.side} top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full text-background/70 transition-all duration-300 hover:bg-background/10 hover:text-background`}
-          aria-label={b.label}
-          initial={{ opacity: 0, x: b.dir === "prev" ? -16 : 16 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: b.dir === "prev" ? -16 : 16 }}
-          transition={{ delay: 0.25 }}
-        >
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="transition-transform duration-300 group-hover:scale-110">
-            <path d={b.path} strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </motion.button>
-      ))}
+      {/* Setas — escondidas no mobile, onde os gestos são o padrão */}
+      {!isTouch &&
+        [
+          { dir: "prev" as const, label: "Anterior", side: "left-4 sm:left-8", path: "M15 6l-6 6 6 6", handler: onPrev },
+          { dir: "next" as const, label: "Próxima", side: "right-4 sm:right-8", path: "M9 6l6 6-6 6", handler: onNext },
+        ].map((b) => (
+          <motion.button
+            key={b.dir}
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              b.handler();
+            }}
+            className={`group absolute ${b.side} top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full text-background/70 transition-all duration-300 hover:bg-background/10 hover:text-background`}
+            aria-label={b.label}
+            initial={{ opacity: 0, x: b.dir === "prev" ? -16 : 16 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: b.dir === "prev" ? -16 : 16 }}
+            transition={{ delay: 0.25 }}
+          >
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="transition-transform duration-300 group-hover:scale-110">
+              <path d={b.path} strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </motion.button>
+        ))}
 
-      {/* Imagem morfa do tile com layoutId */}
+      {/* Imagem morfa do tile com layoutId — agora arrastável no mobile */}
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={index}
@@ -378,11 +492,18 @@ function Lightbox({
           className="relative z-[1] flex max-h-[78vh] w-full max-w-[92vw] items-center justify-center overflow-hidden bg-card/10 shadow-2xl sm:max-w-[80vw] md:max-w-[60vw]"
           transition={{ duration: reduce ? 0 : 0.7, ease: [0.22, 1, 0.36, 1] }}
           onClick={(e) => e.stopPropagation()}
+          style={isTouch ? { x: dragX, y: dragY } : undefined}
+          drag={isTouch ? true : false}
+          dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
+          dragElastic={{ left: 0.6, right: 0.6, top: 0.1, bottom: 0.7 }}
+          dragMomentum={false}
+          onDragEnd={handleDragEnd}
         >
           <motion.img
             src={PHOTOS[index].src}
             alt={PHOTOS[index].alt}
-            className="relative max-h-[78vh] max-w-full object-contain"
+            className="pointer-events-none relative max-h-[78vh] max-w-full object-contain"
+            draggable={false}
             initial={{ scale: 1.04, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
@@ -393,7 +514,7 @@ function Lightbox({
         </motion.div>
       </AnimatePresence>
 
-      {/* Footer: dicas de teclado */}
+      {/* Footer: dicas — teclado no desktop, gestos no mobile */}
       <motion.div
         className="absolute bottom-0 left-0 right-0 flex items-center justify-center gap-6 px-6 py-6 sm:py-8"
         initial={{ opacity: 0, y: 16 }}
@@ -401,26 +522,34 @@ function Lightbox({
         exit={{ opacity: 0, y: 16 }}
         transition={{ duration: 0.5, delay: 0.15 }}
       >
-        {[
-          { keys: ["←", "→"], label: "navegar" },
-          { keys: ["esc"], label: "fechar" },
-        ].map((hint) => (
-          <div key={hint.label} className="flex items-center gap-2">
-            <div className="flex items-center gap-1">
-              {hint.keys.map((k) => (
-                <kbd
-                  key={k}
-                  className="inline-flex h-6 min-w-[24px] items-center justify-center rounded border border-background/20 px-1.5 text-[10px] font-medium text-background/70"
-                >
-                  {k}
-                </kbd>
-              ))}
-            </div>
-            <span className="tracking-editorial text-[9px] uppercase text-background/40">
-              {hint.label}
+        {isTouch ? (
+          <div className="flex items-center gap-2">
+            <span className="tracking-editorial text-[9px] uppercase text-background/50">
+              deslize ↔ navegar  ·  ↓ fechar
             </span>
           </div>
-        ))}
+        ) : (
+          [
+            { keys: ["←", "→"], label: "navegar" },
+            { keys: ["esc"], label: "fechar" },
+          ].map((hint) => (
+            <div key={hint.label} className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
+                {hint.keys.map((k) => (
+                  <kbd
+                    key={k}
+                    className="inline-flex h-6 min-w-[24px] items-center justify-center rounded border border-background/20 px-1.5 text-[10px] font-medium text-background/70"
+                  >
+                    {k}
+                  </kbd>
+                ))}
+              </div>
+              <span className="tracking-editorial text-[9px] uppercase text-background/40">
+                {hint.label}
+              </span>
+            </div>
+          ))
+        )}
       </motion.div>
     </motion.div>
   );
@@ -560,6 +689,7 @@ export function Gallery() {
                   setOpenIndex((i) => (i === null ? null : (i + 1) % PHOTOS.length))
                 }
                 reduce={reduce}
+                isTouch={isTouch}
               />
             )}
           </AnimatePresence>
