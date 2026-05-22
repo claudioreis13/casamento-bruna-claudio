@@ -100,9 +100,17 @@ export function GiftModal({ presente, onClose, onConfirm }: Props) {
           ×
         </button>
 
-        <h2 id="modal-title" className="text-center text-lg font-semibold text-primary-dark">
-          💖 Obrigado pelo presente!
-        </h2>
+        <div className="text-center">
+          <p className="tracking-editorial text-[10px] uppercase text-muted-foreground">
+            Que presente especial
+          </p>
+          <h2
+            id="modal-title"
+            className="mt-2 font-display text-3xl italic leading-tight text-primary-dark"
+          >
+            Obrigado de coração
+          </h2>
+        </div>
 
         <picture>
           <source type="image/webp" srcSet={presente.img.replace(/\.jpe?g$/i, ".webp")} />
@@ -118,15 +126,20 @@ export function GiftModal({ presente, onClose, onConfirm }: Props) {
         </picture>
 
         <div className="text-center">
-          <p className="text-sm font-medium text-foreground">{presente.nome}</p>
-          <p className="mt-1 text-xl font-semibold text-primary-dark">
+          <p className="font-display text-lg italic text-foreground">{presente.nome}</p>
+          <p className="tracking-editorial mt-1 text-sm font-semibold text-primary-dark tabular-nums">
             {formatarPreco(presente.preco)}
           </p>
         </div>
 
-        <div className="rounded-lg bg-muted px-4 py-3 text-center">
-          <p className="text-xs uppercase tracking-wide text-muted-foreground">PIX</p>
-          <p className="mt-0.5 font-mono text-sm break-all text-foreground">{WEDDING.pix}</p>
+        <p className="mx-auto max-w-xs text-center text-sm font-light leading-relaxed text-muted-foreground">
+          Cada presente vira uma memória na nossa nova casa.
+          Copie o PIX abaixo e finalize no seu banco — a gente cuida do resto com muito carinho.
+        </p>
+
+        <div className="rounded-lg border border-primary/15 bg-secondary/10 px-4 py-3 text-center">
+          <p className="tracking-editorial text-[10px] uppercase text-muted-foreground">Chave PIX</p>
+          <p className="mt-1 font-mono text-sm break-all text-foreground">{WEDDING.pix}</p>
         </div>
 
         <button
@@ -134,18 +147,25 @@ export function GiftModal({ presente, onClose, onConfirm }: Props) {
           onClick={copiarPix}
           aria-label={copied ? "PIX copiado" : "Copiar código PIX"}
           className={cn(
-            "inline-flex items-center justify-center rounded-full px-4 py-2.5 text-sm font-medium transition-all",
+            "tracking-editorial inline-flex items-center justify-center px-6 py-3 text-[11px] font-semibold uppercase transition-colors",
             copied
-              ? "bg-primary text-primary-foreground"
+              ? "bg-primary-dark text-primary-foreground"
               : "bg-primary text-primary-foreground hover:bg-primary-dark"
           )}
         >
-          {copied ? "PIX Copiado ✔" : "Copiar PIX"}
+          {copied ? "PIX copiado ✔" : "Copiar chave PIX"}
         </button>
 
         {copied && (
-          <p role="status" aria-live="polite" className="text-center text-sm text-muted-foreground">
-            Agora abra seu banco e cole o PIX para finalizar 🎉
+          <p
+            role="status"
+            aria-live="polite"
+            className="text-center font-display text-base italic text-primary-dark"
+          >
+            Muito obrigado, de verdade. 💛
+            <span className="mt-1 block text-xs not-italic font-sans text-muted-foreground">
+              Agora é só abrir seu banco e colar o PIX para finalizar.
+            </span>
           </p>
         )}
 

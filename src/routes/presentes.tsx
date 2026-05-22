@@ -26,16 +26,16 @@ const FAIXAS: { id: Faixa; label: string }[] = [
 export const Route = createFileRoute("/presentes")({
   head: () => ({
     meta: [
-      { title: "Lista de Presentes 🎁 — Bruna & Cláudio" },
+      { title: "Para nossa nova casa — Bruna & Cláudio" },
       {
         name: "description",
         content:
-          "Lista de presentes do casamento de Bruna e Cláudio (10/10/2026). Escolha um presente especial ou contribua via PIX.",
+          "Pequenos gestos para construir nossa nova casa. Escolha um presente especial ou contribua via PIX — Bruna & Cláudio, 10/10/2026.",
       },
-      { property: "og:title", content: "Lista de Presentes — Bruna & Cláudio" },
+      { property: "og:title", content: "Para nossa nova casa — Bruna & Cláudio" },
       {
         property: "og:description",
-        content: "Escolha um presente especial para o casamento em 10/10/2026!",
+        content: "Pequenos gestos para construir nossa nova casa. Escolha um presente especial para 10/10/2026.",
       },
       { property: "og:image", content: "/imagens/casamento.jpg" },
       { property: "og:url", content: "/presentes" },
@@ -109,11 +109,11 @@ function Presentes() {
       {/* Hero editorial */}
       <header className="mx-auto max-w-6xl px-4 pb-16 pt-20 text-center sm:px-8 sm:pt-28">
         <h1 className="font-display text-5xl italic leading-[1.05] text-foreground sm:text-7xl">
-          Lista de Presentes
+          Para nossa nova casa
         </h1>
         <p className="mx-auto mt-6 max-w-md text-sm font-light leading-relaxed text-muted-foreground">
-          Escolha algo especial para celebrar conosco e tornar nossa nova casa
-          um reflexo do nosso amor.
+          Pequenos gestos que vão morar com a gente. Escolha algo especial
+          para celebrar conosco e tornar nosso novo lar um reflexo do nosso amor.
         </p>
       </header>
 
