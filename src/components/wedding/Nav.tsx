@@ -1,6 +1,24 @@
 import { Link } from "@tanstack/react-router";
+import { motion } from "motion/react";
 import { ThemeToggle } from "./ThemeToggle";
 import logoBC from "@/assets/logo-bc.png";
+
+const itemVariants = {
+  initial: { rotateX: 0, opacity: 1 },
+  hover: { rotateX: -90, opacity: 0 },
+};
+
+const backVariants = {
+  initial: { rotateX: 90, opacity: 0 },
+  hover: { rotateX: 0, opacity: 1 },
+};
+
+const sharedTransition = {
+  type: "spring" as const,
+  stiffness: 100,
+  damping: 20,
+  duration: 0.5,
+};
 
 export function Nav() {
   return (
@@ -28,19 +46,40 @@ export function Nav() {
             { to: "/cerimonia", label: "Cerimônia" },
             { to: "/presentes", label: "Presentes" },
           ].map((l) => (
-            <Link
+            <motion.div
               key={l.to}
-              to={l.to}
-              className="relative py-1 transition-opacity hover:opacity-60"
-              activeOptions={{ exact: l.to === "/" }}
-              activeProps={{
-                "aria-current": "page",
-                className:
-                  "relative py-1 after:absolute after:-bottom-0.5 after:left-0 after:h-px after:w-full after:bg-primary-dark",
-              }}
+              initial="initial"
+              whileHover="hover"
+              style={{ perspective: "600px" }}
+              className="relative"
             >
-              {l.label}
-            </Link>
+              <Link
+                to={l.to}
+                className="relative block py-1"
+                activeOptions={{ exact: l.to === "/" }}
+                activeProps={{
+                  "aria-current": "page",
+                  className:
+                    "relative block py-1 after:absolute after:-bottom-0.5 after:left-0 after:h-px after:w-full after:bg-primary-dark",
+                }}
+              >
+                <motion.span
+                  variants={itemVariants}
+                  transition={sharedTransition}
+                  style={{ transformStyle: "preserve-3d", transformOrigin: "center bottom", display: "inline-block" }}
+                >
+                  {l.label}
+                </motion.span>
+                <motion.span
+                  variants={backVariants}
+                  transition={sharedTransition}
+                  style={{ transformStyle: "preserve-3d", transformOrigin: "center top", display: "inline-block" }}
+                  className="absolute inset-0 flex items-center justify-center"
+                >
+                  {l.label}
+                </motion.span>
+              </Link>
+            </motion.div>
           ))}
           <ThemeToggle />
         </div>
