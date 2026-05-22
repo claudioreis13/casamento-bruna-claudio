@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { formatarPreco, type Gift } from "@/data/gifts";
 import { cn } from "@/lib/utils";
 
@@ -10,8 +10,32 @@ interface Props {
 
 export function GiftCard({ presente, reservado, onPresentear }: Props) {
   const [carregada, setCarregada] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
   const presenteado = !!presente.presenteado;
   const indisponivel = presenteado || reservado;
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (indisponivel || !containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = (e.clientX - rect.left - rect.width / 2) / 18;
+    const y = (e.clientY - rect.top - rect.height / 2) / 18;
+    containerRef.current.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
+  };
+
+  const handleMouseLeave = () => {
+    if (!containerRef.current) return;
+    containerRef.current.style.transform = `rotateY(0deg) rotateX(0deg)`;
+  };
+
+  const handleMouseEnter = () => {
+    if (!containerRef.current) return;
+    containerRef.current.style.transition = "transform 0.1s ease-out";
+    requestAnimationFrame(() => {
+      if (containerRef.current) {
+        containerRef.current.style.transition = "";
+      }
+    });
+  };
 
   return (
     <article
@@ -20,30 +44,42 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
         indisponivel && "opacity-60"
       )}
       data-id={presente.id}
-      style={{ perspective: "1200px" }}
+      style={{ perspective: "1000px" }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      onMouseEnter={handleMouseEnter}
     >
       {/* Moldura — image with white matte border */}
       <div
+        ref={containerRef}
         className={cn(
           "relative aspect-square overflow-hidden bg-secondary/20",
-          "transition-[transform,box-shadow] duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
           "[transform-style:preserve-3d] will-change-transform",
-          !indisponivel &&
-            "group-hover:[transform:translateY(-10px)_rotateX(4deg)_rotateY(-3deg)] group-hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.35)]"
+          !indisponivel && "group-hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.35)] transition-shadow duration-500"
         )}
+        style={{ transition: "transform 0.1s ease-out" }}
       >
         {/* Badges */}
         {presente.humor && (
-          <span className="tracking-editorial absolute left-4 top-4 z-20 bg-primary px-2.5 py-1 text-[9px] uppercase text-primary-foreground">
+          <span
+            className="tracking-editorial absolute left-4 top-4 z-20 bg-primary px-2.5 py-1 text-[9px] uppercase text-primary-foreground"
+            style={{ transform: "translateZ(30px)" }}
+          >
             Surpresa
           </span>
         )}
         {presenteado ? (
-          <span className="tracking-editorial absolute left-4 top-4 z-20 bg-muted-foreground px-2.5 py-1 text-[9px] uppercase text-background">
+          <span
+            className="tracking-editorial absolute left-4 top-4 z-20 bg-muted-foreground px-2.5 py-1 text-[9px] uppercase text-background"
+            style={{ transform: "translateZ(30px)" }}
+          >
             ✓ Já presenteado
           </span>
         ) : reservado ? (
-          <span className="tracking-editorial absolute left-4 top-4 z-20 bg-background/95 border border-primary/30 px-2.5 py-1 text-[9px] uppercase text-primary-dark backdrop-blur-sm">
+          <span
+            className="tracking-editorial absolute left-4 top-4 z-20 bg-background/95 border border-primary/30 px-2.5 py-1 text-[9px] uppercase text-primary-dark backdrop-blur-sm"
+            style={{ transform: "translateZ(30px)" }}
+          >
             ✓ Reservado
           </span>
         ) : null}
@@ -95,10 +131,10 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
             height={400}
             sizes="(min-width: 768px) 300px, 50vw"
             onLoad={() => setCarregada(true)}
+            style={!indisponivel ? { transform: "translateZ(60px)" } : undefined}
             className={cn(
-              "h-full w-full object-contain p-4 transition-[transform,filter,opacity] duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
-              !indisponivel &&
-                "group-hover:[transform:translateZ(40px)_scale(1.08)]",
+              "h-full w-full object-contain p-4 transition-[filter,opacity] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
+              !indisponivel && "group-hover:drop-shadow-xl",
               presenteado && "grayscale",
               carregada ? "opacity-100 blur-0" : "scale-105 opacity-0 blur-xl"
             )}
