@@ -1,30 +1,37 @@
-import { useEffect, useState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import {
+  motion,
+  AnimatePresence,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+  useMotionValue,
+  useSpring,
+  LayoutGroup,
+} from "motion/react";
 import { Reveal } from "./Reveal";
 
 type Photo = {
   src: string;
   alt: string;
-  /** Altura relativa no grid — controla a "quebra" masonry. */
   span: "tall" | "short" | "medium";
+  /** Velocidade de parallax (1 = neutro). */
+  parallax: number;
 };
 
 /**
- * Galeria editorial — 8 fotos.
- *
- * Para substituir os placeholders, basta colocar os arquivos em:
+ * Substitua as fotos colocando os arquivos em:
  *   public/imagens/galeria/momento-01.jpg ... momento-08.jpg
- * (mantendo os mesmos nomes). Nenhuma alteração de código é necessária.
  */
 const PHOTOS: Photo[] = [
-  { src: "/imagens/galeria/momento-01.jpg", alt: "Momento 1", span: "tall" },
-  { src: "/imagens/galeria/momento-02.jpg", alt: "Momento 2", span: "short" },
-  { src: "/imagens/galeria/momento-03.jpg", alt: "Momento 3", span: "medium" },
-  { src: "/imagens/galeria/momento-04.jpg", alt: "Momento 4", span: "tall" },
-  { src: "/imagens/galeria/momento-05.jpg", alt: "Momento 5", span: "medium" },
-  { src: "/imagens/galeria/momento-06.jpg", alt: "Momento 6", span: "short" },
-  { src: "/imagens/galeria/momento-07.jpg", alt: "Momento 7", span: "medium" },
-  { src: "/imagens/galeria/momento-08.jpg", alt: "Momento 8", span: "tall" },
+  { src: "/imagens/galeria/momento-01.jpg", alt: "Momento 1", span: "tall",   parallax: -40 },
+  { src: "/imagens/galeria/momento-02.jpg", alt: "Momento 2", span: "short",  parallax:  25 },
+  { src: "/imagens/galeria/momento-03.jpg", alt: "Momento 3", span: "medium", parallax: -20 },
+  { src: "/imagens/galeria/momento-04.jpg", alt: "Momento 4", span: "tall",   parallax:  35 },
+  { src: "/imagens/galeria/momento-05.jpg", alt: "Momento 5", span: "medium", parallax: -30 },
+  { src: "/imagens/galeria/momento-06.jpg", alt: "Momento 6", span: "short",  parallax:  20 },
+  { src: "/imagens/galeria/momento-07.jpg", alt: "Momento 7", span: "medium", parallax: -25 },
+  { src: "/imagens/galeria/momento-08.jpg", alt: "Momento 8", span: "tall",   parallax:  40 },
 ];
 
 const spanClasses: Record<Photo["span"], string> = {
@@ -57,10 +64,336 @@ function PlaceholderArt({ index }: { index: number }) {
   );
 }
 
+/* ============================================================ */
+/*  Tile com magnetic hover + tilt + parallax de scroll          */
+/* ============================================================ */
+function GalleryTile({
+  photo,
+  index,
+  onOpen,
+  reduce,
+  sectionRef,
+}: {
+  photo: Photo;
+  index: number;
+  onOpen: (i: number) => void;
+  reduce: boolean | null;
+  sectionRef: React.RefObject<HTMLElement>;
+}) {
+  const tileRef = useRef<HTMLButtonElement>(null);
+  const [loaded, setLoaded] = useState(false);
+  const [hovered, setHovered] = useState(false);
+
+  // Parallax: cada tile flutua em ritmo diferente conforme a seção é rolada.
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+  const parallaxY = useTransform(
+    scrollYProgress,
+    [0, 1],
+    reduce ? [0, 0] : [photo.parallax, -photo.parallax],
+  );
+
+  // Tilt magnético com mouse.
+  const rx = useMotionValue(0);
+  const ry = useMotionValue(0);
+  const sx = useSpring(rx, { stiffness: 120, damping: 14 });
+  const sy = useSpring(ry, { stiffness: 120, damping: 14 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (reduce) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    ry.set(x * 8);   // rotateY em graus
+    rx.set(-y * 8);  // rotateX em graus
+  };
+  const handleMouseLeave = () => {
+    rx.set(0);
+    ry.set(0);
+    setHovered(false);
+  };
+
+  return (
+    <motion.div
+      style={{ y: parallaxY }}
+      className={`mb-4 break-inside-avoid md:mb-6`}
+    >
+      <motion.button
+        ref={tileRef}
+        type="button"
+        layoutId={`photo-${index}`}
+        onClick={() => onOpen(index)}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={handleMouseLeave}
+        initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
+        whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        viewport={{ once: true, margin: "-10%" }}
+        transition={{
+          duration: 1.1,
+          ease: [0.22, 1, 0.36, 1],
+          delay: (index % 4) * 0.09,
+        }}
+        style={{
+          rotateX: sx,
+          rotateY: sy,
+          transformPerspective: 1000,
+          transformStyle: "preserve-3d",
+        }}
+        className={`group relative block w-full overflow-hidden bg-secondary/20 ${spanClasses[photo.span]} cursor-pointer will-change-transform`}
+        aria-label={`Abrir ${photo.alt}`}
+      >
+        {/* Placeholder por trás */}
+        <PlaceholderArt index={index} />
+
+        {/* Imagem real (some se quebrar) */}
+        <motion.img
+          src={photo.src}
+          alt={photo.alt}
+          loading="lazy"
+          decoding="async"
+          onLoad={() => setLoaded(true)}
+          onError={(e) => {
+            (e.currentTarget as HTMLImageElement).style.display = "none";
+          }}
+          animate={{
+            scale: hovered ? 1.06 : 1,
+            filter: hovered ? "grayscale(0%) brightness(1.02)" : "grayscale(100%) brightness(0.95)",
+            opacity: loaded ? 1 : 0,
+          }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          className="relative h-full w-full object-cover will-change-transform"
+        />
+
+        {/* Sheen — brilho diagonal que cruza no hover */}
+        <motion.div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-background/25 to-transparent"
+          animate={{ x: hovered ? "200%" : "-100%" }}
+          transition={{ duration: 1.1, ease: [0.4, 0, 0.2, 1] }}
+        />
+
+        {/* Vinheta inferior + caption */}
+        <motion.div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-primary-dark/70 via-primary-dark/20 to-transparent"
+          animate={{ opacity: hovered ? 1 : 0 }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        />
+
+        <motion.div
+          className="absolute inset-x-0 bottom-0 flex items-end justify-between p-4 sm:p-5"
+          animate={{ opacity: hovered ? 1 : 0, y: hovered ? 0 : 12 }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <span className="font-display text-xs italic text-background/90 sm:text-sm">
+            momento
+          </span>
+          <span className="tracking-editorial-lg text-[9px] uppercase text-background/80">
+            {String(index + 1).padStart(2, "0")} / 08
+          </span>
+        </motion.div>
+
+        {/* Borda interna sutil para sensação de "moldura" */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-background/0 transition-all duration-500 group-hover:ring-background/20"
+        />
+      </motion.button>
+    </motion.div>
+  );
+}
+
+/* ============================================================ */
+/*  Lightbox premium                                              */
+/* ============================================================ */
+function Lightbox({
+  index,
+  onClose,
+  onPrev,
+  onNext,
+  reduce,
+}: {
+  index: number;
+  onClose: () => void;
+  onPrev: () => void;
+  onNext: () => void;
+  reduce: boolean | null;
+}) {
+  return (
+    <motion.div
+      key="lightbox"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: reduce ? 0 : 0.5, ease: [0.22, 1, 0.36, 1] }}
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Visualização ampliada"
+    >
+      {/* Backdrop com blur animado */}
+      <motion.div
+        aria-hidden
+        className="absolute inset-0 bg-primary-dark/95"
+        initial={{ backdropFilter: "blur(0px)", opacity: 0 }}
+        animate={{ backdropFilter: "blur(20px)", opacity: 1 }}
+        exit={{ backdropFilter: "blur(0px)", opacity: 0 }}
+        transition={{ duration: reduce ? 0 : 0.6 }}
+        style={{ WebkitBackdropFilter: "blur(20px)" }}
+      />
+
+      {/* Header: contador editorial */}
+      <motion.div
+        className="absolute left-0 right-0 top-0 flex items-center justify-between px-6 py-6 sm:px-10 sm:py-8"
+        initial={{ opacity: 0, y: -16 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -16 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <span className="tracking-editorial-lg text-[10px] uppercase text-background/60">
+          Momentos · B &amp; C
+        </span>
+        <div className="flex items-center gap-3 text-background/70">
+          <AnimatePresence mode="popLayout" initial={false}>
+            <motion.span
+              key={index}
+              initial={{ y: 8, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -8, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="font-display text-base italic"
+            >
+              {String(index + 1).padStart(2, "0")}
+            </motion.span>
+          </AnimatePresence>
+          <span className="h-px w-6 bg-background/30" />
+          <span className="font-display text-base italic text-background/40">
+            {String(PHOTOS.length).padStart(2, "0")}
+          </span>
+        </div>
+      </motion.div>
+
+      {/* Close */}
+      <motion.button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          onClose();
+        }}
+        className="absolute right-6 top-20 z-10 flex h-10 w-10 items-center justify-center rounded-full text-background/80 transition-all duration-300 hover:bg-background/10 hover:text-background sm:right-10"
+        aria-label="Fechar"
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.8 }}
+        transition={{ delay: 0.2 }}
+      >
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" />
+        </svg>
+      </motion.button>
+
+      {/* Setas */}
+      {[
+        { dir: "prev" as const, label: "Anterior", side: "left-4 sm:left-8", path: "M15 6l-6 6 6 6", handler: onPrev },
+        { dir: "next" as const, label: "Próxima", side: "right-4 sm:right-8", path: "M9 6l6 6-6 6", handler: onNext },
+      ].map((b) => (
+        <motion.button
+          key={b.dir}
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            b.handler();
+          }}
+          className={`group absolute ${b.side} top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full text-background/70 transition-all duration-300 hover:bg-background/10 hover:text-background`}
+          aria-label={b.label}
+          initial={{ opacity: 0, x: b.dir === "prev" ? -16 : 16 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: b.dir === "prev" ? -16 : 16 }}
+          transition={{ delay: 0.25 }}
+        >
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="transition-transform duration-300 group-hover:scale-110">
+            <path d={b.path} strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </motion.button>
+      ))}
+
+      {/* Imagem morfa do tile com layoutId */}
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={index}
+          layoutId={`photo-${index}`}
+          className="relative z-[1] aspect-[3/4] max-h-[78vh] w-auto overflow-hidden bg-card/10 shadow-2xl"
+          transition={{ duration: reduce ? 0 : 0.7, ease: [0.22, 1, 0.36, 1] }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <PlaceholderArt index={index} />
+          <motion.img
+            src={PHOTOS[index].src}
+            alt={PHOTOS[index].alt}
+            className="relative h-full w-auto max-w-full object-contain"
+            initial={{ scale: 1.04 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 6, ease: "linear" }}
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).style.display = "none";
+            }}
+          />
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Footer: dicas de teclado */}
+      <motion.div
+        className="absolute bottom-0 left-0 right-0 flex items-center justify-center gap-6 px-6 py-6 sm:py-8"
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 16 }}
+        transition={{ duration: 0.5, delay: 0.15 }}
+      >
+        {[
+          { keys: ["←", "→"], label: "navegar" },
+          { keys: ["esc"], label: "fechar" },
+        ].map((hint) => (
+          <div key={hint.label} className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
+              {hint.keys.map((k) => (
+                <kbd
+                  key={k}
+                  className="inline-flex h-6 min-w-[24px] items-center justify-center rounded border border-background/20 px-1.5 text-[10px] font-medium text-background/70"
+                >
+                  {k}
+                </kbd>
+              ))}
+            </div>
+            <span className="tracking-editorial text-[9px] uppercase text-background/40">
+              {hint.label}
+            </span>
+          </div>
+        ))}
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* ============================================================ */
+/*  Componente principal                                          */
+/* ============================================================ */
 export function Gallery() {
   const reduce = useReducedMotion();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const [loaded, setLoaded] = useState<Record<number, boolean>>({});
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Parallax suave no título da seção
+  const { scrollYProgress: titleProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "center center"],
+  });
+  const titleY = useTransform(titleProgress, [0, 1], reduce ? [0, 0] : [40, 0]);
+  const titleOpacity = useTransform(titleProgress, [0, 0.6], [0, 1]);
 
   useEffect(() => {
     if (openIndex === null) return;
@@ -82,9 +415,24 @@ export function Gallery() {
   }, [openIndex]);
 
   return (
-    <section className="px-6 py-24 sm:py-32">
-      <div className="mx-auto max-w-6xl">
-        <div className="mb-16 text-center">
+    <section ref={sectionRef} className="relative overflow-hidden px-6 py-24 sm:py-32">
+      {/* Ornamentos de fundo que respondem ao scroll */}
+      <motion.div
+        aria-hidden
+        className="absolute -left-32 top-1/4 h-96 w-96 rounded-full bg-primary/5 blur-3xl"
+        style={{ y: useTransform(titleProgress, [0, 1], reduce ? [0, 0] : [0, 60]) }}
+      />
+      <motion.div
+        aria-hidden
+        className="absolute -right-32 bottom-1/4 h-96 w-96 rounded-full bg-secondary/20 blur-3xl"
+        style={{ y: useTransform(titleProgress, [0, 1], reduce ? [0, 0] : [0, -60]) }}
+      />
+
+      <div className="relative mx-auto max-w-6xl">
+        <motion.div
+          className="mb-16 text-center"
+          style={{ y: titleY, opacity: titleOpacity }}
+        >
           <Reveal>
             <span className="tracking-editorial-lg text-[10px] uppercase text-primary-dark/60">
               Galeria
@@ -97,148 +445,69 @@ export function Gallery() {
           </Reveal>
           <Reveal delay={0.25}>
             <div className="mx-auto mt-8 flex items-center justify-center gap-3">
-              <span className="h-px w-12 bg-primary/30" />
-              <svg
+              <motion.span
+                className="h-px bg-primary/30"
+                initial={{ width: 0 }}
+                whileInView={{ width: 48 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+              />
+              <motion.svg
                 aria-hidden
                 viewBox="0 0 24 24"
                 className="h-3 w-3 text-primary-dark/60"
                 fill="currentColor"
+                initial={{ scale: 0, rotate: -180 }}
+                whileInView={{ scale: 1, rotate: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
               >
                 <circle cx="12" cy="12" r="3" />
-              </svg>
-              <span className="h-px w-12 bg-primary/30" />
+              </motion.svg>
+              <motion.span
+                className="h-px bg-primary/30"
+                initial={{ width: 0 }}
+                whileInView={{ width: 48 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+              />
             </div>
           </Reveal>
-        </div>
+        </motion.div>
 
-        {/* Masonry via CSS columns — naturalmente editorial e responsivo */}
-        <div className="columns-2 gap-4 md:columns-3 md:gap-6">
-          {PHOTOS.map((photo, i) => (
-            <Reveal key={photo.src} delay={(i % 4) * 0.08} y={24}>
-              <button
-                type="button"
-                onClick={() => setOpenIndex(i)}
-                className={`group relative mb-4 block w-full break-inside-avoid overflow-hidden bg-secondary/20 md:mb-6 ${spanClasses[photo.span]}`}
-                aria-label={`Abrir ${photo.alt}`}
-              >
-                <PlaceholderArt index={i} />
-                <img
-                  src={photo.src}
-                  alt={photo.alt}
-                  loading="lazy"
-                  decoding="async"
-                  onLoad={() => setLoaded((s) => ({ ...s, [i]: true }))}
-                  onError={(e) => {
-                    (e.currentTarget as HTMLImageElement).style.display = "none";
-                  }}
-                  className={`relative h-full w-full object-cover grayscale transition-all duration-700 ease-out group-hover:scale-[1.03] group-hover:grayscale-0 ${loaded[i] ? "opacity-100" : "opacity-0"}`}
-                />
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0 bg-gradient-to-t from-primary-dark/30 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-                />
-              </button>
-            </Reveal>
-          ))}
-        </div>
+        <LayoutGroup>
+          <div className="columns-2 gap-4 md:columns-3 md:gap-6">
+            {PHOTOS.map((photo, i) => (
+              <GalleryTile
+                key={photo.src}
+                photo={photo}
+                index={i}
+                onOpen={setOpenIndex}
+                reduce={reduce}
+                sectionRef={sectionRef}
+              />
+            ))}
+          </div>
+
+          <AnimatePresence>
+            {openIndex !== null && (
+              <Lightbox
+                index={openIndex}
+                onClose={() => setOpenIndex(null)}
+                onPrev={() =>
+                  setOpenIndex((i) =>
+                    i === null ? null : (i - 1 + PHOTOS.length) % PHOTOS.length,
+                  )
+                }
+                onNext={() =>
+                  setOpenIndex((i) => (i === null ? null : (i + 1) % PHOTOS.length))
+                }
+                reduce={reduce}
+              />
+            )}
+          </AnimatePresence>
+        </LayoutGroup>
       </div>
-
-      {/* Lightbox */}
-      <AnimatePresence>
-        {openIndex !== null && (
-          <motion.div
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-primary-dark/95 p-4 backdrop-blur-sm"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: reduce ? 0 : 0.4 }}
-            onClick={() => setOpenIndex(null)}
-            role="dialog"
-            aria-modal="true"
-            aria-label="Visualização ampliada"
-          >
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setOpenIndex(null);
-              }}
-              className="absolute right-6 top-6 text-background/80 transition-colors hover:text-background"
-              aria-label="Fechar"
-            >
-              <svg
-                width="28"
-                height="28"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-              >
-                <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" />
-              </svg>
-            </button>
-
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setOpenIndex(
-                  (i) =>
-                    i === null
-                      ? null
-                      : (i - 1 + PHOTOS.length) % PHOTOS.length,
-                );
-              }}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-background/70 transition-colors hover:text-background sm:left-8"
-              aria-label="Foto anterior"
-            >
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
-                <path d="M15 6l-6 6 6 6" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setOpenIndex((i) =>
-                  i === null ? null : (i + 1) % PHOTOS.length,
-                );
-              }}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-background/70 transition-colors hover:text-background sm:right-8"
-              aria-label="Próxima foto"
-            >
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
-                <path d="M9 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-
-            <motion.div
-              className="relative max-h-[85vh] max-w-5xl"
-              initial={{ scale: 0.96, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.96, opacity: 0 }}
-              transition={{ duration: reduce ? 0 : 0.4, ease: [0.22, 1, 0.36, 1] }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="relative flex aspect-[3/4] max-h-[85vh] w-auto items-center justify-center bg-card/10">
-                <PlaceholderArt index={openIndex} />
-                <img
-                  src={PHOTOS[openIndex].src}
-                  alt={PHOTOS[openIndex].alt}
-                  className="relative max-h-[85vh] w-auto max-w-full object-contain"
-                  onError={(e) => {
-                    (e.currentTarget as HTMLImageElement).style.display = "none";
-                  }}
-                />
-              </div>
-              <p className="mt-4 text-center text-[10px] uppercase tracking-editorial-lg text-background/60">
-                {String(openIndex + 1).padStart(2, "0")} / {String(PHOTOS.length).padStart(2, "0")}
-              </p>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </section>
   );
 }
