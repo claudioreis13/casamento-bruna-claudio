@@ -201,7 +201,7 @@ function GalleryTile({
             momento
           </span>
           <span className="tracking-editorial-lg text-[9px] uppercase text-background/80">
-            {String(index + 1).padStart(2, "0")} / 08
+            {String(index + 1).padStart(2, "0")} / {String(PHOTOS.length).padStart(2, "0")}
           </span>
         </motion.div>
 
