@@ -6,6 +6,7 @@ import { Reveal } from "@/components/wedding/Reveal";
 import { SplitHeadline } from "@/components/wedding/SplitHeadline";
 import { OrganicDivider } from "@/components/wedding/OrganicDivider";
 import { HeroPicture } from "@/components/wedding/HeroPicture";
+import { Gallery } from "@/components/wedding/Gallery";
 import { useAdaptiveCopy } from "@/hooks/use-adaptive-copy";
 import { WEDDING } from "@/lib/wedding-config";
 
@@ -271,8 +272,13 @@ function Index() {
 
       <OrganicDivider />
 
+      <Gallery />
+
+      <OrganicDivider />
+
       {/* Countdown + CTAs */}
       <section className="bg-card/40 px-6 py-24 backdrop-blur-sm">
+
 
         <div className="mx-auto flex max-w-5xl flex-col items-center">
           <Reveal>
