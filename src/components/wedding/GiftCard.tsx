@@ -180,7 +180,7 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
               : "border-primary text-primary-dark hover:bg-primary hover:text-primary-foreground"
           )}
         >
-          {presenteado ? "Já presenteado" : reservado ? "Reservado" : "Presentear"}
+          {presenteado ? "Já presenteado" : reservado ? "Reservado" : "Quero presentear"}
         </button>
       </div>
     </article>
