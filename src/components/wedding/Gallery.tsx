@@ -17,21 +17,30 @@ type Photo = {
   span: "tall" | "short" | "medium";
   /** Velocidade de parallax (1 = neutro). */
   parallax: number;
+  featured?: { label: string; caption: string };
 };
 
 /**
  * Substitua as fotos colocando os arquivos em:
- *   public/imagens/galeria/momento-01.jpg ... momento-08.jpg
+ *   public/imagens/galeria/momento-01.jpg ... momento-07.jpg
  */
 const PHOTOS: Photo[] = [
-  { src: "/imagens/galeria/momento-01.jpg", alt: "Momento 1", span: "tall",   parallax: -40 },
+  {
+    src: "/imagens/galeria/momento-01.jpg",
+    alt: "A primeira foto que tiramos juntos",
+    span: "tall",
+    parallax: -40,
+    featured: {
+      label: "O primeiro clique",
+      caption: "onde tudo começou",
+    },
+  },
   { src: "/imagens/galeria/momento-02.jpg", alt: "Momento 2", span: "short",  parallax:  25 },
   { src: "/imagens/galeria/momento-03.jpg", alt: "Momento 3", span: "medium", parallax: -20 },
   { src: "/imagens/galeria/momento-04.jpg", alt: "Momento 4", span: "tall",   parallax:  35 },
   { src: "/imagens/galeria/momento-05.jpg", alt: "Momento 5", span: "medium", parallax: -30 },
   { src: "/imagens/galeria/momento-06.jpg", alt: "Momento 6", span: "short",  parallax:  20 },
-  { src: "/imagens/galeria/momento-07.jpg", alt: "Momento 7", span: "medium", parallax: -25 },
-  { src: "/imagens/galeria/momento-08.jpg", alt: "Momento 8", span: "tall",   parallax:  40 },
+  { src: "/imagens/galeria/momento-07.jpg", alt: "Momento 7", span: "tall",   parallax: -25 },
 ];
 
 const spanClasses: Record<Photo["span"], string> = {
@@ -192,15 +201,42 @@ function GalleryTile({
             momento
           </span>
           <span className="tracking-editorial-lg text-[9px] uppercase text-background/80">
-            {String(index + 1).padStart(2, "0")} / 08
+            {String(index + 1).padStart(2, "0")} / {String(PHOTOS.length).padStart(2, "0")}
           </span>
         </motion.div>
 
         {/* Borda interna sutil para sensação de "moldura" */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-background/0 transition-all duration-500 group-hover:ring-background/20"
+          className={`pointer-events-none absolute inset-0 ring-inset transition-all duration-500 ${
+            photo.featured
+              ? "ring-2 ring-primary/40 group-hover:ring-primary/70"
+              : "ring-1 ring-background/0 group-hover:ring-background/20"
+          }`}
         />
+
+        {/* Selo de foto em destaque */}
+        {photo.featured && (
+          <motion.div
+            className="pointer-events-none absolute left-3 top-3 flex flex-col items-start gap-1 sm:left-4 sm:top-4"
+            initial={{ opacity: 0, y: -8 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.6, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-background/85 px-2.5 py-1 backdrop-blur-sm">
+              <svg viewBox="0 0 24 24" className="h-2.5 w-2.5 fill-primary" aria-hidden>
+                <path d="M12 2l2.4 6.9H22l-6 4.4 2.3 7L12 16.1 5.7 20.3 8 13.3l-6-4.4h7.6z" />
+              </svg>
+              <span className="tracking-editorial-lg text-[8px] font-semibold uppercase text-primary-dark">
+                {photo.featured.label}
+              </span>
+            </span>
+            <span className="ml-1 font-display text-[11px] italic text-background drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]">
+              {photo.featured.caption}
+            </span>
+          </motion.div>
+        )}
       </motion.button>
     </motion.div>
   );
