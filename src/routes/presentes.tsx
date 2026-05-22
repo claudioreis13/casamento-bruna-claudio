@@ -26,16 +26,16 @@ const FAIXAS: { id: Faixa; label: string }[] = [
 export const Route = createFileRoute("/presentes")({
   head: () => ({
     meta: [
-      { title: "Lista de Presentes 🎁 — Bruna & Cláudio" },
+      { title: "Para nossa nova casa — Bruna & Cláudio" },
       {
         name: "description",
         content:
-          "Lista de presentes do casamento de Bruna e Cláudio (10/10/2026). Escolha um presente especial ou contribua via PIX.",
+          "Pequenos gestos para construir nossa nova casa. Escolha um presente especial ou contribua via PIX — Bruna & Cláudio, 10/10/2026.",
       },
-      { property: "og:title", content: "Lista de Presentes — Bruna & Cláudio" },
+      { property: "og:title", content: "Para nossa nova casa — Bruna & Cláudio" },
       {
         property: "og:description",
-        content: "Escolha um presente especial para o casamento em 10/10/2026!",
+        content: "Pequenos gestos para construir nossa nova casa. Escolha um presente especial para 10/10/2026.",
       },
       { property: "og:image", content: "/imagens/casamento.jpg" },
       { property: "og:url", content: "/presentes" },
