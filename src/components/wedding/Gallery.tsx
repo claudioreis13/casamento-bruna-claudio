@@ -208,8 +208,35 @@ function GalleryTile({
         {/* Borda interna sutil para sensação de "moldura" */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-background/0 transition-all duration-500 group-hover:ring-background/20"
+          className={`pointer-events-none absolute inset-0 ring-inset transition-all duration-500 ${
+            photo.featured
+              ? "ring-2 ring-primary/40 group-hover:ring-primary/70"
+              : "ring-1 ring-background/0 group-hover:ring-background/20"
+          }`}
         />
+
+        {/* Selo de foto em destaque */}
+        {photo.featured && (
+          <motion.div
+            className="pointer-events-none absolute left-3 top-3 flex flex-col items-start gap-1 sm:left-4 sm:top-4"
+            initial={{ opacity: 0, y: -8 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.6, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-background/85 px-2.5 py-1 backdrop-blur-sm">
+              <svg viewBox="0 0 24 24" className="h-2.5 w-2.5 fill-primary" aria-hidden>
+                <path d="M12 2l2.4 6.9H22l-6 4.4 2.3 7L12 16.1 5.7 20.3 8 13.3l-6-4.4h7.6z" />
+              </svg>
+              <span className="tracking-editorial-lg text-[8px] font-semibold uppercase text-primary-dark">
+                {photo.featured.label}
+              </span>
+            </span>
+            <span className="ml-1 font-display text-[11px] italic text-background drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]">
+              {photo.featured.caption}
+            </span>
+          </motion.div>
+        )}
       </motion.button>
     </motion.div>
   );
