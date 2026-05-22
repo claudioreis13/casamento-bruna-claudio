@@ -12,7 +12,7 @@ export const WEDDING = {
     "https://waze.com/ul?q=Igreja+Matriz+Nepomuceno+MG&navigate=yes",
   gmapsUrl:
     "https://www.google.com/maps/search/Igreja+Matriz+Nepomuceno+MG",
-  pix: "cr.reis@live.com",
+  pix: "brunaeclaudio13@gmail.com",
   whatsappBase: "https://wa.me/5535997167717",
 } as const;
 
