@@ -112,8 +112,8 @@ function Presentes() {
           Para nossa nova casa
         </h1>
         <p className="mx-auto mt-6 max-w-md text-sm font-light leading-relaxed text-muted-foreground">
-          Pequenos gestos que vão morar com a gente. Escolha algo especial
-          para celebrar conosco e tornar nosso novo lar um reflexo do nosso amor.
+          A sua presença já é o maior presente. Mas se quiser deixar um cantinho
+          seu na nossa casa, ficamos felizes demais.
         </p>
       </header>
 
