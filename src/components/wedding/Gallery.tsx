@@ -435,6 +435,15 @@ function Lightbox({
 /* ============================================================ */
 export function Gallery() {
   const reduce = useReducedMotion();
+  const [isTouch, setIsTouch] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(hover: none), (max-width: 768px)");
+    const update = () => setIsTouch(mq.matches);
+    update();
+    mq.addEventListener?.("change", update);
+    return () => mq.removeEventListener?.("change", update);
+  }, []);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
