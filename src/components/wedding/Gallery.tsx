@@ -544,6 +544,7 @@ export function Gallery() {
                 index={i}
                 onOpen={setOpenIndex}
                 reduce={reduce}
+                isTouch={isTouch}
                 sectionRef={sectionRef}
               />
             ))}
