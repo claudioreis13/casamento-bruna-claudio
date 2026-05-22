@@ -83,18 +83,21 @@ function GalleryTile({
   onOpen,
   reduce,
   sectionRef,
+  isTouch,
 }: {
   photo: Photo;
   index: number;
   onOpen: (i: number) => void;
   reduce: boolean | null;
   sectionRef: React.RefObject<HTMLElement | null>;
+  isTouch: boolean;
 }) {
   const tileRef = useRef<HTMLButtonElement>(null);
   const [loaded, setLoaded] = useState(false);
   const [hovered, setHovered] = useState(false);
 
   // Parallax: cada tile flutua em ritmo diferente conforme a seção é rolada.
+  // Desabilitado em touch/mobile para evitar oscilação durante o scroll.
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
@@ -102,17 +105,17 @@ function GalleryTile({
   const parallaxY = useTransform(
     scrollYProgress,
     [0, 1],
-    reduce ? [0, 0] : [photo.parallax, -photo.parallax],
+    reduce || isTouch ? [0, 0] : [photo.parallax, -photo.parallax],
   );
 
-  // Tilt magnético com mouse.
+  // Tilt magnético com mouse (apenas desktop).
   const rx = useMotionValue(0);
   const ry = useMotionValue(0);
   const sx = useSpring(rx, { stiffness: 120, damping: 14 });
   const sy = useSpring(ry, { stiffness: 120, damping: 14 });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (reduce) return;
+    if (reduce || isTouch) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
@@ -125,6 +128,9 @@ function GalleryTile({
     setHovered(false);
   };
 
+  // No mobile a foto fica sempre revelada (em cor, sem grayscale).
+  const isRevealed = hovered || isTouch;
+
   return (
     <motion.div
       style={{ y: parallaxY }}
@@ -136,7 +142,7 @@ function GalleryTile({
         layoutId={`photo-${index}`}
         onClick={() => onOpen(index)}
         onMouseMove={handleMouseMove}
-        onMouseEnter={() => setHovered(true)}
+        onMouseEnter={() => !isTouch && setHovered(true)}
         onMouseLeave={handleMouseLeave}
         initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
         whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
@@ -147,14 +153,15 @@ function GalleryTile({
           delay: (index % 4) * 0.09,
         }}
         style={{
-          rotateX: sx,
-          rotateY: sy,
+          rotateX: isTouch ? 0 : sx,
+          rotateY: isTouch ? 0 : sy,
           transformPerspective: 1000,
           transformStyle: "preserve-3d",
         }}
         className={`group relative block w-full overflow-hidden bg-secondary/20 ${spanClasses[photo.span]} cursor-pointer will-change-transform`}
         aria-label={`Abrir ${photo.alt}`}
       >
+
         {/* Placeholder por trás */}
         <PlaceholderArt index={index} />
 
