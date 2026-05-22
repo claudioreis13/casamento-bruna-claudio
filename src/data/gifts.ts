@@ -4,6 +4,7 @@ export type Categoria =
   | "quarto"
   | "sala"
   | "eletronicos"
+  | "ferramentas"
   | "lua-de-mel"
   | "diversao";
 
@@ -25,6 +26,7 @@ export const CATEGORIAS: { id: Categoria | "todos"; label: string }[] = [
   { id: "quarto", label: "Quarto & Banho" },
   { id: "sala", label: "Sala" },
   { id: "eletronicos", label: "Eletrônicos" },
+  { id: "ferramentas", label: "Casa & Ferramentas" },
   { id: "lua-de-mel", label: "Lua de Mel" },
   { id: "diversao", label: "Diversão" },
 ];
@@ -51,7 +53,7 @@ export const PRESENTES: Gift[] = [
   { id: "ronaldo", nome: "Corte de cabelo do noivo por 6 meses", preco: 500, img: "/imagens/ronaldo.jpg", categoria: "diversao", humor: true },
   { id: "assadeiras", nome: "Conjunto de assadeiras Marinex", preco: 121, img: "/imagens/assadeiras.jpg", categoria: "cozinha" },
   { id: "tv", nome: 'TV 60"', preco: 3000, img: "/imagens/tv.jpg", categoria: "eletronicos" },
-  { id: "parafusadeira", nome: "Parafusadeira e furadeira", preco: 500, img: "/imagens/parafusadeira.jpg", categoria: "eletronicos" },
+  { id: "parafusadeira", nome: "Parafusadeira e furadeira", preco: 500, img: "/imagens/parafusadeira.jpg", categoria: "ferramentas" },
   { id: "julius", nome: "Só pra dizer que não dei nada", preco: 20, img: "/imagens/julius.jpg", categoria: "diversao", humor: true },
   { id: "tacas", nome: "Taças de vinho", preco: 50, img: "/imagens/tacas.jpg", categoria: "cozinha" },
   { id: "tigela", nome: "Conjunto de bowls", preco: 50, img: "/imagens/tigela.jpg", categoria: "cozinha" },
