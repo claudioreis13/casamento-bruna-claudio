@@ -19,18 +19,63 @@ import { CustomCursor } from "@/components/wedding/CustomCursor";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-[60vh] items-center justify-center px-4">
-      <div className="max-w-md text-center">
-        <h1 className="font-display text-7xl text-primary-dark">404</h1>
-        <p className="mt-2 text-muted-foreground">Página não encontrada.</p>
-        <Link
-          to="/"
-          className="mt-6 inline-flex items-center justify-center rounded-full bg-primary px-5 py-2 text-sm font-medium text-primary-foreground hover:bg-primary-dark"
-        >
-          Voltar ao início
-        </Link>
+    <section className="relative flex min-h-[80vh] items-center justify-center overflow-hidden px-4 py-20">
+      {/* Ornamento sutil de fundo */}
+      <div
+        aria-hidden
+        className="absolute -right-32 -top-32 h-80 w-80 rounded-full bg-primary/5 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="absolute -bottom-32 -left-32 h-80 w-80 rounded-full bg-secondary/20 blur-3xl"
+      />
+
+      <div className="relative z-10 max-w-xl text-center">
+        <span className="tracking-editorial-lg text-[10px] uppercase text-primary-dark">
+          Erro 404
+        </span>
+
+        <h1 className="mt-6 font-display text-6xl italic leading-[1.05] text-foreground sm:text-8xl">
+          Esse caminho<br />não leva ao altar
+        </h1>
+
+        {/* Floreio divisor */}
+        <div className="mx-auto mt-8 flex items-center justify-center gap-3">
+          <span className="h-px w-12 bg-primary/30" />
+          <svg
+            aria-hidden
+            viewBox="0 0 24 24"
+            className="h-4 w-4 text-primary-dark"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1"
+          >
+            <path d="M12 21s-7-4.5-7-11a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 6.5-7 11-7 11z" />
+          </svg>
+          <span className="h-px w-12 bg-primary/30" />
+        </div>
+
+        <p className="mx-auto mt-8 max-w-md text-sm font-light leading-relaxed text-muted-foreground">
+          Parece que você se perdeu entre as flores do buquê.
+          Nada que um passo de volta não resolva — a celebração continua na página inicial.
+        </p>
+
+        <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-6">
+          <Link
+            to="/"
+            className="tracking-editorial inline-flex items-center justify-center bg-primary px-8 py-4 text-[11px] font-semibold uppercase text-primary-foreground transition-colors hover:bg-primary-dark"
+          >
+            Voltar ao início
+          </Link>
+          <Link
+            to="/presentes"
+            className="tracking-editorial text-[11px] uppercase text-primary-dark underline decoration-primary/40 underline-offset-[6px] transition-colors hover:decoration-primary-dark"
+          >
+            Ver lista de presentes
+          </Link>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
 
