@@ -83,7 +83,7 @@ export const PRESENTES: Gift[] = [
   { id: "tapete", nome: "Tapete de sala", preco: 450, img: "/imagens/tapete.jpg", categoria: "sala" },
   { id: "quadros", nome: "Quadros decorativos", preco: 250, img: "/imagens/quadros.jpg", categoria: "sala" },
   { id: "difusor", nome: "Difusor de ambiente", preco: 120, img: "/imagens/difusor.jpg", categoria: "sala" },
-  { id: "ferro", nome: "Ferro a vapor vertical", preco: 350, img: "/imagens/ferro.jpg", categoria: "ferramentas" },
+  { id: "ferro", nome: "Ferro a vapor", preco: 90, img: "/imagens/ferro.jpg", categoria: "ferramentas" },
 ];
 
 export function formatarPreco(preco: number) {
