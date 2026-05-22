@@ -108,10 +108,7 @@ function Presentes() {
     <div className="min-h-screen bg-background">
       {/* Hero editorial */}
       <header className="mx-auto max-w-6xl px-4 pb-16 pt-20 text-center sm:px-8 sm:pt-28">
-        <span className="tracking-editorial-lg block text-[11px] font-semibold uppercase text-primary">
-          Com carinho
-        </span>
-        <h1 className="mt-5 font-display text-5xl italic leading-[1.05] text-foreground sm:text-7xl">
+        <h1 className="font-display text-5xl italic leading-[1.05] text-foreground sm:text-7xl">
           Lista de Presentes
         </h1>
         <p className="mx-auto mt-6 max-w-md text-sm font-light leading-relaxed text-muted-foreground">
