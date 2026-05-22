@@ -66,7 +66,7 @@ export function GiftModal({ presente, onClose, onConfirm }: Props) {
       setCopied(true);
       petalBurst();
       onConfirm(presente.id);
-      setTimeout(() => onClose(), 2500);
+      setTimeout(() => onClose(), 6000);
     } catch {
       alert(`Copie manualmente: ${WEDDING.pix}`);
     }
