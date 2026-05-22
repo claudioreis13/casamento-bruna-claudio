@@ -119,7 +119,7 @@ function Presentes() {
 
       {/* PIX em destaque — boutique */}
       <section className="mx-auto mb-16 max-w-4xl px-4 sm:mb-24 sm:px-8">
-        <div className="relative overflow-hidden border border-primary/20 bg-secondary/20 p-6 sm:p-12">
+        <div className="relative overflow-hidden border border-primary/20 bg-secondary/20 p-6 shadow-[0_4px_16px_rgba(0,0,0,0.06)] sm:p-12">
           {/* Ornamento sutil */}
           <div
             aria-hidden
