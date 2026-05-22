@@ -17,21 +17,30 @@ type Photo = {
   span: "tall" | "short" | "medium";
   /** Velocidade de parallax (1 = neutro). */
   parallax: number;
+  featured?: { label: string; caption: string };
 };
 
 /**
  * Substitua as fotos colocando os arquivos em:
- *   public/imagens/galeria/momento-01.jpg ... momento-08.jpg
+ *   public/imagens/galeria/momento-01.jpg ... momento-07.jpg
  */
 const PHOTOS: Photo[] = [
-  { src: "/imagens/galeria/momento-01.jpg", alt: "Momento 1", span: "tall",   parallax: -40 },
+  {
+    src: "/imagens/galeria/momento-01.jpg",
+    alt: "A primeira foto que tiramos juntos",
+    span: "tall",
+    parallax: -40,
+    featured: {
+      label: "O primeiro clique",
+      caption: "onde tudo começou",
+    },
+  },
   { src: "/imagens/galeria/momento-02.jpg", alt: "Momento 2", span: "short",  parallax:  25 },
   { src: "/imagens/galeria/momento-03.jpg", alt: "Momento 3", span: "medium", parallax: -20 },
   { src: "/imagens/galeria/momento-04.jpg", alt: "Momento 4", span: "tall",   parallax:  35 },
   { src: "/imagens/galeria/momento-05.jpg", alt: "Momento 5", span: "medium", parallax: -30 },
   { src: "/imagens/galeria/momento-06.jpg", alt: "Momento 6", span: "short",  parallax:  20 },
-  { src: "/imagens/galeria/momento-07.jpg", alt: "Momento 7", span: "medium", parallax: -25 },
-  { src: "/imagens/galeria/momento-08.jpg", alt: "Momento 8", span: "tall",   parallax:  40 },
+  { src: "/imagens/galeria/momento-07.jpg", alt: "Momento 7", span: "tall",   parallax: -25 },
 ];
 
 const spanClasses: Record<Photo["span"], string> = {
