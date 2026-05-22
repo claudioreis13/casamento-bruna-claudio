@@ -78,7 +78,7 @@ function GalleryTile({
   index: number;
   onOpen: (i: number) => void;
   reduce: boolean | null;
-  sectionRef: React.RefObject<HTMLElement>;
+  sectionRef: React.RefObject<HTMLElement | null>;
 }) {
   const tileRef = useRef<HTMLButtonElement>(null);
   const [loaded, setLoaded] = useState(false);
