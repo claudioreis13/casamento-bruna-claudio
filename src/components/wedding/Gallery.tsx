@@ -83,18 +83,21 @@ function GalleryTile({
   onOpen,
   reduce,
   sectionRef,
+  isTouch,
 }: {
   photo: Photo;
   index: number;
   onOpen: (i: number) => void;
   reduce: boolean | null;
   sectionRef: React.RefObject<HTMLElement | null>;
+  isTouch: boolean;
 }) {
   const tileRef = useRef<HTMLButtonElement>(null);
   const [loaded, setLoaded] = useState(false);
   const [hovered, setHovered] = useState(false);
 
   // Parallax: cada tile flutua em ritmo diferente conforme a seção é rolada.
+  // Desabilitado em touch/mobile para evitar oscilação durante o scroll.
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
@@ -102,17 +105,17 @@ function GalleryTile({
   const parallaxY = useTransform(
     scrollYProgress,
     [0, 1],
-    reduce ? [0, 0] : [photo.parallax, -photo.parallax],
+    reduce || isTouch ? [0, 0] : [photo.parallax, -photo.parallax],
   );
 
-  // Tilt magnético com mouse.
+  // Tilt magnético com mouse (apenas desktop).
   const rx = useMotionValue(0);
   const ry = useMotionValue(0);
   const sx = useSpring(rx, { stiffness: 120, damping: 14 });
   const sy = useSpring(ry, { stiffness: 120, damping: 14 });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (reduce) return;
+    if (reduce || isTouch) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
@@ -125,6 +128,9 @@ function GalleryTile({
     setHovered(false);
   };
 
+  // No mobile a foto fica sempre revelada (em cor, sem grayscale).
+  const isRevealed = hovered || isTouch;
+
   return (
     <motion.div
       style={{ y: parallaxY }}
@@ -136,7 +142,7 @@ function GalleryTile({
         layoutId={`photo-${index}`}
         onClick={() => onOpen(index)}
         onMouseMove={handleMouseMove}
-        onMouseEnter={() => setHovered(true)}
+        onMouseEnter={() => !isTouch && setHovered(true)}
         onMouseLeave={handleMouseLeave}
         initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
         whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
@@ -147,14 +153,15 @@ function GalleryTile({
           delay: (index % 4) * 0.09,
         }}
         style={{
-          rotateX: sx,
-          rotateY: sy,
+          rotateX: isTouch ? 0 : sx,
+          rotateY: isTouch ? 0 : sy,
           transformPerspective: 1000,
           transformStyle: "preserve-3d",
         }}
         className={`group relative block w-full overflow-hidden bg-secondary/20 ${spanClasses[photo.span]} cursor-pointer will-change-transform`}
         aria-label={`Abrir ${photo.alt}`}
       >
+
         {/* Placeholder por trás */}
         <PlaceholderArt index={index} />
 
@@ -169,8 +176,10 @@ function GalleryTile({
             (e.currentTarget as HTMLImageElement).style.display = "none";
           }}
           animate={{
-            scale: hovered ? 1.06 : 1,
-            filter: hovered ? "grayscale(0%) brightness(1.02)" : "grayscale(100%) brightness(0.95)",
+            scale: isRevealed ? (isTouch ? 1.02 : 1.06) : 1,
+            filter: isRevealed
+              ? "grayscale(0%) brightness(1.02)"
+              : "grayscale(100%) brightness(0.95)",
             opacity: loaded ? 1 : 0,
           }}
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
@@ -179,11 +188,11 @@ function GalleryTile({
           }`}
         />
 
-        {/* Sheen — brilho diagonal que cruza no hover */}
+        {/* Sheen — brilho diagonal que cruza no hover (desktop) */}
         <motion.div
           aria-hidden
           className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-background/25 to-transparent"
-          animate={{ x: hovered ? "200%" : "-100%" }}
+          animate={{ x: hovered && !isTouch ? "200%" : "-100%" }}
           transition={{ duration: 1.1, ease: [0.4, 0, 0.2, 1] }}
         />
 
@@ -191,17 +200,17 @@ function GalleryTile({
         <motion.div
           aria-hidden
           className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-primary-dark/70 via-primary-dark/20 to-transparent"
-          animate={{ opacity: hovered ? 1 : 0 }}
+          animate={{ opacity: isRevealed ? (isTouch ? 0.75 : 1) : 0 }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         />
 
         <motion.div
           className="absolute inset-x-0 bottom-0 flex items-end justify-between p-4 sm:p-5"
-          animate={{ opacity: hovered ? 1 : 0, y: hovered ? 0 : 12 }}
+          animate={{ opacity: isRevealed ? 1 : 0, y: isRevealed ? 0 : 12 }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         >
           <span className="font-display text-xs italic text-background/90 sm:text-sm">
-            momento
+            {isTouch ? "toque para ampliar" : "momento"}
           </span>
           <span className="tracking-editorial-lg text-[9px] uppercase text-background/80">
             {String(index + 1).padStart(2, "0")} / {String(PHOTOS.length).padStart(2, "0")}
@@ -214,9 +223,12 @@ function GalleryTile({
           className={`pointer-events-none absolute inset-0 ring-inset transition-all duration-500 ${
             photo.featured
               ? "ring-2 ring-primary/40 group-hover:ring-primary/70"
-              : "ring-1 ring-background/0 group-hover:ring-background/20"
+              : isTouch
+                ? "ring-1 ring-background/15"
+                : "ring-1 ring-background/0 group-hover:ring-background/20"
           }`}
         />
+
 
         {/* Selo de foto em destaque */}
         {photo.featured && (
@@ -423,6 +435,15 @@ function Lightbox({
 /* ============================================================ */
 export function Gallery() {
   const reduce = useReducedMotion();
+  const [isTouch, setIsTouch] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(hover: none), (max-width: 768px)");
+    const update = () => setIsTouch(mq.matches);
+    update();
+    mq.addEventListener?.("change", update);
+    return () => mq.removeEventListener?.("change", update);
+  }, []);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -523,6 +544,7 @@ export function Gallery() {
                 index={i}
                 onOpen={setOpenIndex}
                 reduce={reduce}
+                isTouch={isTouch}
                 sectionRef={sectionRef}
               />
             ))}
