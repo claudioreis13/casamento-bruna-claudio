@@ -173,7 +173,7 @@ function GalleryTile({
             opacity: loaded ? 1 : 0,
           }}
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="relative h-full w-full object-cover will-change-transform"
+          className="relative h-full w-full object-cover object-top will-change-transform"
         />
 
         {/* Sheen — brilho diagonal que cruza no hover */}
