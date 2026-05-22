@@ -212,9 +212,6 @@ function GalleryTile({
           <span className="font-display text-xs italic text-background/90 sm:text-sm">
             {isTouch ? "toque para ampliar" : "momento"}
           </span>
-          <span className="tracking-editorial-lg text-[9px] uppercase text-background/80">
-            {String(index + 1).padStart(2, "0")} / {String(PHOTOS.length).padStart(2, "0")}
-          </span>
         </motion.div>
 
         {/* Borda interna sutil para sensação de "moldura" */}
@@ -378,18 +375,17 @@ function Lightbox({
         <motion.div
           key={index}
           layoutId={`photo-${index}`}
-          className="relative z-[1] aspect-[3/4] max-h-[78vh] w-auto overflow-hidden bg-card/10 shadow-2xl"
+          className="relative z-[1] flex max-h-[78vh] w-full max-w-[92vw] items-center justify-center overflow-hidden bg-card/10 shadow-2xl sm:max-w-[80vw] md:max-w-[60vw]"
           transition={{ duration: reduce ? 0 : 0.7, ease: [0.22, 1, 0.36, 1] }}
           onClick={(e) => e.stopPropagation()}
         >
-          <PlaceholderArt index={index} />
           <motion.img
             src={PHOTOS[index].src}
             alt={PHOTOS[index].alt}
-            className="relative h-full w-auto max-w-full object-contain"
-            initial={{ scale: 1.04 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 6, ease: "linear" }}
+            className="relative max-h-[78vh] max-w-full object-contain"
+            initial={{ scale: 1.04, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             onError={(e) => {
               (e.currentTarget as HTMLImageElement).style.display = "none";
             }}
