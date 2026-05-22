@@ -4,6 +4,7 @@ export type Categoria =
   | "quarto"
   | "sala"
   | "eletronicos"
+  | "ferramentas"
   | "lua-de-mel"
   | "diversao";
 
@@ -25,6 +26,7 @@ export const CATEGORIAS: { id: Categoria | "todos"; label: string }[] = [
   { id: "quarto", label: "Quarto & Banho" },
   { id: "sala", label: "Sala" },
   { id: "eletronicos", label: "Eletrônicos" },
+  { id: "ferramentas", label: "Casa & Ferramentas" },
   { id: "lua-de-mel", label: "Lua de Mel" },
   { id: "diversao", label: "Diversão" },
 ];
