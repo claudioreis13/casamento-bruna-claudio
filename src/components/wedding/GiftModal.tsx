@@ -134,7 +134,7 @@ export function GiftModal({ presente, onClose, onConfirm }: Props) {
 
         <p className="mx-auto max-w-xs text-center text-sm font-light leading-relaxed text-muted-foreground">
           Cada presente vira uma memória na nossa nova casa.
-          Copie o PIX abaixo e finalize no seu banco — a gente cuida do resto com muito carinho.
+          Copie o PIX abaixo e finalize no seu banco. A gente cuida do resto com muito carinho.
         </p>
 
         <div className="rounded-lg border border-primary/15 bg-secondary/10 px-4 py-3 text-center">
