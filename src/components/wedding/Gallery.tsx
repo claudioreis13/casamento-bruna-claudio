@@ -291,7 +291,7 @@ function GalleryTile({
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         >
           <span className="font-display text-xs italic text-background/90 sm:text-sm">
-            {isTouch ? "toque para ampliar" : "momento"}
+            {isTouch ? "" : "momento"}
           </span>
         </motion.div>
 
