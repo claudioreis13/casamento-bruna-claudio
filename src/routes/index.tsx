@@ -285,10 +285,10 @@ function Index() {
       <OrganicDivider />
 
       {/* Countdown + CTAs */}
-      <section className="bg-card/40 px-6 py-24 backdrop-blur-sm">
+      <section ref={countdownRef} className="bg-card/40 px-6 py-24 backdrop-blur-sm">
 
 
-        <div className="mx-auto flex max-w-5xl flex-col items-center">
+        <motion.div className="mx-auto flex max-w-5xl flex-col items-center" style={{ y: countdownY }}>
           <Reveal>
             <p className="mb-14 text-[10px] font-semibold uppercase tracking-editorial-lg text-primary-dark/60">
               Contagem Regressiva
