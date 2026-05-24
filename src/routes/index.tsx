@@ -8,6 +8,7 @@ import { OrganicDivider } from "@/components/wedding/OrganicDivider";
 import { HeroPicture } from "@/components/wedding/HeroPicture";
 import { Gallery } from "@/components/wedding/Gallery";
 import { useAdaptiveCopy } from "@/hooks/use-adaptive-copy";
+import { useParallax } from "@/hooks/use-parallax";
 import { WEDDING } from "@/lib/wedding-config";
 
 
@@ -90,6 +91,13 @@ function Index() {
   });
   const heroY = useTransform(scrollYProgress, [0, 1], ["0%", reduce ? "0%" : "30%"]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.2]);
+
+  // Parallax sutil para outras seções (respeita reduced-motion + mobile).
+  const historiaRef = useRef<HTMLElement>(null);
+  const historiaImgY = useParallax(historiaRef, 70);
+  const historiaTextY = useParallax(historiaRef, -30);
+  const countdownRef = useRef<HTMLElement>(null);
+  const countdownY = useParallax(countdownRef, 40);
 
   return (
     <>
@@ -216,7 +224,7 @@ function Index() {
       <OrganicDivider />
 
       {/* Seção assimétrica: imagem à esquerda, texto à direita */}
-      <section className="px-6 py-24 sm:py-32">
+      <section ref={historiaRef} className="px-6 py-24 sm:py-32">
         <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-12 md:items-center md:gap-16">
           <Reveal className="md:col-span-7" y={32}>
             <div className="group relative aspect-[4/5] overflow-hidden">
@@ -225,8 +233,8 @@ function Index() {
                 alt="Bruna e Cláudio"
                 loading="lazy"
                 decoding="async"
-                className="h-full w-full object-cover"
-                style={{ objectPosition: "center 25%" }}
+                className="h-[115%] w-full object-cover will-change-transform"
+                style={{ objectPosition: "center 25%", y: historiaImgY }}
                 initial={{ scale: 1.04 }}
                 whileInView={{ scale: 1 }}
                 viewport={{ once: true, margin: "-15%" }}
@@ -239,7 +247,7 @@ function Index() {
             </div>
           </Reveal>
 
-          <div className="md:col-span-5">
+          <motion.div className="md:col-span-5" style={{ y: historiaTextY }}>
             <Reveal delay={0.15}>
               <span className="tracking-editorial-lg text-[10px] uppercase text-primary-dark/60">
                 Nossa história
@@ -266,7 +274,7 @@ function Index() {
                 </span>
               </div>
             </Reveal>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -277,10 +285,10 @@ function Index() {
       <OrganicDivider />
 
       {/* Countdown + CTAs */}
-      <section className="bg-card/40 px-6 py-24 backdrop-blur-sm">
+      <section ref={countdownRef} className="bg-card/40 px-6 py-24 backdrop-blur-sm">
 
 
-        <div className="mx-auto flex max-w-5xl flex-col items-center">
+        <motion.div className="mx-auto flex max-w-5xl flex-col items-center" style={{ y: countdownY }}>
           <Reveal>
             <p className="mb-14 text-[10px] font-semibold uppercase tracking-editorial-lg text-primary-dark/60">
               Contagem Regressiva
@@ -308,7 +316,7 @@ function Index() {
               />
             </div>
           </Reveal>
-        </div>
+        </motion.div>
       </section>
     </>
   );
