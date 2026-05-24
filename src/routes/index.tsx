@@ -8,6 +8,7 @@ import { OrganicDivider } from "@/components/wedding/OrganicDivider";
 import { HeroPicture } from "@/components/wedding/HeroPicture";
 import { Gallery } from "@/components/wedding/Gallery";
 import { useAdaptiveCopy } from "@/hooks/use-adaptive-copy";
+import { useParallax } from "@/hooks/use-parallax";
 import { WEDDING } from "@/lib/wedding-config";
 
 
