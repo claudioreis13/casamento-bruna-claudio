@@ -316,7 +316,7 @@ function Index() {
               />
             </div>
           </Reveal>
-        </div>
+        </motion.div>
       </section>
     </>
   );
