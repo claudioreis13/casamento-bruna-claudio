@@ -92,6 +92,13 @@ function Index() {
   const heroY = useTransform(scrollYProgress, [0, 1], ["0%", reduce ? "0%" : "30%"]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.2]);
 
+  // Parallax sutil para outras seções (respeita reduced-motion + mobile).
+  const historiaRef = useRef<HTMLElement>(null);
+  const historiaImgY = useParallax(historiaRef, 70);
+  const historiaTextY = useParallax(historiaRef, -30);
+  const countdownRef = useRef<HTMLElement>(null);
+  const countdownY = useParallax(countdownRef, 40);
+
   return (
     <>
       {/* Hero fine-art com Ken Burns + parallax + scroll cue */}
