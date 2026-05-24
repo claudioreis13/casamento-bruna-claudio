@@ -224,7 +224,7 @@ function Index() {
       <OrganicDivider />
 
       {/* Seção assimétrica: imagem à esquerda, texto à direita */}
-      <section className="px-6 py-24 sm:py-32">
+      <section ref={historiaRef} className="px-6 py-24 sm:py-32">
         <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-12 md:items-center md:gap-16">
           <Reveal className="md:col-span-7" y={32}>
             <div className="group relative aspect-[4/5] overflow-hidden">
@@ -233,8 +233,8 @@ function Index() {
                 alt="Bruna e Cláudio"
                 loading="lazy"
                 decoding="async"
-                className="h-full w-full object-cover"
-                style={{ objectPosition: "center 25%" }}
+                className="h-[115%] w-full object-cover will-change-transform"
+                style={{ objectPosition: "center 25%", y: historiaImgY }}
                 initial={{ scale: 1.04 }}
                 whileInView={{ scale: 1 }}
                 viewport={{ once: true, margin: "-15%" }}
@@ -247,7 +247,7 @@ function Index() {
             </div>
           </Reveal>
 
-          <div className="md:col-span-5">
+          <motion.div className="md:col-span-5" style={{ y: historiaTextY }}>
             <Reveal delay={0.15}>
               <span className="tracking-editorial-lg text-[10px] uppercase text-primary-dark/60">
                 Nossa história
@@ -274,7 +274,7 @@ function Index() {
                 </span>
               </div>
             </Reveal>
-          </div>
+          </motion.div>
         </div>
       </section>
 
