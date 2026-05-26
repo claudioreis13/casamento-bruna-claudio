@@ -210,7 +210,7 @@ function Index() {
           </div>
         </Reveal>
         <Reveal delay={0.15}>
-          <blockquote className="max-w-3xl font-display text-3xl font-light italic leading-relaxed text-primary-dark sm:text-4xl md:text-5xl">
+          <blockquote className="max-w-5xl font-display text-3xl font-light italic leading-relaxed text-primary-dark sm:text-4xl md:text-[2.75rem] md:whitespace-nowrap">
             “Assim eles já não são dois, mas sim uma só carne”
           </blockquote>
         </Reveal>
