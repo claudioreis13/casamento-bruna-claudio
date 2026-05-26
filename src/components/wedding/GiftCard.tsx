@@ -14,27 +14,39 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
   const presenteado = !!presente.presenteado;
   const indisponivel = presenteado || reservado;
 
+  const rafRef = useRef<number | null>(null);
+  const targetRef = useRef({ x: 0, y: 0 });
+  const currentRef = useRef({ x: 0, y: 0 });
+
+  const animate = () => {
+    if (!containerRef.current) return;
+    const ease = 0.12;
+    currentRef.current.x += (targetRef.current.x - currentRef.current.x) * ease;
+    currentRef.current.y += (targetRef.current.y - currentRef.current.y) * ease;
+    const { x, y } = currentRef.current;
+    containerRef.current.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
+    if (
+      Math.abs(targetRef.current.x - x) > 0.01 ||
+      Math.abs(targetRef.current.y - y) > 0.01
+    ) {
+      rafRef.current = requestAnimationFrame(animate);
+    } else {
+      rafRef.current = null;
+    }
+  };
+
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (indisponivel || !containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left - rect.width / 2) / 18;
-    const y = (e.clientY - rect.top - rect.height / 2) / 18;
-    containerRef.current.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
+    targetRef.current.x = (e.clientX - rect.left - rect.width / 2) / 40;
+    targetRef.current.y = (e.clientY - rect.top - rect.height / 2) / 40;
+    if (rafRef.current == null) rafRef.current = requestAnimationFrame(animate);
   };
 
   const handleMouseLeave = () => {
-    if (!containerRef.current) return;
-    containerRef.current.style.transform = `rotateY(0deg) rotateX(0deg)`;
-  };
-
-  const handleMouseEnter = () => {
-    if (!containerRef.current) return;
-    containerRef.current.style.transition = "transform 0.1s ease-out";
-    requestAnimationFrame(() => {
-      if (containerRef.current) {
-        containerRef.current.style.transition = "";
-      }
-    });
+    targetRef.current.x = 0;
+    targetRef.current.y = 0;
+    if (rafRef.current == null) rafRef.current = requestAnimationFrame(animate);
   };
 
   return (
@@ -47,7 +59,6 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
       style={{ perspective: "1000px" }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      onMouseEnter={handleMouseEnter}
     >
       {/* Moldura — image with white matte border */}
       <div
@@ -55,10 +66,9 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
         className={cn(
           "relative aspect-square overflow-hidden bg-secondary/20",
           "[transform-style:preserve-3d] will-change-transform",
-          "shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-shadow duration-500",
+          "shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-shadow duration-700",
           !indisponivel && "group-hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.35)]"
         )}
-        style={{ transition: "transform 0.1s ease-out" }}
       >
         {/* Badges */}
         {presente.humor && (
