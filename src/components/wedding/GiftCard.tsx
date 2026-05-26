@@ -57,9 +57,10 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
       )}
       data-id={presente.id}
       style={{ perspective: "1000px" }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      onMouseEnter={handleMouseEnter}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+      >
+
     >
       {/* Moldura — image with white matte border */}
       <div
