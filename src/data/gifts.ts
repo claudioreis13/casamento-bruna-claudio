@@ -90,7 +90,7 @@ export const PRESENTES: Gift[] = [
   { id: "colcha", nome: "Kit 3 peças colcha Cobre Leito + Porta travesseiro", preco: 73.80, img: "/imagens/colcha.jpg", categoria: "quarto" },
   { id: "cumbucas", nome: "Kit de cumbucas tigelas porcelana", preco: 72.82, img: "/imagens/cumbucas.jpg", categoria: "cozinha" },
   { id: "descanso", nome: "Kit descansos de panela", preco: 26.99, img: "/imagens/descanso.jpg", categoria: "cozinha" },
-  { id: "diamond", nome: "Jogo de copos 6 unidades Diamond", preco: 50, img: "/imagens/diamond.jpg", categoria: "cozinha" },
+  { id: "diamond", nome: "Jogo de copos 6 unidades Diamond", preco: 27.80, img: "/imagens/diamond.jpg", categoria: "cozinha" },
   { id: "formas", nome: "Conjunto Multi formas 3, 5 ou 7 peças", preco: 65.90, img: "/imagens/formas.jpg", categoria: "cozinha" },
   { id: "frios", nome: "Porta frios com tampa", preco: 60.50, img: "/imagens/frios.jpg", categoria: "cozinha" },
   { id: "fundue", nome: "Conjunto para fondue 10 peças", preco: 119.70, img: "/imagens/fundue.jpg", categoria: "cozinha" },
@@ -98,7 +98,7 @@ export const PRESENTES: Gift[] = [
   { id: "queijeira", nome: "Queijeira de vidro canelado com tampa", preco: 60.89, img: "/imagens/queijeira.jpg", categoria: "cozinha" },
   { id: "rosto", nome: "Kit 4 toalhas de rosto marrom bordadas", preco: 65.90, img: "/imagens/rosto.jpg", categoria: "quarto" },
   { id: "xicaras", nome: "Jogo de 6 xícaras vidro canelado borda dourada", preco: 79.91, img: "/imagens/xicaras.jpg", categoria: "cozinha" },
-  { id: "marinex", nome: "Kit 2 assadeiras Marinex (3,5L + 2,1L)", preco: 121, img: "/imagens/marinex.jpg", categoria: "cozinha" },
+  
   { id: "ovos", nome: "Porta-ovos transparente para geladeira", preco: 64.99, img: "/imagens/ovos.jpg", categoria: "cozinha" },
   { id: "passadeira", nome: "Kit passadeira + 2 tapetes de cozinha", preco: 105.99, img: "/imagens/passadeira.jpg", categoria: "cozinha" },
   { id: "petisqueira", nome: "Kit petisqueira + molheira ramekin e 6 garfinhos", preco: 25.49, img: "/imagens/petisqueira.jpg", categoria: "cozinha" },
