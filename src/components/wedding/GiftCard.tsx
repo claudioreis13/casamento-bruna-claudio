@@ -57,10 +57,8 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
       )}
       data-id={presente.id}
       style={{ perspective: "1000px" }}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-      >
-
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
     >
       {/* Moldura — image with white matte border */}
       <div
@@ -68,10 +66,9 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
         className={cn(
           "relative aspect-square overflow-hidden bg-secondary/20",
           "[transform-style:preserve-3d] will-change-transform",
-          "shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-shadow duration-500",
+          "shadow-[0_2px_8px_rgba(0,0,0,0.06)] transition-shadow duration-700",
           !indisponivel && "group-hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.35)]"
         )}
-        style={{ transition: "transform 0.1s ease-out" }}
       >
         {/* Badges */}
         {presente.humor && (
