@@ -185,7 +185,7 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
                 : `Presentear com ${presente.nome}`
           }
           className={cn(
-            "tracking-editorial mt-3 w-full border py-3 text-[10px] font-bold uppercase transition-all duration-300",
+            "tracking-editorial mt-auto w-full border py-3 text-[10px] font-bold uppercase transition-all duration-300",
             indisponivel
               ? "border-muted text-muted-foreground cursor-not-allowed"
               : "border-primary text-primary-dark hover:bg-primary hover:text-primary-foreground"
