@@ -14,27 +14,39 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
   const presenteado = !!presente.presenteado;
   const indisponivel = presenteado || reservado;
 
+  const rafRef = useRef<number | null>(null);
+  const targetRef = useRef({ x: 0, y: 0 });
+  const currentRef = useRef({ x: 0, y: 0 });
+
+  const animate = () => {
+    if (!containerRef.current) return;
+    const ease = 0.12;
+    currentRef.current.x += (targetRef.current.x - currentRef.current.x) * ease;
+    currentRef.current.y += (targetRef.current.y - currentRef.current.y) * ease;
+    const { x, y } = currentRef.current;
+    containerRef.current.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
+    if (
+      Math.abs(targetRef.current.x - x) > 0.01 ||
+      Math.abs(targetRef.current.y - y) > 0.01
+    ) {
+      rafRef.current = requestAnimationFrame(animate);
+    } else {
+      rafRef.current = null;
+    }
+  };
+
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (indisponivel || !containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left - rect.width / 2) / 18;
-    const y = (e.clientY - rect.top - rect.height / 2) / 18;
-    containerRef.current.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
+    targetRef.current.x = (e.clientX - rect.left - rect.width / 2) / 40;
+    targetRef.current.y = (e.clientY - rect.top - rect.height / 2) / 40;
+    if (rafRef.current == null) rafRef.current = requestAnimationFrame(animate);
   };
 
   const handleMouseLeave = () => {
-    if (!containerRef.current) return;
-    containerRef.current.style.transform = `rotateY(0deg) rotateX(0deg)`;
-  };
-
-  const handleMouseEnter = () => {
-    if (!containerRef.current) return;
-    containerRef.current.style.transition = "transform 0.1s ease-out";
-    requestAnimationFrame(() => {
-      if (containerRef.current) {
-        containerRef.current.style.transition = "";
-      }
-    });
+    targetRef.current.x = 0;
+    targetRef.current.y = 0;
+    if (rafRef.current == null) rafRef.current = requestAnimationFrame(animate);
   };
 
   return (
