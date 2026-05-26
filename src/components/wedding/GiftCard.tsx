@@ -159,10 +159,11 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
       </div>
 
       {/* Info */}
-      <div className="mt-6 flex flex-col items-center gap-2 text-center">
-        <h3 className="font-display text-lg italic leading-tight text-foreground">
+      <div className="mt-6 flex flex-1 flex-col items-center gap-2 text-center">
+        <h3 className="font-display text-lg italic leading-tight text-foreground line-clamp-2 min-h-[2.6em]">
           {presente.nome}
         </h3>
+
         <p
           className={cn(
             "tracking-editorial text-sm font-semibold text-primary-dark tabular-nums",
@@ -184,7 +185,7 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
                 : `Presentear com ${presente.nome}`
           }
           className={cn(
-            "tracking-editorial mt-3 w-full border py-3 text-[10px] font-bold uppercase transition-all duration-300",
+            "tracking-editorial mt-auto w-full border py-3 text-[10px] font-bold uppercase transition-all duration-300",
             indisponivel
               ? "border-muted text-muted-foreground cursor-not-allowed"
               : "border-primary text-primary-dark hover:bg-primary hover:text-primary-foreground"
