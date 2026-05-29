@@ -128,34 +128,28 @@ export function GiftCard({ presente, reservado, onPresentear }: Props) {
             carregada ? "opacity-0" : "opacity-100 animate-pulse"
           )}
         />
-        <picture>
-          <source
-            type="image/webp"
-            srcSet={presente.img.replace(/\.jpe?g$/i, ".webp")}
-          />
-          <img
-            src={presente.img}
-            alt={presente.nome}
-            loading="lazy"
-            decoding="async"
-            width={400}
-            height={400}
-            sizes="(min-width: 768px) 300px, 50vw"
-            onLoad={() => setCarregada(true)}
-            style={!indisponivel ? { transform: "translateZ(60px)" } : undefined}
-            className={cn(
-              "h-full w-full object-contain p-4 transition-[filter,opacity] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
-              !indisponivel && "group-hover:drop-shadow-xl",
-              presenteado && "grayscale",
-              carregada ? "opacity-100 blur-0" : "scale-105 opacity-0 blur-xl"
-            )}
-            onError={(e) => {
-              setCarregada(true);
-              (e.currentTarget as HTMLImageElement).src =
-                "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><rect fill='%23e8e4dd' width='400' height='400'/></svg>";
-            }}
-          />
-        </picture>
+        <img
+          src={presente.img}
+          alt={presente.nome}
+          loading="lazy"
+          decoding="async"
+          width={400}
+          height={400}
+          sizes="(min-width: 768px) 300px, 50vw"
+          onLoad={() => setCarregada(true)}
+          style={!indisponivel ? { transform: "translateZ(60px)" } : undefined}
+          className={cn(
+            "h-full w-full object-contain p-4 transition-[filter,opacity] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
+            !indisponivel && "group-hover:drop-shadow-xl",
+            presenteado && "grayscale",
+            carregada ? "opacity-100 blur-0" : "scale-105 opacity-0 blur-xl"
+          )}
+          onError={(e) => {
+            setCarregada(true);
+            (e.currentTarget as HTMLImageElement).src =
+              "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><rect fill='%23e8e4dd' width='400' height='400'/></svg>";
+          }}
+        />
       </div>
 
       {/* Info */}
