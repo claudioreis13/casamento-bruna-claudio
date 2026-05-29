@@ -103,6 +103,11 @@ export const PRESENTES: Gift[] = [
   { id: "passadeira", nome: "Kit passadeira + 2 tapetes de cozinha", preco: 105.99, img: "/imagens/passadeira.jpg", categoria: "cozinha" },
   { id: "petisqueira", nome: "Kit petisqueira + molheira ramekin e 6 garfinhos", preco: 25.49, img: "/imagens/petisqueira.jpg", categoria: "cozinha" },
   { id: "pisoo", nome: "Kit 5 peças toalha de piso", preco: 49.26, img: "/imagens/pisoo.jpg", categoria: "quarto" },
+  { id: "retrato", nome: "Porta Retrato Dourado Metal Espelhado Vidro", preco: 90, img: "/imagens/retrato.jpg", categoria: "sala" },
+  { id: "copomauve", nome: "Conjunto 6 Copos Mauve com Fio de Ouro 350ml", preco: 85.50, img: "/imagens/copomauve.jpg", categoria: "cozinha" },
+  { id: "ramequins", nome: "Kit Ramequins Porcelana 80ml | Molhos Porções", preco: 48.90, img: "/imagens/ramequins.jpg", categoria: "cozinha" },
+  { id: "sushi", nome: "Kit 2 Pratos para Sushi com Molheira", preco: 30.04, img: "/imagens/sushi.jpg", categoria: "cozinha" },
+  { id: "molheira", nome: "Molheira Lyor Porta Shoyu", preco: 11.12, img: "/imagens/molheira.jpg", categoria: "cozinha" },
 ];
 
 export function formatarPreco(preco: number) {
