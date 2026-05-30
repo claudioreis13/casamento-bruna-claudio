@@ -14,6 +14,7 @@ export interface Gift {
   preco: number;
   img: string;
   categoria: Categoria;
+  categorias?: Categoria[];
   humor?: boolean;
   presenteado?: boolean;
 }
