@@ -74,7 +74,7 @@ function Presentes() {
     let l = PRESENTES.slice();
     const t = termoDeferred.toLowerCase().trim();
     if (t) l = l.filter((p) => p.nome.toLowerCase().includes(t));
-    if (categoria !== "todos") l = l.filter((p) => p.categoria === categoria);
+    if (categoria !== "todos") l = l.filter((p) => p.categoria === categoria || p.categorias?.includes(categoria));
     if (faixa === "ate200") l = l.filter((p) => p.preco <= 200);
     else if (faixa === "200a500") l = l.filter((p) => p.preco > 200 && p.preco <= 500);
     else if (faixa === "500a1000") l = l.filter((p) => p.preco > 500 && p.preco <= 1000);
