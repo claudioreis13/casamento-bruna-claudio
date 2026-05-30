@@ -47,7 +47,7 @@ export const PRESENTES: Gift[] = [
   { id: "toalha", nome: "Jogo de toalha banhão", preco: 182.27, img: "/imagens/toalha.jpg", categoria: "quarto" },
   { id: "edredon", nome: "Edredon Queen 300 fios", preco: 500, img: "/imagens/edredon.jpg", categoria: "quarto", presenteado: true },
   { id: "purificador", nome: "Purificador de água", preco: 500, img: "/imagens/purificador.jpg", categoria: "eletrodomesticos" },
-  { id: "buque", nome: "Aumente em 30% sua chance de pegar o buquê", preco: 150, img: "/imagens/buque.jpg", categoria: "lua-de-mel", humor: true },
+  { id: "buque", nome: "Aumente em 30% sua chance de pegar o buquê", preco: 150, img: "/imagens/buque.jpg", categoria: "diversao", humor: true },
   { id: "convidado", nome: "Levar alguém que não foi convidado", preco: 7965.49, img: "/imagens/convidado.jpg", categoria: "diversao", humor: true },
   { id: "cueca", nome: "Cueca sexy para lua de mel", preco: 100, img: "/imagens/cueca.jpg", categoria: "diversao", humor: true },
   { id: "ronaldo", nome: "Corte de cabelo do noivo por 6 meses", preco: 500, img: "/imagens/ronaldo.jpg", categoria: "diversao", humor: true },
